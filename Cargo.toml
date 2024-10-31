@@ -1,0 +1,36 @@
+[workspace]
+members = ["sss", "card", "parser"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["TOwInOK"]
+repository = "https://github.com/TOwInOK/SSS-rs"
+license = "Apache-2.0"
+
+[workspace.metadata.docs]
+rs-doc-path = "docs"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = true
+codegen-units = 1
+panic = 'abort'
+
+[profile.test]
+opt-level = 0
+debug = true
+
+[profile.bench]
+opt-level = 3
+debug = false

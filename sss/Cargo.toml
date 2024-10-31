@@ -1,0 +1,10 @@
+[package]
+name = "sss"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+parser = { path = "../parser" }
+card = { path = "../card" }
