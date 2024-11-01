@@ -1,35 +1,41 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+pub type Skills = Vec<Skill>;
+pub type Nicknames = Vec<Nickname>;
+pub type Specifications = Vec<String>;
+pub type SocialMedias = Vec<Blank>;
+pub type TopProjects = Vec<Blank>;
+
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct User {
     /// Имя
     pub name: String,
     /// Прозвище
     pub nickname: Nickname,
     /// Иные прозвища
-    pub other_nicknames: Vec<Nickname>,
+    pub other_nicknames: Nicknames,
     /// Уклон в разработке
-    pub specifications: Vec<String>,
+    pub specifications: Specifications,
     /// О пользователе
     pub about: About,
     /// Репозитории
-    pub repos: Vec<Blank>,
+    pub repos: TopProjects,
     /// Социальные сети
-    pub social_media: Vec<SocialMedia>,
+    pub social_media: SocialMedias,
     /// Список навыков
-    pub skills: Vec<Skill>,
+    pub skills: Skills,
 }
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Nickname {
     /// Прозвище
     pub word: String,
     /// Произношение
     #[serde(default)]
-    pub prononce: String, // опциональное поле
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pronounce: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct About {
     /// Текст о пользователе
     pub text: String,
@@ -50,22 +56,9 @@ pub struct Blank {
     pub link: String,
     /// Логотип репозитория
     #[serde(default)]
-    pub logo: String, // по умолчанию стандартный логотип
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logo: Option<String>,
     /// Основной репозиторий
-    #[serde(default)]
-    pub main: bool, // по умолчанию false
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct SocialMedia {
-    /// Провайдер соцсети
-    pub provider: String,
-    /// Ссылка на профиль
-    pub link: String,
-    /// Логотип соцсети
-    #[serde(default)]
-    pub logo: String, // по умолчанию стандартный логотип
-    /// Основная соцсеть
     #[serde(default)]
     pub main: bool, // по умолчанию false
 }
@@ -75,7 +68,7 @@ pub struct Skill {
     /// Навык
     pub skill: String,
     /// Топ проектов
-    pub top_projects: Vec<Blank>, // переиспользуем структуру Blank
+    pub top_projects: TopProjects,
     /// Даты
     #[serde(default)]
     pub since: Option<Since>, // опциональная структура
@@ -84,7 +77,8 @@ pub struct Skill {
     pub main: bool, // по умолчанию false
     /// Сайт поддержателя
     #[serde(default)]
-    pub maintainer_site: String, // по умолчанию пустая строка
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maintainer_site: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

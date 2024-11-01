@@ -1,0 +1,109 @@
+name = "Your name"
+specifications = ["Backend", "Fullstack"]
+
+[nickname]
+word = "TOwInOK"
+
+[[other_nicknames]]
+word = "nqcq"
+
+[[other_nicknames]]
+word = "cqnq"
+
+[about]
+text = "Some huge text :/"
+max_length = 100
+
+[[repos]]
+provider = "GitHub"
+link = "https://github.com/your_project1"
+logo = "direct_link.png || svg"
+main = true
+
+[[repos]]
+provider = "GitHub"
+link = "https://github.com/your_project1"
+main = false
+
+[[social_media]]
+provider = "Facebook"
+link = "https://facebook.com/your_profile"
+logo = ""
+main = true
+
+[[social_media]]
+provider = "Steam"
+link = "https://steamcommunity.com/your_profile"
+main = false
+
+[[social_media]]
+provider = "Instagram"
+link = "https://instagram.com/your_profile"
+main = false
+
+[[social_media]]
+provider = "X"
+link = "https://twitter.com/your_profile"
+main = false
+
+[[social_media]]
+provider = "Spotify"
+link = "https://spotify.com/your_profile"
+main = false
+
+[[skills]]
+skill = "rust"
+main = true
+maintainer_site = "https://crates.io/TOwInOK"
+
+[[skills.top_projects]]
+provider = "GitHub"
+link = "https://github.com/your_project1"
+logo = "custom_logo.svg"
+main = true
+
+[[skills.top_projects]]
+provider = "GitHub"
+link = "https://github.com/your_project2"
+main = false
+
+[[skills.top_projects]]
+provider = "GitLab"
+link = "https://gitlab.com/your_project3"
+main = false
+
+[skills.since]
+start = 2020
+end = 0
+
+[[skills]]
+skill = "javascript"
+main = false
+
+[[skills.top_projects]]
+provider = "GitHub"
+link = "https://github.com/your_js_project"
+main = false
+
+[[skills.top_projects]]
+provider = "GitHub"
+link = "https://github.com/another_js_project"
+main = false
+
+[skills.since]
+start = 2018
+end = 2022
+
+[[skills]]
+skill = "typescript"
+main = true
+maintainer_site = "https://www.npmjs.com/~your_profile"
+
+[[skills.top_projects]]
+provider = "GitHub"
+link = "https://github.com/ts_project"
+main = false
+
+[skills.since]
+start = 2019
+end = 0

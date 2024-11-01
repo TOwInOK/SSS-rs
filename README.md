@@ -10,10 +10,9 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
 
 **P.S** have a suggestion make an issue
 
-- [ ] Parser
-  - [ ] Toml
-  - [ ] Json
-  - [ ] any serde staff
+- [X] Parser
+  - [X] Toml
+  - [X] Json
 - [ ] Card generation
   - [ ] Leptos component
   - [ ] html
