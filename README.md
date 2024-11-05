@@ -25,7 +25,7 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
 Themes will be added as soon as possible.
 If you **want** to see more **themes**, **make an issue!**
 
-- [ ] Pink Pine
+- [ ] Rosé Pine
   - [ ] Moon
 - [ ] GrooveBox
 
