@@ -1,14 +1,19 @@
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Icon {
-    #[default]
-    GitHub,
+    GitHub(IconVariant),
 }
 
 impl Icon {
     /// Convert variant to svg
     pub fn as_str(&self) -> &str {
         match &self {
-            Icon::GitHub => todo!(),
+            Icon::GitHub(_) => todo!(),
         }
     }
+}
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
+pub enum IconVariant {
+    #[default]
+    Outline,
+    Filled,
 }
