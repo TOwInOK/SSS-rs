@@ -1,13 +1,9 @@
 [package]
-name = "parser"
+name = "sss_core"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 
 [dependencies]
-sss_core = { path = "../sss-core" }
 serde = { workspace = true, features = ["derive"] }
-serde_json.workspace = true
-thiserror.workspace = true
-toml = "0.8"

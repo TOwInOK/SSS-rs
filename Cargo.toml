@@ -1,5 +1,5 @@
 [workspace]
-members = ["sss", "card", "parser"]
+members = ["render", "card", "parser", "sss-core"]
 resolver = "2"
 
 [workspace.package]

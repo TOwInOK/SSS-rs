@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod toml {
-    use parser::{parse::parse_toml, types::User};
+    use parser::parse::parse_toml;
+    use sss_core::types::user::User;
     use std::fs;
 
     fn parse_default_toml() {

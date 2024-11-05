@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod json {
-    use parser::{parse::parse_json, parse::parse_toml, types::User};
+    use parser::{parse::parse_json, parse::parse_toml};
+    use sss_core::types::user::User;
     use std::fs;
 
     fn parse_default_json() {

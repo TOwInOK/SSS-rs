@@ -1,15 +1,16 @@
 # Skill, Slick, Style - rs
 A tool to present you as a developer with Slick, Shark, Savvy skills and style.
+
 ## Generation options
 - Card
   - leptos
   - pure html
 - Website
+
 ## Progress status
-**Note** still in development
+**Note** still under development
 
 **P.S** have a suggestion make an issue
-
 - [X] Parser
   - [X] Toml
   - [X] Json
@@ -19,3 +20,25 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
 - [ ] Website generation
   - [ ] Leptos
   - [ ] html
+
+## Themes?
+Themes will be added as soon as possible.
+If you **want** to see more **themes**, **make an issue!**
+
+- [ ] Pink Pine
+  - [ ] Moon
+- [ ] GrooveBox
+
+
+## Structure of project
+**Note** still under development
+
+1. sss_core (folder: sss-core)
+  * Contains global dependencies
+2. parser
+  * parse some structures into configs
+3. card
+  * some structure's data of card/site
+4. render
+  * generate leptos component/html code by card
+
