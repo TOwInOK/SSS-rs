@@ -3,8 +3,8 @@ mod components {
     use card::component::{
         field::Field,
         frame::{Direction, Frame},
+        icon::Icon,
         link::Link,
-        svg::{Icons, Svg},
         text::{Font, Text},
     };
 
@@ -19,12 +19,12 @@ mod components {
         let link = Link::new(
             Some(Text::new("some text", Font::Label)),
             "some ref",
-            Some(Svg::new(Icons::GitHub)),
+            Some(Icon::GitHub),
         );
         assert_eq!(link.href, "some ref");
         assert_eq!(link.text.unwrap().text, "some text");
         assert_eq!(link.text.unwrap().font, Font::Label);
-        assert_eq!(link.icon.unwrap().data, Icons::GitHub);
+        assert_eq!(link.icon.unwrap(), Icon::GitHub);
     }
     #[test]
     fn frame() {
@@ -34,19 +34,15 @@ mod components {
     }
     #[test]
     fn field() {
-        let field = Field::new(
-            Text::new("some text", Font::Text),
-            None,
-            Some(Svg::new(Icons::GitHub)),
-        );
+        let field = Field::new(Text::new("some text", Font::Text), None, Some(Icon::GitHub));
         assert!(field.element.is_none());
         assert_eq!(field.title.text, "some text");
         assert_eq!(field.title.font, Font::Text);
-        assert_eq!(field.icon.unwrap().data, Icons::GitHub);
+        assert_eq!(field.icon.unwrap(), Icon::GitHub);
     }
     #[test]
-    fn svg() {
-        let svg = Svg::new(Icons::GitHub);
-        assert_eq!(svg.data, Icons::GitHub);
+    fn icon() {
+        let icon = Icon::GitHub;
+        assert_eq!(icon, Icon::GitHub);
     }
 }

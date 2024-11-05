@@ -2,17 +2,17 @@
 pub mod field;
 /// Div with Some(border) contains [Component]
 pub mod frame;
+/// SVG icons
+pub mod icon;
 /// It's a button with link or an <a> el
 pub mod link;
-/// SVG icons
-pub mod svg;
 /// just a text
 pub mod text;
 
 use field::Field;
 use frame::Frame;
+use icon::Icon;
 use link::Link;
-use svg::Svg;
 use text::Text;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Component<'a> {
@@ -20,7 +20,7 @@ pub enum Component<'a> {
     Frame(Frame<'a>),
     Link(Link<'a>),
     Field(Field<'a>),
-    Icon(Svg),
+    Icon(Icon),
 }
 
 impl<'a> From<Text<'a>> for Component<'a> {
@@ -44,8 +44,8 @@ impl<'a> From<Link<'a>> for Component<'a> {
         Self::Link(value)
     }
 }
-impl<'a> From<Svg> for Component<'a> {
-    fn from(value: Svg) -> Self {
+impl<'a> From<Icon> for Component<'a> {
+    fn from(value: Icon) -> Self {
         Self::Icon(value)
     }
 }
