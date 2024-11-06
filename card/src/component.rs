@@ -20,7 +20,7 @@ pub enum Component<'a> {
     Frame(Frame<'a>),
     Link(Link<'a>),
     Field(Field<'a>),
-    Icon(Icon),
+    Icon(Icon<'a>),
 }
 
 impl<'a> From<Text<'a>> for Component<'a> {
@@ -44,8 +44,8 @@ impl<'a> From<Link<'a>> for Component<'a> {
         Self::Link(value)
     }
 }
-impl<'a> From<Icon> for Component<'a> {
-    fn from(value: Icon) -> Self {
+impl<'a> From<Icon<'a>> for Component<'a> {
+    fn from(value: Icon<'a>) -> Self {
         Self::Icon(value)
     }
 }
