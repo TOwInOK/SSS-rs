@@ -12,7 +12,6 @@ impl Icon<'_> {
             Icon::Outline(outline) => outline.as_str(),
             Icon::Custom(e) => &e,
         }
-        quote = "1.0.37"
     }
 }
 
