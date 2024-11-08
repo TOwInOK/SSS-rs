@@ -10,7 +10,7 @@ impl Icon<'_> {
         match self {
             Icon::Filled(filled) => filled.as_str(),
             Icon::Outline(outline) => outline.as_str(),
-            Icon::Custom(e) => &e,
+            Icon::Custom(e) => e,
         }
     }
 }
