@@ -1,21 +1,21 @@
-use super::{icon::Icon, text::Text, Component};
+use super::Component;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Field<'a> {
-    pub title: Text<'a>,
-    pub icon: Option<Icon<'a>>,
+    pub title: &'a Component<'a>,
+    pub icon: Option<&'a Component<'a>>,
     pub element: Option<&'a Component<'a>>,
 }
 
 impl<'a> Field<'a> {
     pub fn new(
-        title: Text<'a>,
+        title: &'a Component<'a>,
+        icon: Option<&'a Component<'a>>,
         element: Option<&'a Component<'a>>,
-        icon: Option<Icon<'a>>,
     ) -> Self {
         Self {
             title,
-            element,
             icon,
+            element,
         }
     }
 }

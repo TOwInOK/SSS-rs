@@ -49,3 +49,34 @@ impl<'a> From<Icon<'a>> for Component<'a> {
         Self::Icon(value)
     }
 }
+
+#[macro_export]
+macro_rules! text {
+    ($data:expr, $font:ident) => {{
+        Component::Text(Text::new($data, Some(Font::$font)))
+    }};
+
+    ($data:expr) => {
+        Component::Text(Text::new($data, None))
+    };
+}
+
+#[macro_export]
+macro_rules! frame {
+    ($($aspect:ident;)? $data:expr ) => {
+        {   use $crate::component::Component;
+
+            let aspect = Direction::default();
+            $(let aspect = Direction::$aspect;)?
+            Component::Frame(Frame::new($data, aspect))
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! icon {
+    ($variant:ident, $aspect:ident) => {{
+        use $crate::create_icon;
+        Component::Icon(create_icon!($variant, $aspect))
+    }};
+}

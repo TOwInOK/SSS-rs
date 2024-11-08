@@ -4,7 +4,7 @@
 /// - Outline
 /// - Filled
 /// - Custom (push &str)
-macro_rules! icon {
+macro_rules! create_icon {
     ($t:ident, $item:ident) => {
         Icon::$t($t::$item)
     };

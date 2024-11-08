@@ -1,14 +1,18 @@
-use super::{icon::Icon, text::Text};
+use super::Component;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Link<'a> {
-    pub text: Option<Text<'a>>,
+    pub text: Option<&'a Component<'a>>,
     pub href: &'a str,
-    pub icon: Option<Icon<'a>>,
+    pub icon: Option<&'a Component<'a>>,
 }
 
 impl<'a> Link<'a> {
-    pub fn new(text: Option<Text<'a>>, href: &'a str, icon: Option<Icon<'a>>) -> Self {
+    pub fn new(
+        text: Option<&'a Component<'a>>,
+        href: &'a str,
+        icon: Option<&'a Component<'a>>,
+    ) -> Self {
         Self { text, href, icon }
     }
 }

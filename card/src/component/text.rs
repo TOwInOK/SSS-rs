@@ -6,8 +6,11 @@ pub struct Text<'a> {
 }
 
 impl<'a> Text<'a> {
-    pub fn new(data: &'a str, font: Font) -> Self {
-        Self { text: data, font }
+    pub fn new(data: &'a str, font: Option<Font>) -> Self {
+        Self {
+            text: data,
+            font: font.unwrap_or_default(),
+        }
     }
 }
 

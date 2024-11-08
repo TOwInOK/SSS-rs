@@ -17,17 +17,17 @@ pub enum Direction {
     ///
     /// from top to bottom
     #[default]
-    VStack,
+    Vertical,
     /// Horizontal placement from
     ///
     /// left to right
-    HStack,
+    Horizontal,
     /// Reversed vertical placement
     ///
     /// from bottom to top
-    RVStack,
+    ReversVertical,
     /// Reversed Horizontal placement
     ///
     /// from right to left
-    RHStack,
+    ReversHorizontal,
 }

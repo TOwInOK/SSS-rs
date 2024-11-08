@@ -20,15 +20,15 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
   - [x] Json
 - [ ] Global settings
   - under develop
-- [ ] Card elements
+- [x] Card elements
   - [x] Field
   - [x] Frame
   - [x] Link
-  - [ ] Svg(Icons)
+  - [x] Svg(Icons)
   - [x] Text
 - [ ] Card generation
   - [ ] Leptos component
-  - [ ] html
+  - [x] html
 - [ ] Website generation
   - [ ] Leptos
   - [ ] html

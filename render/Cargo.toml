@@ -7,3 +7,4 @@ license.workspace = true
 
 [dependencies]
 card = { path = "../card" }
+sss_core = { path = "../sss-core" }
