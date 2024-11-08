@@ -1,11 +1,14 @@
 #[cfg(test)]
 mod components {
-    use card::component::{
-        field::Field,
-        frame::{Direction, Frame},
-        icon::{Filled, Icon},
-        link::Link,
-        text::{Font, Text},
+    use card::{
+        component::{
+            field::Field,
+            frame::{Direction, Frame},
+            icon::{Filled, Icon, Outline},
+            link::Link,
+            text::{Font, Text},
+        },
+        icon,
     };
 
     #[test]
@@ -45,8 +48,8 @@ mod components {
         assert_eq!(field.icon.unwrap(), Icon::Filled(Filled::GitHub));
     }
     #[test]
-    fn icon() {
-        let icon = Icon::Filled(Filled::GitHub);
-        assert_eq!(icon, Icon::Filled(Filled::GitHub));
+    fn test_icon() {
+        let icon = icon!(Outline, GitHub);
+        assert_eq!(icon, Icon::Outline(Outline::GitHub));
     }
 }
