@@ -11,6 +11,17 @@ pub static UMBRELLA_LIGHT: Shade = Shade::Light(Theme {
     button_gap: 0,
     border_gap: 0,
     frame_gap: 0,
+    label_style: "",
+    sub_label_style: "",
+    text_style: "",
+    text_minor_style: "",
+    link_style: "",
+    frame_style: "",
+    icon_style: "",
+    vertical_frame_style: "",
+    horizontal_frame_style: "",
+    revers_vertical_frame_style: "",
+    revers_horizontal_frame_style: "",
 });
 
 pub static UMBRELLA_DARK: Shade = Shade::Dark(Theme {
@@ -24,4 +35,15 @@ pub static UMBRELLA_DARK: Shade = Shade::Dark(Theme {
     button_gap: 0,
     border_gap: 0,
     frame_gap: 0,
+    label_style: "",
+    sub_label_style: "",
+    text_style: "",
+    text_minor_style: "",
+    link_style: "",
+    frame_style: "",
+    icon_style: "",
+    vertical_frame_style: "",
+    horizontal_frame_style: "",
+    revers_vertical_frame_style: "",
+    revers_horizontal_frame_style: "",
 });
