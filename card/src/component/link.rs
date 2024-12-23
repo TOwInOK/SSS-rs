@@ -1,18 +1,18 @@
 use super::Component;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Link<'a> {
-    pub text: Option<&'a Component<'a>>,
+    pub text: Option<Box<Component<'a>>>,
     pub href: &'a str,
-    pub icon: Option<&'a Component<'a>>,
+    pub icon: Option<Box<Component<'a>>>,
 }
 
 impl<'a> Link<'a> {
-    pub fn new(
-        text: Option<&'a Component<'a>>,
-        href: &'a str,
-        icon: Option<&'a Component<'a>>,
-    ) -> Self {
-        Self { text, href, icon }
+    pub fn new(text: Option<Component<'a>>, href: &'a str, icon: Option<Component<'a>>) -> Self {
+        Self {
+            text: text.map(Box::new),
+            href,
+            icon: icon.map(Box::new),
+        }
     }
 }

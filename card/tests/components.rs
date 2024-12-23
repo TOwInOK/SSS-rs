@@ -28,14 +28,14 @@ mod components {
     fn link() {
         let text = Component::Text(Text::new("some text", Some(Font::Label)));
         let icon = Component::Icon(Icon::Filled(Filled::GitHub));
-        let link = Link::new(Some(&text), "some ref", Some(&icon));
+        let link = Link::new(Some(text.clone()), "some ref", Some(icon.clone()));
         assert_eq!(link.href, "some ref");
-        assert_eq!(link.text.unwrap(), &text);
-        assert_eq!(link.icon.unwrap(), &icon);
+        assert_eq!(link.text.unwrap(), Box::new(text));
+        assert_eq!(link.icon.unwrap(), Box::new(icon));
     }
     #[test]
     fn frame() {
-        let frame = Frame::new(&[], Direction::Vertical);
+        let frame = Frame::new(vec![], Direction::Vertical);
         assert!(frame.data.is_empty());
         assert_eq!(frame.direction, Direction::Vertical);
     }

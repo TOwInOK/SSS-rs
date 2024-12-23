@@ -14,7 +14,7 @@ use frame::Frame;
 use icon::Icon;
 use link::Link;
 use text::Text;
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Component<'a> {
     Text(Text<'a>),
     Frame(Frame<'a>),
@@ -60,19 +60,19 @@ macro_rules! text {
         Component::Text(Text::new($data, None))
     };
 }
-
 #[macro_export]
 macro_rules! frame {
-    ($($aspect:ident;)? $data:expr ) => {
-        {   use $crate::component::Component;
-
-            let aspect = Direction::default();
-            $(let aspect = Direction::$aspect;)?
-            Component::Frame(Frame::new($data, aspect))
-        }
-    };
+    ($aspect:ident; $data:expr) => {{
+        use $crate::component::frame::Direction;
+        use $crate::component::Component;
+        Component::Frame(Frame::new($data, Direction::$aspect))
+    }};
+    ($data:expr) => {{
+        use $crate::component::frame::Direction;
+        use $crate::component::Component;
+        Component::Frame(Frame::new($data, Direction::default()))
+    }};
 }
-
 #[macro_export]
 macro_rules! icon {
     ($variant:ident, $aspect:ident) => {{

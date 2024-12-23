@@ -1,12 +1,12 @@
 use super::Component;
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Frame<'a> {
-    pub data: &'a [Component<'a>],
+    pub data: Vec<Component<'a>>,
     pub direction: Direction,
 }
 
 impl<'a> Frame<'a> {
-    pub fn new(data: &'a [Component<'a>], direction: Direction) -> Self {
+    pub fn new(data: Vec<Component<'a>>, direction: Direction) -> Self {
         Self { data, direction }
     }
 }
