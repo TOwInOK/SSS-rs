@@ -28,8 +28,8 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
   - [x] Link
   - [x] Svg(Icons)
   - [x] Text
-- [ ] Card generation
-  - [ ] Leptos component
+- [x] Card generation
+  - [x] Leptos component
   - [x] html
 - [ ] Website generation
   - [ ] Leptos
