@@ -1,5 +1,5 @@
 use super::Renderer;
-use crate::theme::{CssShading, TailwindShading};
+use crate::theme::CssShading;
 use card::component::{frame::Direction, text::Font, Component};
 
 pub struct HtmlCssRenderer;
@@ -45,8 +45,9 @@ impl HtmlCssRenderer {
     }
 }
 
-impl<T: CssShading + TailwindShading> Renderer<T> for HtmlCssRenderer {
+impl<T: CssShading> Renderer<T> for HtmlCssRenderer {
     type Output = String;
+
     #[allow(clippy::only_used_in_recursion)]
     fn render(theme: &T, component: &Component) -> Self::Output {
         match component {

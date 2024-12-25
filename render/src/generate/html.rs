@@ -1,6 +1,6 @@
 use card::component::{frame::Direction, text::Font, Component};
 
-use crate::theme::{CssShading, TailwindShading};
+use crate::theme::TailwindShading;
 
 use super::Renderer;
 
@@ -16,17 +16,16 @@ impl HtmlRenderer {
     }
 }
 
-impl<T: TailwindShading + CssShading> Renderer<T> for HtmlRenderer {
+impl<T: TailwindShading> Renderer<T> for HtmlRenderer {
     type Output = String;
-
     fn render(theme: &T, component: &Component) -> Self::Output {
         match component {
             Component::Text(text) => {
                 let class = match text.font {
-                    Font::Label => TailwindShading::label(theme),
-                    Font::SubLabel => TailwindShading::sub_label(theme),
-                    Font::Text => TailwindShading::text(theme),
-                    Font::Minor => TailwindShading::text_minor(theme),
+                    Font::Label => theme.label(),
+                    Font::SubLabel => theme.sub_label(),
+                    Font::Text => theme.text(),
+                    Font::Minor => theme.text_minor(),
                 };
                 HtmlRenderer::wrap_tag("p", &class, text.text)
             }
@@ -34,7 +33,7 @@ impl<T: TailwindShading + CssShading> Renderer<T> for HtmlRenderer {
             Component::Link(link) => format!(
                 "<a href=\"{}\" class=\"{}\">\n{}{}\n</a>\n",
                 link.href,
-                TailwindShading::link(theme),
+                theme.link(),
                 link.text
                     .as_ref()
                     .map(|x| HtmlRenderer::render(theme, x))
@@ -48,21 +47,17 @@ impl<T: TailwindShading + CssShading> Renderer<T> for HtmlRenderer {
             Component::Field(field) => format!(
                 "<input type=\"text\" value=\"{}\" class=\"{}\"/>\n",
                 HtmlRenderer::render(theme, field.title),
-                TailwindShading::field(theme),
+                theme.field(),
             ),
 
-            Component::Icon(icon) => {
-                HtmlRenderer::wrap_tag("i", &TailwindShading::icon(theme), icon.as_str())
-            }
+            Component::Icon(icon) => HtmlRenderer::wrap_tag("i", &theme.icon(), icon.as_str()),
 
             Component::Frame(frame) => {
                 let class = match frame.direction {
-                    Direction::Vertical => TailwindShading::vertical_frame(theme),
-                    Direction::Horizontal => TailwindShading::horizontal_frame(theme),
-                    Direction::ReversVertical => TailwindShading::reversed_vertical_frame(theme),
-                    Direction::ReversHorizontal => {
-                        TailwindShading::reversed_horizontal_frame(theme)
-                    }
+                    Direction::Vertical => theme.vertical_frame(),
+                    Direction::Horizontal => theme.horizontal_frame(),
+                    Direction::ReversVertical => theme.reversed_vertical_frame(),
+                    Direction::ReversHorizontal => theme.reversed_horizontal_frame(),
                 };
                 let content: String = frame
                     .data
@@ -87,7 +82,7 @@ impl<T: TailwindShading + CssShading> Renderer<T> for HtmlRenderer {
                 {}\n\
             </body>\n\
             </html>",
-            TailwindShading::body(theme),
+            theme.body(),
             component
         )
     }

@@ -3,7 +3,7 @@ use html::{a, body, div, head, html, meta, p, script, ElementChild};
 use leptos::*;
 use prelude::{AnyView, ClassAttribute, CustomAttribute, IntoAny, RenderHtml};
 
-use crate::theme::{CssShading, TailwindShading};
+use crate::theme::TailwindShading;
 
 use super::Renderer;
 
@@ -15,28 +15,25 @@ impl LeptosRenderer {
     }
 }
 
-impl<T: TailwindShading + CssShading> Renderer<T> for LeptosRenderer {
+impl<T: TailwindShading> Renderer<T> for LeptosRenderer {
     type Output = AnyView;
-
     fn render(theme: &T, component: &card::component::Component) -> Self::Output {
         match component {
             card::component::Component::Text(item) => {
                 let class = match item.font {
-                    Font::Label => TailwindShading::label(theme),
-                    Font::SubLabel => TailwindShading::sub_label(theme),
-                    Font::Text => TailwindShading::text(theme),
-                    Font::Minor => TailwindShading::text_minor(theme),
+                    Font::Label => theme.label(),
+                    Font::SubLabel => theme.sub_label(),
+                    Font::Text => theme.text(),
+                    Font::Minor => theme.text_minor(),
                 };
                 p().class(class).child(item.text.to_html()).into_any()
             }
             card::component::Component::Frame(item) => {
                 let class = match item.direction {
-                    Direction::Vertical => TailwindShading::vertical_frame(theme),
-                    Direction::Horizontal => TailwindShading::horizontal_frame(theme),
-                    Direction::ReversVertical => TailwindShading::reversed_vertical_frame(theme),
-                    Direction::ReversHorizontal => {
-                        TailwindShading::reversed_horizontal_frame(theme)
-                    }
+                    Direction::Vertical => theme.vertical_frame(),
+                    Direction::Horizontal => theme.horizontal_frame(),
+                    Direction::ReversVertical => theme.reversed_vertical_frame(),
+                    Direction::ReversHorizontal => theme.reversed_horizontal_frame(),
                 };
                 let children = item
                     .data
@@ -46,7 +43,7 @@ impl<T: TailwindShading + CssShading> Renderer<T> for LeptosRenderer {
                 Self::wrap_element(class, children).into_any()
             }
             card::component::Component::Link(item) => {
-                let class = TailwindShading::link(theme);
+                let class = theme.link();
                 match &item.text {
                     Some(e) => a()
                         .href(item.href.to_html())
@@ -57,7 +54,7 @@ impl<T: TailwindShading + CssShading> Renderer<T> for LeptosRenderer {
                 }
             }
             card::component::Component::Field(item) => {
-                let class = TailwindShading::field(theme);
+                let class = theme.field();
                 let label = Self::render(theme, item.title);
                 let value = item
                     .element
@@ -73,7 +70,7 @@ impl<T: TailwindShading + CssShading> Renderer<T> for LeptosRenderer {
                     .into_any()
             }
             card::component::Component::Icon(item) => {
-                let class = TailwindShading::icon(theme);
+                let class = theme.icon();
                 div().class(class).child(item.as_str().to_html()).into_any()
             }
         }

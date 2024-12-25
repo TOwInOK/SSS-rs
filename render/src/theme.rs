@@ -36,368 +36,242 @@ pub struct Gaps {
 }
 
 #[derive(Debug)]
-pub enum Shade<T: TailwindShading + CssShading> {
+pub enum Shade<T: Shading> {
     Dark(T),
     Light(T),
 }
 
-impl<T: Default + TailwindShading + CssShading> Default for Shade<T> {
+impl<T: Default + Shading> Default for Shade<T> {
     fn default() -> Self {
         Self::Dark(T::default())
     }
 }
 
-/// generate some classes for specific elements
-/// overwise need to use css prefix (main.css)
-pub trait TailwindShading
-where
-    Self: Sync + Send + Debug + Default,
-{
-    fn body(&self) -> String;
-    fn label(&self) -> String;
-    fn sub_label(&self) -> String;
-    fn text(&self) -> String;
-    fn text_minor(&self) -> String;
-    fn horizontal_frame(&self) -> String;
-    fn reversed_horizontal_frame(&self) -> String;
-    fn vertical_frame(&self) -> String;
-    fn reversed_vertical_frame(&self) -> String;
-    fn link(&self) -> String;
-    fn field(&self) -> String;
-    fn icon(&self) -> String;
+pub trait Shading: Sync + Send + Debug + Default {
+    fn get_colors(&self) -> &Colors;
+    fn get_paddings(&self) -> &Paddings;
+    fn get_gaps(&self) -> &Gaps;
 }
 
-impl TailwindShading for Theme {
+impl Shading for Theme {
+    fn get_colors(&self) -> &Colors {
+        &self.color
+    }
+
+    fn get_paddings(&self) -> &Paddings {
+        &self.padding
+    }
+
+    fn get_gaps(&self) -> &Gaps {
+        &self.gap
+    }
+}
+
+pub trait TailwindShading: Shading {
     fn body(&self) -> String {
-        format!("bg-[{}]", self.color.thirdly)
+        format!("bg-{}", self.get_colors().thirdly)
     }
 
     fn label(&self) -> String {
-        format!("text-[{}] font-semibold text-lg", self.color.primary)
+        format!("text-{} font-semibold text-lg", self.get_colors().primary)
     }
 
     fn sub_label(&self) -> String {
-        format!("text-[{}] font-medium text-base", self.color.secondary)
+        format!("text-{} font-medium text-base", self.get_colors().secondary)
     }
 
     fn text(&self) -> String {
-        format!("text-[{}] text-base", self.color.primary)
+        format!("text-{} text-base", self.get_colors().primary)
     }
 
     fn text_minor(&self) -> String {
-        format!("text-[{}] text-sm", self.color.thirdly)
+        format!("text-{} text-sm", self.get_colors().thirdly)
     }
 
     fn horizontal_frame(&self) -> String {
         format!(
-            "flex flex-row border-[{}] border-[{}px] rounded-md p-{} gap-{}",
-            self.color.border, self.padding.border, self.padding.frame, self.gap.frame
+            "flex flex-row border-{} border-{} rounded-md p-{} gap-{}",
+            self.get_colors().border,
+            self.get_paddings().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn reversed_horizontal_frame(&self) -> String {
         format!(
-            "flex flex-row-reverse border-[{}] border-[{}px] rounded-md p-{} gap-{}",
-            self.color.border, self.padding.border, self.padding.frame, self.gap.frame
+            "flex flex-row-reverse border-{} border-{} rounded-md p-{} gap-{}",
+            self.get_colors().border,
+            self.get_paddings().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn vertical_frame(&self) -> String {
         format!(
-            "flex flex-col border-[{}] border-[{}px] rounded-md p-{} gap-{}",
-            self.color.border, self.padding.border, self.padding.frame, self.gap.frame
+            "flex flex-col border-{} border-{} rounded-md p-{} gap-{}",
+            self.get_colors().border,
+            self.get_paddings().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn reversed_vertical_frame(&self) -> String {
         format!(
-            "flex flex-col-reverse border-[{}] border-[{}px] rounded-md p-{} gap-{}",
-            self.color.border, self.padding.border, self.padding.frame, self.gap.frame
+            "flex flex-col-reverse border-{} border-{} rounded-md p-{} gap-{}",
+            self.get_colors().border,
+            self.get_paddings().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn link(&self) -> String {
         format!(
-            "text-[{}] hover:underline cursor-pointer",
-            self.color.primary
+            "text-{} hover:underline cursor-pointer",
+            self.get_colors().primary
         )
     }
 
     fn field(&self) -> String {
         format!(
-            "border-[{}] border-[{}px] rounded p-{} focus:outline-none focus:border-[{}]",
-            self.color.border, self.padding.border, self.padding.button, self.color.primary
+            "border-{} border-{} rounded p-{} focus:outline-none focus:border-{}",
+            self.get_colors().border,
+            self.get_paddings().border,
+            self.get_paddings().button,
+            self.get_colors().primary
         )
     }
 
     fn icon(&self) -> String {
-        format!("w-6 h-6 text-[{}]", self.color.primary)
+        format!("w-6 h-6 text-{}", self.get_colors().primary)
     }
 }
 
-impl<T: TailwindShading + CssShading> TailwindShading for Shade<T> {
+// CSS formatting
+pub trait CssShading: Shading {
     fn body(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::body(theme),
-        }
-    }
-
-    fn label(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::label(theme),
-        }
-    }
-
-    fn sub_label(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::sub_label(theme),
-        }
-    }
-
-    fn text(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::text(theme),
-        }
-    }
-
-    fn text_minor(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::text_minor(theme),
-        }
-    }
-
-    fn horizontal_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::horizontal_frame(theme),
-        }
-    }
-
-    fn reversed_horizontal_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => {
-                TailwindShading::reversed_horizontal_frame(theme)
-            }
-        }
-    }
-
-    fn vertical_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::vertical_frame(theme),
-        }
-    }
-
-    fn reversed_vertical_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => {
-                TailwindShading::reversed_vertical_frame(theme)
-            }
-        }
-    }
-
-    fn link(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::link(theme),
-        }
-    }
-
-    fn field(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::field(theme),
-        }
-    }
-
-    fn icon(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => TailwindShading::icon(theme),
-        }
-    }
-}
-
-pub trait CssShading
-where
-    Self: Sync + Send + Debug + Default,
-{
-    fn body(&self) -> String;
-    fn label(&self) -> String;
-    fn sub_label(&self) -> String;
-    fn text(&self) -> String;
-    fn text_minor(&self) -> String;
-    fn horizontal_frame(&self) -> String;
-    fn reversed_horizontal_frame(&self) -> String;
-    fn vertical_frame(&self) -> String;
-    fn reversed_vertical_frame(&self) -> String;
-    fn link(&self) -> String;
-    fn field(&self) -> String;
-    fn icon(&self) -> String;
-}
-
-impl<T: CssShading + TailwindShading> CssShading for Shade<T> {
-    fn body(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::body(theme),
-        }
-    }
-
-    fn label(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::label(theme),
-        }
-    }
-
-    fn sub_label(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::sub_label(theme),
-        }
-    }
-
-    fn text(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::text(theme),
-        }
-    }
-
-    fn text_minor(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::text_minor(theme),
-        }
-    }
-
-    fn horizontal_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::horizontal_frame(theme),
-        }
-    }
-
-    fn reversed_horizontal_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => {
-                CssShading::reversed_horizontal_frame(theme)
-            }
-        }
-    }
-
-    fn vertical_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::vertical_frame(theme),
-        }
-    }
-
-    fn reversed_vertical_frame(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::reversed_vertical_frame(theme),
-        }
-    }
-
-    fn link(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::link(theme),
-        }
-    }
-
-    fn field(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::field(theme),
-        }
-    }
-
-    fn icon(&self) -> String {
-        match self {
-            Shade::Dark(theme) | Shade::Light(theme) => CssShading::icon(theme),
-        }
-    }
-}
-
-impl CssShading for Theme {
-    fn body(&self) -> String {
-        format!("background-color: {};", self.color.thirdly)
+        format!("background-color: {};", self.get_colors().thirdly)
     }
 
     fn label(&self) -> String {
         format!(
             "color: {}; font-weight: 600; font-size: 1.125rem; line-height: 1.75rem;",
-            self.color.primary
+            self.get_colors().primary
         )
     }
 
     fn sub_label(&self) -> String {
         format!(
             "color: {}; font-weight: 500; font-size: 1rem; line-height: 1.5rem;",
-            self.color.secondary
+            self.get_colors().secondary
         )
     }
 
     fn text(&self) -> String {
         format!(
             "color: {}; font-size: 1rem; line-height: 1.5rem;",
-            self.color.primary
+            self.get_colors().primary
         )
     }
 
     fn text_minor(&self) -> String {
         format!(
             "color: {}; font-size: 0.875rem; line-height: 1.25rem;",
-            self.color.thirdly
+            self.get_colors().thirdly
         )
     }
 
     fn horizontal_frame(&self) -> String {
         format!(
             "display: flex; flex-direction: row; border: {}px solid {}; border-radius: 0.375rem; padding: {}px; gap: {}px;",
-            self.padding.border,
-            self.color.border,
-            self.padding.frame,
-            self.gap.frame
+            self.get_paddings().border,
+            self.get_colors().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn reversed_horizontal_frame(&self) -> String {
         format!(
             "display: flex; flex-direction: row-reverse; border: {}px solid {}; border-radius: 0.375rem; padding: {}px; gap: {}px;",
-            self.padding.border,
-            self.color.border,
-            self.padding.frame,
-            self.gap.frame
+            self.get_paddings().border,
+            self.get_colors().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn vertical_frame(&self) -> String {
         format!(
             "display: flex; flex-direction: column; border: {}px solid {}; border-radius: 0.375rem; padding: {}px; gap: {}px;",
-            self.padding.border,
-            self.color.border,
-            self.padding.frame,
-            self.gap.frame
+            self.get_paddings().border,
+            self.get_colors().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn reversed_vertical_frame(&self) -> String {
         format!(
             "display: flex; flex-direction: column-reverse; border: {}px solid {}; border-radius: 0.375rem; padding: {}px; gap: {}px;",
-            self.padding.border,
-            self.color.border,
-            self.padding.frame,
-            self.gap.frame
+            self.get_paddings().border,
+            self.get_colors().border,
+            self.get_paddings().frame,
+            self.get_gaps().frame
         )
     }
 
     fn link(&self) -> String {
         format!(
             "color: {}; text-decoration: none; cursor: pointer;",
-            self.color.primary
+            self.get_colors().primary
         )
     }
 
     fn field(&self) -> String {
         format!(
             "border: {}px solid {}; border-radius: 0.25rem; padding: {}px; outline: none;",
-            self.padding.border, self.color.border, self.padding.button
+            self.get_paddings().border,
+            self.get_colors().border,
+            self.get_paddings().button
         )
     }
 
     fn icon(&self) -> String {
         format!(
             "width: 1.5rem; height: 1.5rem; color: {};",
-            self.color.primary
+            self.get_colors().primary
         )
     }
 }
+
+// Simple implementations for Theme
+impl TailwindShading for Theme {}
+impl CssShading for Theme {}
+
+// Implementations for Shade
+impl<T: Shading> Shading for Shade<T> {
+    fn get_colors(&self) -> &Colors {
+        match self {
+            Shade::Dark(theme) | Shade::Light(theme) => theme.get_colors(),
+        }
+    }
+
+    fn get_paddings(&self) -> &Paddings {
+        match self {
+            Shade::Dark(theme) | Shade::Light(theme) => theme.get_paddings(),
+        }
+    }
+
+    fn get_gaps(&self) -> &Gaps {
+        match self {
+            Shade::Dark(theme) | Shade::Light(theme) => theme.get_gaps(),
+        }
+    }
+}
+
+impl<T: Shading + TailwindShading> TailwindShading for Shade<T> {}
+impl<T: Shading + CssShading> CssShading for Shade<T> {}
