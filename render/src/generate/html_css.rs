@@ -1,10 +1,14 @@
 use super::Renderer;
-use crate::theme::CssShading;
+use crate::{
+    format::{css::CssFormatter, StyleFormatter},
+    theme::Shading,
+};
 use card::component::{frame::Direction, text::Font, Component};
-
+/// HTML/CSS renderer that generates styled HTML output for components using pure CSS classes
 pub struct HtmlCssRenderer;
 
 impl HtmlCssRenderer {
+    /// Wraps content in an HTML tag with a CSS class and proper indentation
     fn wrap_tag(tag: &str, class: &str, content: &str) -> String {
         if content.is_empty() {
             format!("<{} class=\"{}\"/>\n", tag, class)
@@ -13,7 +17,16 @@ impl HtmlCssRenderer {
         }
     }
 
-    fn generate_styles<T: CssShading>(theme: &T) -> String {
+    /// Generates CSS styles for all component types based on the provided theme configuration
+    ///
+    /// Creates CSS classes for:
+    /// - Body (.sss-body)
+    /// - Text elements (.sss-label, .sss-sub-label, .sss-text, .sss-text-minor)
+    /// - Frames (.sss-frame-*)
+    /// - Links (.sss-link)
+    /// - Fields (.sss-field)
+    /// - Icons (.sss-icon)
+    fn generate_styles(formatter: &CssFormatter, theme: &impl Shading) -> String {
         format!(
             "<style>\n\
                 .sss-body {{\n{}  \n}}\n\
@@ -29,27 +42,40 @@ impl HtmlCssRenderer {
                 .sss-field {{\n    {}\n}}\n\
                 .sss-icon {{\n    {}\n}}\n\
             </style>",
-            theme.body(),
-            theme.label(),
-            theme.sub_label(),
-            theme.text(),
-            theme.text_minor(),
-            theme.horizontal_frame(),
-            theme.reversed_horizontal_frame(),
-            theme.vertical_frame(),
-            theme.reversed_vertical_frame(),
-            theme.link(),
-            theme.field(),
-            theme.icon(),
+            formatter.body(theme),
+            formatter.label(theme),
+            formatter.sub_label(theme),
+            formatter.text(theme),
+            formatter.text_minor(theme),
+            formatter.horizontal_frame(theme),
+            formatter.reversed_horizontal_frame(theme),
+            formatter.vertical_frame(theme),
+            formatter.reversed_vertical_frame(theme),
+            formatter.link(theme),
+            formatter.field(theme),
+            formatter.icon(theme),
         )
     }
 }
 
-impl<T: CssShading> Renderer<T> for HtmlCssRenderer {
+impl Renderer for HtmlCssRenderer {
     type Output = String;
+    type Formatter = CssFormatter;
 
+    /// Renders a component to HTML markup with appropriate CSS styling
+    ///
+    /// Handles:
+    /// - Text components with different font styles
+    /// - Links with optional text and icons
+    /// - Input fields
+    /// - Icons
+    /// - Frames with different layout directions
     #[allow(clippy::only_used_in_recursion)]
-    fn render(theme: &T, component: &Component) -> Self::Output {
+    fn render(
+        formatter: &Self::Formatter,
+        theme: &impl Shading,
+        component: &Component,
+    ) -> Self::Output {
         match component {
             Component::Text(text) => {
                 let class = match text.font {
@@ -66,11 +92,11 @@ impl<T: CssShading> Renderer<T> for HtmlCssRenderer {
                     "{}{}",
                     link.text
                         .as_ref()
-                        .map(|x| Self::render(theme, x))
+                        .map(|x| Self::render(formatter, theme, x))
                         .unwrap_or_default(),
                     link.icon
                         .as_ref()
-                        .map(|x| Self::render(theme, x))
+                        .map(|x| Self::render(formatter, theme, x))
                         .unwrap_or_default()
                 );
                 format!(
@@ -81,7 +107,7 @@ impl<T: CssShading> Renderer<T> for HtmlCssRenderer {
 
             Component::Field(field) => format!(
                 "<input type=\"text\" value=\"{}\" class=\"sss-field\"/>\n",
-                Self::render(theme, field.title),
+                Self::render(formatter, theme, field.title),
             ),
 
             Component::Icon(icon) => Self::wrap_tag("i", "sss-icon", icon.as_str()),
@@ -93,13 +119,28 @@ impl<T: CssShading> Renderer<T> for HtmlCssRenderer {
                     Direction::ReversVertical => "sss-frame-vertical-reverse",
                     Direction::ReversHorizontal => "sss-frame-horizontal-reverse",
                 };
-                let content: String = frame.data.iter().map(|x| Self::render(theme, x)).collect();
+                let content: String = frame
+                    .data
+                    .iter()
+                    .map(|x| Self::render(formatter, theme, x))
+                    .collect();
                 Self::wrap_tag("div", class, &content)
             }
         }
     }
 
-    fn finallyse(theme: &T, component: Self::Output) -> Self::Output {
+    /// Wraps the rendered component in a complete HTML5 document with styling
+    ///
+    /// Includes:
+    /// - DOCTYPE declaration
+    /// - Meta tags for charset and viewport
+    /// - Generated CSS styles
+    /// - Component content in a styled body
+    fn finallyse(
+        formatter: &Self::Formatter,
+        theme: &impl Shading,
+        component: Self::Output,
+    ) -> Self::Output {
         format!(
             "<!DOCTYPE html>\n\
                 <html lang=\"en\">\n\
@@ -110,7 +151,7 @@ impl<T: CssShading> Renderer<T> for HtmlCssRenderer {
                 </head>\n\
                 <body class=\"sss-body\">\n    {}\n</body>\n\
                 </html>",
-            Self::generate_styles(theme),
+            Self::generate_styles(formatter, theme),
             component
         )
     }

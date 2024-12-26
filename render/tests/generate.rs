@@ -34,9 +34,9 @@ mod gen_render_el {
 
     #[test]
     #[instrument]
-    fn text() {
+    fn gen() {
         LazyLock::force(&TS);
-        let components = vec![text!("some text")];
+        let components = vec![text!("test")];
         info!("Components: {:#?}", &components);
         let component = Component::Frame(Frame {
             data: components,
@@ -45,43 +45,43 @@ mod gen_render_el {
         info!("Component: {:#?}", &component);
         let settings = Settings {
             user: User {
-                name: "Some_Name".to_string(),
+                name: "Test_User".to_string(),
                 nickname: Nickname {
-                    word: "S".to_string(),
-                    pronounce: Some("'asS".to_string()),
+                    word: "T".to_string(),
+                    pronounce: Some("test".to_string()),
                 },
                 other_nicknames: vec![
                     Nickname {
-                        word: "A".to_string(),
-                        pronounce: Some("'aaI".to_string()),
+                        word: "Test1".to_string(),
+                        pronounce: Some("test1".to_string()),
                     },
                     Nickname {
-                        word: "B".to_string(),
-                        pronounce: Some("'bI".to_string()),
+                        word: "Test2".to_string(),
+                        pronounce: Some("test2".to_string()),
                     },
                 ],
-                specifications: vec!["xxx".to_string()],
+                specifications: vec!["test_spec".to_string()],
                 about: About {
-                    text: "ssss".to_string(),
+                    text: "test description".to_string(),
                     max_length: 20,
                 },
                 repos: vec![Blank {
-                    provider: "GH".to_string(),
-                    link: "0".to_string(),
+                    provider: "Test".to_string(),
+                    link: "test_link".to_string(),
                     logo: None,
                     main: false,
                 }],
                 social_media: vec![Blank {
-                    provider: "GgH".to_string(),
-                    link: "02".to_string(),
+                    provider: "TestSocial".to_string(),
+                    link: "test_social_link".to_string(),
                     logo: None,
                     main: false,
                 }],
                 skills: vec![Skill {
-                    skill: "02".to_string(),
+                    skill: "test_skill".to_string(),
                     top_projects: vec![Blank {
-                        provider: "GH".to_string(),
-                        link: "0".to_string(),
+                        provider: "Test".to_string(),
+                        link: "test_project_link".to_string(),
                         logo: None,
                         main: false,
                     }],

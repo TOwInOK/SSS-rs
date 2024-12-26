@@ -1,3 +1,10 @@
+//! Rendering engine for user profile layouts and components
+//!
+//! This module provides a complete system for generating and rendering user profile layouts.
+//! It supports multiple output formats including HTML with Tailwind CSS, standalone HTML+CSS,
+//! and Leptos components. The rendering pipeline includes layout generation, formatting,
+//! and theme application through the Shading trait interface.
+
 use card::{
     component::{
         frame::{Direction, Frame},
@@ -12,10 +19,20 @@ use leptos::prelude::AnyView;
 use sss_core::Settings;
 
 use crate::{
+    format::{css::CssFormatter, tailwindcss::TailwindFormatter},
     generate::{html::HtmlRenderer, html_css::HtmlCssRenderer, leptos::LeptosRenderer, Renderer},
-    theme::{CssShading, TailwindShading},
+    theme::Shading,
 };
 
+/// Creates a component tree representing the user profile layout
+///
+/// Generates a hierarchical component structure from the provided user settings.
+/// The layout includes sections for:
+/// - Name and nickname
+/// - Professional specializations
+/// - About/bio section
+/// - Main skills and expertise
+/// - Social media links and profiles
 pub fn layout(
     Settings {
         user,
@@ -94,32 +111,61 @@ pub fn layout(
     ))
 }
 
+/// Type representing the various supported output formats
+///
+/// Each variant contains the rendered profile in a specific format:
+/// - HTML: Basic HTML with Tailwind classes
+/// - HTMLCSS: Standalone HTML with embedded CSS styles
+/// - LEPTOS: Leptos framework view components
 pub enum RenderOut {
+    /// Plain HTML output
     HTML(String),
+    /// HTML with CSS styles output
     HTMLCSS(String),
+    /// Leptos view component output
     LEPTOS(AnyView),
 }
 
-pub fn render<T: TailwindShading + CssShading>(settings: &Settings, theme: &T) -> RenderOut {
+/// Transforms the profile layout into the requested output format
+///
+/// Takes the user settings and theme configuration to render the profile.
+/// The output format is determined by the render_type setting and can be:
+/// - HTML with Tailwind classes
+/// - HTML with embedded CSS
+/// - Leptos view components
+pub fn render(settings: &Settings, theme: &impl Shading) -> RenderOut {
     let component = layout(settings);
     match settings.render_type {
         sss_core::types::render::Render::HTML => {
-            RenderOut::HTML(HtmlRenderer::render(theme, &component))
+            let formatter = TailwindFormatter;
+            RenderOut::HTML(HtmlRenderer::render(&formatter, theme, &component))
         }
         sss_core::types::render::Render::LEPTOS => {
-            RenderOut::LEPTOS(LeptosRenderer::render(theme, &component))
+            let formatter = TailwindFormatter;
+            RenderOut::LEPTOS(LeptosRenderer::render(&formatter, theme, &component))
         }
         sss_core::types::render::Render::HTMLCSS => {
-            RenderOut::HTMLCSS(HtmlCssRenderer::render(theme, &component))
+            let formatter = CssFormatter;
+            RenderOut::HTMLCSS(HtmlCssRenderer::render(&formatter, theme, &component))
         }
     }
 }
 
-pub fn finallyse<T: TailwindShading + CssShading>(settings: &Settings, theme: &T) -> RenderOut {
+/// Applies final processing to the rendered output
+pub fn finallyse(settings: &Settings, theme: &impl Shading) -> RenderOut {
     let render = render(settings, theme);
     match render {
-        RenderOut::HTML(e) => RenderOut::HTML(HtmlRenderer::finallyse(theme, e)),
-        RenderOut::LEPTOS(e) => RenderOut::LEPTOS(LeptosRenderer::finallyse(theme, e)),
-        RenderOut::HTMLCSS(e) => RenderOut::HTMLCSS(HtmlCssRenderer::finallyse(theme, e)),
+        RenderOut::HTML(e) => {
+            let formatter = TailwindFormatter;
+            RenderOut::HTML(HtmlRenderer::finallyse(&formatter, theme, e))
+        }
+        RenderOut::LEPTOS(e) => {
+            let formatter = TailwindFormatter;
+            RenderOut::LEPTOS(LeptosRenderer::finallyse(&formatter, theme, e))
+        }
+        RenderOut::HTMLCSS(e) => {
+            let formatter = CssFormatter;
+            RenderOut::HTMLCSS(HtmlCssRenderer::finallyse(&formatter, theme, e))
+        }
     }
 }
