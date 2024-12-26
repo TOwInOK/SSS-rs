@@ -9,7 +9,7 @@ pub static UMBRELLA_LIGHT: Shade<Theme> = Shade::Light(Theme {
     },
     padding: Paddings {
         button: 2,
-        border: 1,
+        border: 2,
         frame: 4,
     },
     gap: Gaps { frame: 2 },
@@ -18,9 +18,9 @@ pub static UMBRELLA_LIGHT: Shade<Theme> = Shade::Light(Theme {
 pub static UMBRELLA_DARK: Shade<Theme> = Shade::Dark(Theme {
     color: Colors {
         primary: "#ffffff",   // Белый
-        secondary: "#e5e5e5", // Светло-серый
+        secondary: "#1a1a1a", // Светло-серый
         thirdly: "#a3a3a3",   // Серый
-        border: "#404040",    // Тёмно-серый
+        border: "#ffffff",    // Тёмно-серый
     },
     padding: Paddings {
         button: 2,

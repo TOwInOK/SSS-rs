@@ -3,7 +3,7 @@ mod gen_render_el {
     use std::sync::LazyLock;
 
     use card::{
-        component::{frame::Frame, text::Text, Component},
+        component::{frame::Frame, icon::Icon, text::Text, Component},
         text,
     };
     use render::{
@@ -68,25 +68,37 @@ mod gen_render_el {
                 repos: vec![Blank {
                     provider: "Test".to_string(),
                     link: "test_link".to_string(),
-                    logo: None,
-                    main: false,
+                    logo: Some(
+                        Icon::Filled(card::component::icon::Filled::GitHub)
+                            .as_str()
+                            .to_string(),
+                    ),
+                    main: true,
                 }],
                 social_media: vec![Blank {
                     provider: "TestSocial".to_string(),
                     link: "test_social_link".to_string(),
-                    logo: None,
-                    main: false,
+                    logo: Some(
+                        Icon::Filled(card::component::icon::Filled::GitHub)
+                            .as_str()
+                            .to_string(),
+                    ),
+                    main: true,
                 }],
                 skills: vec![Skill {
                     skill: "test_skill".to_string(),
                     top_projects: vec![Blank {
                         provider: "Test".to_string(),
                         link: "test_project_link".to_string(),
-                        logo: None,
-                        main: false,
+                        logo: Some(
+                            Icon::Filled(card::component::icon::Filled::GitHub)
+                                .as_str()
+                                .to_string(),
+                        ),
+                        main: true,
                     }],
                     since: None,
-                    main: false,
+                    main: true,
                     maintainer_site: None,
                 }],
             },

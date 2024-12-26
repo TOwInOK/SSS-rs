@@ -5,99 +5,96 @@ use super::StyleFormatter;
 pub struct TailwindFormatter;
 
 impl StyleFormatter for TailwindFormatter {
-    /// Returns Tailwind classes for styling the background of a body element
     fn body(&self, theme: &impl Shading) -> String {
-        format!("bg-{}", theme.get_colors().thirdly)
-    }
-
-    /// Returns Tailwind classes for styling a primary label element
-    fn label(&self, theme: &impl Shading) -> String {
-        format!("text-{} font-semibold text-lg", theme.get_colors().primary)
-    }
-
-    /// Returns Tailwind classes for styling a secondary/sub label element
-    fn sub_label(&self, theme: &impl Shading) -> String {
         format!(
-            "text-{} font-medium text-base",
+            "bg-[{}] min-h-screen flex items-center justify-center",
             theme.get_colors().secondary
         )
     }
 
-    /// Returns Tailwind classes for styling regular text content
+    fn label(&self, theme: &impl Shading) -> String {
+        format!("text-[{}] font-bold text-xl", theme.get_colors().primary)
+    }
+
+    fn sub_label(&self, theme: &impl Shading) -> String {
+        format!("text-[{}] opacity-80 text-lg", theme.get_colors().primary)
+    }
+
     fn text(&self, theme: &impl Shading) -> String {
-        format!("text-{} text-base", theme.get_colors().primary)
+        format!("text-[{}] text-base", theme.get_colors().primary)
     }
 
-    /// Returns Tailwind classes for styling minor/secondary text content
     fn text_minor(&self, theme: &impl Shading) -> String {
-        format!("text-{} text-sm", theme.get_colors().thirdly)
+        format!("text-[{}] text-sm opacity-60", theme.get_colors().primary)
     }
 
-    /// Returns Tailwind classes for a horizontal flex container with borders
     fn horizontal_frame(&self, theme: &impl Shading) -> String {
         format!(
-            "flex flex-row border-{} border-{} rounded-md p-{} gap-{}",
-            theme.get_colors().border,
-            theme.get_paddings().border,
-            theme.get_paddings().frame,
-            theme.get_gaps().frame
-        )
+               "flex items-center justify-center border-[{}] border-[{}] rounded-md p-{} gap-{} bg-[{}] shadow-lg shadow-[{}]/20",
+               theme.get_colors().border,
+               theme.get_paddings().border,
+               theme.get_paddings().frame,
+               theme.get_gaps().frame,
+               theme.get_colors().secondary,
+               theme.get_colors().thirdly
+           )
     }
 
-    /// Returns Tailwind classes for a reversed horizontal flex container with borders
     fn reversed_horizontal_frame(&self, theme: &impl Shading) -> String {
         format!(
-            "flex flex-row-reverse border-{} border-{} rounded-md p-{} gap-{}",
-            theme.get_colors().border,
-            theme.get_paddings().border,
-            theme.get_paddings().frame,
-            theme.get_gaps().frame
-        )
+               "flex flex-row-reverse items-center justify-center border-[{}] border-[{}] rounded-md p-{} gap-{} bg-[{}] shadow-lg shadow-[{}]/20",
+               theme.get_colors().border,
+               theme.get_paddings().border,
+               theme.get_paddings().frame,
+               theme.get_gaps().frame,
+               theme.get_colors().secondary,
+               theme.get_colors().thirdly
+           )
     }
 
-    /// Returns Tailwind classes for a vertical flex container with borders
     fn vertical_frame(&self, theme: &impl Shading) -> String {
         format!(
-            "flex flex-col border-{} border-{} rounded-md p-{} gap-{}",
-            theme.get_colors().border,
-            theme.get_paddings().border,
-            theme.get_paddings().frame,
-            theme.get_gaps().frame
-        )
+               "flex flex-col items-center justify-center border-[{}] border-[{}] rounded-md p-{} gap-{} bg-[{}] shadow-lg shadow-[{}]/20",
+               theme.get_colors().border,
+               theme.get_paddings().border,
+               theme.get_paddings().frame,
+               theme.get_gaps().frame,
+               theme.get_colors().secondary,
+               theme.get_colors().thirdly
+           )
     }
 
-    /// Returns Tailwind classes for a reversed vertical flex container with borders
     fn reversed_vertical_frame(&self, theme: &impl Shading) -> String {
         format!(
-            "flex flex-col-reverse border-{} border-{} rounded-md p-{} gap-{}",
-            theme.get_colors().border,
-            theme.get_paddings().border,
-            theme.get_paddings().frame,
-            theme.get_gaps().frame
-        )
+               "flex flex-col-reverse items-center justify-center border-[{}] border-[{}] rounded-md p-{} gap-{} bg-[{}] shadow-lg shadow-[{}]/20",
+               theme.get_colors().border,
+               theme.get_paddings().border,
+               theme.get_paddings().frame,
+               theme.get_gaps().frame,
+               theme.get_colors().secondary,
+               theme.get_colors().thirdly
+           )
     }
 
-    /// Returns Tailwind classes for styling a clickable link element
     fn link(&self, theme: &impl Shading) -> String {
         format!(
-            "text-{} hover:underline cursor-pointer",
+            "text-[{}] hover:underline cursor-pointer opacity-90",
             theme.get_colors().primary
         )
     }
 
-    /// Returns Tailwind classes for styling an input field
     fn field(&self, theme: &impl Shading) -> String {
         format!(
-            "border-{} border-{} rounded p-{} focus:outline-none focus:border-{}",
+            "border-[{}] border-[{}] rounded p-{} focus:outline-none focus:border-[{}] bg-[{}]/80",
             theme.get_colors().border,
             theme.get_paddings().border,
             theme.get_paddings().button,
-            theme.get_colors().primary
+            theme.get_colors().primary,
+            theme.get_colors().secondary
         )
     }
 
-    /// Returns Tailwind classes for styling an icon element
     fn icon(&self, theme: &impl Shading) -> String {
-        format!("w-6 h-6 text-{}", theme.get_colors().primary)
+        format!("w-6 h-6 text-[{}] opacity-80", theme.get_colors().primary)
     }
 }

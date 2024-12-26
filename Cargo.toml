@@ -1,5 +1,5 @@
 [workspace]
-members = ["render", "card", "parser", "sss-core"]
+members = ["render", "card", "parser", "sss-core", "tailwindcss-validator"]
 resolver = "2"
 
 [workspace.package]

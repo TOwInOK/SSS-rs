@@ -1,0 +1,11 @@
+[package]
+name = "tailwindcss-validator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "A validator for Tailwind CSS color names and classes"
+
+[dependencies]
+csscolorparser = { version = "0.7.0", features = ["rgb", "rust-rgb"] }
+rgb = "0.8.50"
