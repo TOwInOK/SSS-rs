@@ -6,21 +6,19 @@ pub struct Umbrella;
 
 impl Layout for Umbrella {
     fn layout<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a> {
         frame!(Vertical;
-            self.user(component_layout, settings),
-            self.specializations(component_layout, settings),
-            self.about(component_layout, settings),
-            self.skills(component_layout, settings),
-            self.socials(component_layout, settings)
+            Self::user(component_layout, settings),
+            Self::specializations(component_layout, settings),
+            Self::about(component_layout, settings),
+            Self::skills(component_layout, settings),
+            Self::socials(component_layout, settings)
         )
     }
 
     fn user<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a> {
@@ -34,7 +32,6 @@ impl Layout for Umbrella {
     }
 
     fn specializations<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
@@ -48,7 +45,6 @@ impl Layout for Umbrella {
     }
 
     fn about<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
@@ -56,7 +52,6 @@ impl Layout for Umbrella {
     }
 
     fn skills<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
@@ -71,7 +66,6 @@ impl Layout for Umbrella {
     }
 
     fn socials<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
@@ -89,28 +83,33 @@ impl Layout for Umbrella {
         )
     }
 
-    // Вспомогательные методы можно оставить как todo!()
     fn specialization<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
-        todo!()
+        frame!(Horizontal;
+            icon!(Filled, GitHub),
+            text!("Specialization")
+        )
     }
 
     fn skill<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
-        todo!()
+        frame!(Horizontal;
+            text!("Skill"),
+            text!("(5/5)", Minor)
+        )
     }
 
     fn social<'a>(
-        &self,
         _component_layout: &'a impl ComponentLayout,
         _settings: &'a impl UserProvider,
     ) -> Component<'a> {
-        todo!()
+        frame!(Horizontal;
+            icon!(Filled, GitHub),
+            text!("GitHub")
+        )
     }
 }

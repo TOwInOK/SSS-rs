@@ -108,9 +108,8 @@ mod gen_render_el {
             },
             render_type: Render::HTML,
         };
-        let engine = Umbrella {};
-        let r = engine.render(&settings, &HtmlRenderer, &settings, &UMBRELLA_DARK);
-        let r = engine.render_finaly(r, &UMBRELLA_DARK);
+        let r = Umbrella::render(&settings, &HtmlRenderer, &settings, &UMBRELLA_DARK);
+        let r = Umbrella::render_finaly(r, &UMBRELLA_DARK);
         match r {
             layout::RenderOut::HTML(e) => std::fs::write("example.html", &e).unwrap(),
             layout::RenderOut::LEPTOS(_) => todo!(),

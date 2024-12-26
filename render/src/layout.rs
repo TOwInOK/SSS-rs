@@ -40,63 +40,54 @@ pub enum RenderOut {
 pub trait Layout {
     /// Generates the overall layout structure
     fn layout<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates the user information section
     fn user<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates a single specialization section
     fn specialization<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates the specializations container section
     fn specializations<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates the about section
     fn about<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates the skills container section
     fn skills<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates a single skill item section
     fn skill<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates the social links container section
     fn socials<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
 
     /// Generates a single social link item section
     fn social<'a>(
-        &self,
         component_layout: &'a impl ComponentLayout,
         settings: &'a impl UserProvider,
     ) -> Component<'a>;
@@ -109,13 +100,12 @@ pub trait Layout {
     /// - HTML with embedded CSS
     /// - Leptos view components
     fn render(
-        &self,
         user: &impl UserProvider,
         component_layout: &impl ComponentLayout,
         render_type: &impl RenderTypeProvider,
         theme: &impl Shading,
     ) -> RenderOut {
-        let component = self.layout(component_layout, user);
+        let component = Self::layout(component_layout, user);
         match render_type.render_type() {
             sss_core::types::render::Render::HTML => {
                 let formatter = TailwindFormatter;
@@ -136,7 +126,7 @@ pub trait Layout {
     ///
     /// Performs format-specific post-processing and cleanup on the rendered component
     /// based on the output format type and theme settings
-    fn render_finaly(&self, component: RenderOut, theme: &impl Shading) -> RenderOut {
+    fn render_finaly(component: RenderOut, theme: &impl Shading) -> RenderOut {
         match component {
             RenderOut::HTML(e) => {
                 let formatter = TailwindFormatter;
