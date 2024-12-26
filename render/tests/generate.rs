@@ -3,11 +3,12 @@ mod gen_render_el {
     use std::sync::LazyLock;
 
     use card::{
-        component::{frame::Frame, icon::Icon, text::Text, Component},
+        component::{frame::Frame, icon::Icon, Component},
         text,
     };
     use render::{
-        layout::{self, finallyse},
+        component_layout::html::HtmlRenderer,
+        layout::{self, umbrella::Umbrella, Layout},
         theme::umbrella::UMBRELLA_DARK,
     };
     use sss_core::{
@@ -36,7 +37,10 @@ mod gen_render_el {
     #[instrument]
     fn gen() {
         LazyLock::force(&TS);
-        let components = vec![text!("test")];
+        let components = vec![text!("test")]
+            .into_iter()
+            .map(std::borrow::Cow::Owned)
+            .collect::<Vec<_>>();
         info!("Components: {:#?}", &components);
         let component = Component::Frame(Frame {
             data: components,
@@ -104,7 +108,9 @@ mod gen_render_el {
             },
             render_type: Render::HTML,
         };
-        let r = finallyse(&settings, &UMBRELLA_DARK);
+        let engine = Umbrella {};
+        let r = engine.render(&settings, &HtmlRenderer, &settings, &UMBRELLA_DARK);
+        let r = engine.render_finaly(r, &UMBRELLA_DARK);
         match r {
             layout::RenderOut::HTML(e) => std::fs::write("example.html", &e).unwrap(),
             layout::RenderOut::LEPTOS(_) => todo!(),

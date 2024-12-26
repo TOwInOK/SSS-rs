@@ -7,7 +7,7 @@ use crate::{
     theme::Shading,
 };
 
-use super::Renderer;
+use super::ComponentLayout;
 
 pub struct HtmlRenderer;
 
@@ -30,7 +30,7 @@ impl HtmlRenderer {
     }
 }
 
-impl Renderer for HtmlRenderer {
+impl ComponentLayout for HtmlRenderer {
     type Output = String;
     type Formatter = TailwindFormatter;
 
@@ -56,7 +56,7 @@ impl Renderer for HtmlRenderer {
                     Font::Text => formatter.text(theme),
                     Font::Minor => formatter.text_minor(theme),
                 };
-                HtmlRenderer::wrap_tag("p", &class, text.text)
+                HtmlRenderer::wrap_tag("p", &class, text.text.as_ref())
             }
 
             Component::Link(link) => format!(
@@ -75,7 +75,7 @@ impl Renderer for HtmlRenderer {
 
             Component::Field(field) => format!(
                 "<input type=\"text\" value=\"{}\" class=\"{}\"/>\n",
-                Self::render(formatter, theme, field.title),
+                Self::render(formatter, theme, field.title.as_ref()),
                 formatter.field(theme),
             ),
 

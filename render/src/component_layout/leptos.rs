@@ -21,7 +21,7 @@ use crate::{
     theme::Shading,
 };
 
-use super::Renderer;
+use super::ComponentLayout;
 
 pub struct LeptosRenderer;
 
@@ -41,7 +41,7 @@ impl LeptosRenderer {
     }
 }
 
-impl Renderer for LeptosRenderer {
+impl ComponentLayout for LeptosRenderer {
     type Output = AnyView;
     type Formatter = TailwindFormatter;
 
@@ -58,7 +58,9 @@ impl Renderer for LeptosRenderer {
                     Font::Text => formatter.text(theme),
                     Font::Minor => formatter.text_minor(theme),
                 };
-                p().class(class).child(item.text.to_html()).into_any()
+                p().class(class)
+                    .child(item.text.clone().to_html())
+                    .into_any()
             }
             card::component::Component::Frame(item) => {
                 let class = match item.direction {
@@ -78,16 +80,19 @@ impl Renderer for LeptosRenderer {
                 let class = formatter.link(theme);
                 match &item.text {
                     Some(e) => a()
-                        .href(item.href.to_html())
+                        .href(item.href.as_ref().to_html())
                         .class(class)
                         .child(Self::render(formatter, theme, e))
                         .into_any(),
-                    None => a().href(item.href.to_html()).class(class).into_any(),
+                    None => a()
+                        .href(item.href.as_ref().to_html())
+                        .class(class)
+                        .into_any(),
                 }
             }
             card::component::Component::Field(item) => {
                 let class = formatter.field(theme);
-                let title = Self::render(formatter, theme, item.title);
+                let title = Self::render(formatter, theme, item.title.as_ref());
                 let value = item
                     .element
                     .as_ref()
@@ -115,18 +120,22 @@ impl Renderer for LeptosRenderer {
         _theme: &impl Shading,
         component: Self::Output,
     ) -> Self::Output {
-        html()
+        let head_content = head()
+            .child(meta().attr("charset", "UTF-8"))
             .child(
-                head()
-                    .child(meta().attr("charset", "UTF-8"))
-                    .child(
-                        meta()
-                            .attr("name", "viewport")
-                            .attr("content", "width=device-width, initial-scale=1.0"),
-                    )
-                    .child(script().attr("src", "https://cdn.tailwindcss.com")),
+                meta()
+                    .attr("name", "viewport")
+                    .attr("content", "width=device-width, initial-scale=1.0"),
             )
-            .child(body().child(component))
+            .child(script().attr("src", "https://cdn.tailwindcss.com"))
+            .into_view();
+
+        let body_content = body().child(component).into_view();
+
+        html()
+            .child(head_content)
+            .child(body_content)
+            .into_view()
             .into_any()
     }
 }

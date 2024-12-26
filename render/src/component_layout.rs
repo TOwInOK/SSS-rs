@@ -1,11 +1,12 @@
 pub mod html;
 pub mod html_css;
 pub mod leptos;
+
 use crate::{format::StyleFormatter, theme::Shading};
 use card::component::Component;
 
 /// A trait for rendering components to different output formats.
-pub trait Renderer {
+pub trait ComponentLayout {
     /// The output type produced by this renderer.
     type Output;
     /// The style formatter type used by this renderer.

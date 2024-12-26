@@ -1,4 +1,4 @@
-use super::Renderer;
+use super::ComponentLayout;
 use crate::{
     format::{css::CssFormatter, StyleFormatter},
     theme::Shading,
@@ -58,7 +58,7 @@ impl HtmlCssRenderer {
     }
 }
 
-impl Renderer for HtmlCssRenderer {
+impl ComponentLayout for HtmlCssRenderer {
     type Output = String;
     type Formatter = CssFormatter;
 
@@ -84,7 +84,7 @@ impl Renderer for HtmlCssRenderer {
                     Font::Text => "sss-text",
                     Font::Minor => "sss-text-minor",
                 };
-                Self::wrap_tag("p", class, text.text)
+                Self::wrap_tag("p", class, text.text.as_ref())
             }
 
             Component::Link(link) => {
@@ -107,7 +107,7 @@ impl Renderer for HtmlCssRenderer {
 
             Component::Field(field) => format!(
                 "<input type=\"text\" value=\"{}\" class=\"sss-field\"/>\n",
-                Self::render(formatter, theme, field.title),
+                Self::render(formatter, theme, field.title.as_ref()),
             ),
 
             Component::Icon(icon) => Self::wrap_tag("i", "sss-icon", icon.as_str()),

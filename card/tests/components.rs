@@ -18,7 +18,7 @@ mod components {
         assert_eq!(text.text, "some text");
         assert_eq!(text.font, Font::Text);
 
-        let text = text!("some text");
+        let text: Component = text!("some text");
         assert_eq!(
             text,
             Component::Text(Text::new("some text", Some(Font::Text)))
@@ -43,13 +43,27 @@ mod components {
     fn field() {
         let text = Component::Text(Text::new("some text", Some(Font::Label)));
         let tt = text!("some text");
-        let field = Field::new(&tt, None, Some(&icon!(Filled, GitHub)));
+        let field = Field::new(tt, None, Some(icon!(Filled, GitHub)));
         assert!(field.element.is_none());
-        assert_eq!(field.title, &text);
+        assert_eq!(field.title, Box::new(text));
     }
     #[test]
     fn test_icon() {
         let icon = create_icon!(Outline, GitHub);
         assert_eq!(icon, Icon::Outline(Outline::GitHub));
+    }
+    #[test]
+    fn rec_frame() {
+        let text = Component::Text(Text::new("some text", Some(Font::Label)));
+        let frame = Frame::new(
+            vec![
+                Component::Text(Text::new("some text", Some(Font::Label))),
+                Component::Text(Text::new("some text", Some(Font::Label))),
+                text,
+            ],
+            Direction::Vertical,
+        );
+        assert!(frame.data.is_empty());
+        assert_eq!(frame.direction, Direction::Vertical);
     }
 }

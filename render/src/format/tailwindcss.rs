@@ -1,6 +1,7 @@
 use crate::theme::Shading;
 
 use super::StyleFormatter;
+
 /// Formatter for generating Tailwind CSS classes based on a theme
 pub struct TailwindFormatter;
 

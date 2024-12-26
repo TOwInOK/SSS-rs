@@ -6,7 +6,7 @@
 //! - Content generation and formatting utilities
 //! - Output formatting and rendering
 
+pub mod component_layout;
 pub mod format;
-pub mod generate;
 pub mod layout;
 pub mod theme;

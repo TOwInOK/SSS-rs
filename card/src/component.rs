@@ -25,7 +25,7 @@ pub enum Component<'a> {
 
 impl<'a> From<Text<'a>> for Component<'a> {
     fn from(value: Text<'a>) -> Self {
-        Component::Text(value)
+        Self::Text(value)
     }
 }
 impl<'a> From<Frame<'a>> for Component<'a> {
@@ -53,30 +53,115 @@ impl<'a> From<Icon<'a>> for Component<'a> {
 #[macro_export]
 macro_rules! text {
     ($data:expr, $font:ident) => {{
+        use $crate::component::text::{Font, Text};
         Component::Text(Text::new($data, Some(Font::$font)))
     }};
-
-    ($data:expr) => {
+    ($data:expr) => {{
+        use $crate::component::text::Text;
         Component::Text(Text::new($data, None))
+    }};
+    ($($invalid:tt)*) => {
+        compile_error!("Invalid text! macro usage. Use: text!(data) or text!(data, Font)")
     };
 }
 #[macro_export]
 macro_rules! frame {
-    ($aspect:ident; $data:expr) => {{
-        use $crate::component::frame::Direction;
-        use $crate::component::Component;
-        Component::Frame(Frame::new($data, Direction::$aspect))
+    ($aspect:ident; $($component:expr),* $(,)?) => {{
+           use $crate::component::frame::{Frame, Direction};
+           let components: Vec<Component> = vec![$($component),*];
+           Frame::new(
+               components,
+               Direction::$aspect
+           ).into()
+       }};
+    ($($component:expr),* $(,)?) => {{
+        use $crate::component::frame::{Frame, Direction};
+        Frame::new(
+            vec![$($component),*],
+            Direction::default()
+        ).into()
     }};
-    ($data:expr) => {{
-        use $crate::component::frame::Direction;
-        use $crate::component::Component;
-        Component::Frame(Frame::new($data, Direction::default()))
+    ($aspect:ident;) => {{
+        use $crate::component::frame::{Frame, Direction};
+        Frame::new(Vec::new(), Direction::$aspect).into()
+    }};
+    () => {{
+        use $crate::component::frame::{Frame, Direction};
+        Frame::new(Vec::new(), Direction::default()).into()
     }};
 }
 #[macro_export]
 macro_rules! icon {
+    // Для предопределенных иконок
     ($variant:ident, $aspect:ident) => {{
-        use $crate::create_icon;
-        Component::Icon(create_icon!($variant, $aspect))
+        use $crate::component::icon::{$variant, Icon};
+        Icon::$variant($variant::$aspect).into()
     }};
+    // Для кастомных иконок
+    (custom, $svg:expr) => {{
+        use $crate::component::icon::Icon;
+        Icon::Custom($svg).into()
+    }};
+    // Ошибка
+    ($($invalid:tt)*) => {
+        compile_error!(
+            "Invalid icon! macro usage. Use: icon!(Variant, Name) or icon!(custom, svg_string)"
+        )
+    };
+}
+
+#[macro_export]
+macro_rules! field {
+    // Только заголовок
+    ($title:expr) => {{
+        use $crate::component::field::Field;
+        Field::new($title, None, None).into()
+    }};
+    // Заголовок и иконка
+    ($title:expr, icon = $icon:expr) => {{
+        use $crate::component::field::Field;
+        Field::new($title, Some($icon), None).into()
+    }};
+    // Заголовок и элемент
+    ($title:expr, element = $element:expr) => {{
+        use $crate::component::field::Field;
+        Field::new($title, None, Some($element)).into()
+    }};
+    // Полная версия
+    ($title:expr, icon = $icon:expr, element = $element:expr) => {{
+        use $crate::component::field::Field;
+        Field::new($title, Some($icon), Some($element)).into()
+    }};
+    // Ошибка
+    ($($invalid:tt)*) => {
+        compile_error!("Invalid field! macro usage")
+    };
+}
+
+#[macro_export]
+macro_rules! link {
+    // Только href
+    ($href:expr) => {{
+        use $crate::component::link::Link;
+        Link::new(None, $href, None).into()
+    }};
+    // href и текст
+    ($href:expr, text = $text:expr) => {{
+        use $crate::component::link::Link;
+        Link::new(Some($text), $href, None).into()
+    }};
+    // href и иконка
+    ($href:expr, icon = $icon:expr) => {{
+        use $crate::component::link::Link;
+        Link::new(None, $href, Some($icon)).into()
+    }};
+    // Полная версия
+    ($href:expr, text = $text:expr, icon = $icon:expr) => {{
+        use $crate::component::link::Link;
+        Link::new(Some($text), $href, Some($icon)).into()
+    }};
+    // Ошибка
+    ($($invalid:tt)*) => {
+        compile_error!("Invalid link! macro usage")
+    };
 }

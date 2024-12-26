@@ -1,13 +1,18 @@
+use std::borrow::Cow;
+
 use super::Component;
 #[derive(Debug, Clone, PartialEq)]
 pub struct Frame<'a> {
-    pub data: Vec<Component<'a>>,
+    pub data: Vec<Cow<'a, Component<'a>>>,
     pub direction: Direction,
 }
 
 impl<'a> Frame<'a> {
-    pub fn new(data: Vec<Component<'a>>, direction: Direction) -> Self {
-        Self { data, direction }
+    pub fn new(data: Vec<Component<'a>>, direction: Direction) -> Frame<'a> {
+        Self {
+            data: data.into_iter().map(Cow::Owned).collect(),
+            direction,
+        }
     }
 }
 
