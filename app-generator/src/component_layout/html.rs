@@ -1,26 +1,13 @@
-/// A renderer that outputs HTML with Tailwind CSS styling.
-/// Uses Tailwind classes to apply consistent styling to HTML elements.
-use card::component::{frame::Direction, text::Font, Component};
-
+use super::ComponentLayout;
 use crate::{
-    format::{tailwindcss::TailwindFormatter, StyleFormatter},
+    format::{umberella::TailwindFormatter, StyleFormatter},
     theme::Shading,
 };
-
-use super::ComponentLayout;
+use card::component::{frame::Direction, text::Font, Component};
 
 pub struct HtmlRenderer;
 
 impl HtmlRenderer {
-    /// Wraps content in an HTML tag with a class.
-    ///
-    /// # Arguments
-    /// * `tag` - The HTML tag name to use (e.g. "div", "p", "span")
-    /// * `class` - CSS classes to apply to the tag
-    /// * `content` - Inner HTML content to wrap inside the tag
-    ///
-    /// # Returns
-    /// A String containing the wrapped HTML
     fn wrap_tag(tag: &str, class: &str, content: &str) -> String {
         if content.is_empty() {
             format!("<{} class=\"{}\"/>\n", tag, class)
@@ -34,21 +21,12 @@ impl ComponentLayout for HtmlRenderer {
     type Output = String;
     type Formatter = TailwindFormatter;
 
-    /// Renders a component to HTML with Tailwind styling.
-    ///
-    /// # Arguments
-    /// * `formatter` - Formatter that provides Tailwind CSS classes
-    /// * `theme` - Theme colors and styling to apply
-    /// * `component` - Component to render to HTML
-    ///
-    /// # Returns
-    /// HTML string representation of the component
     fn render(
         formatter: &Self::Formatter,
         theme: &impl Shading,
         component: &Component,
     ) -> Self::Output {
-        match component {
+        let rendered = match component {
             Component::Text(text) => {
                 let class = match text.font {
                     Font::Label => formatter.label(theme),
@@ -80,7 +58,12 @@ impl ComponentLayout for HtmlRenderer {
             ),
 
             Component::Icon(icon) => {
-                HtmlRenderer::wrap_tag("i", &formatter.icon(theme), icon.as_str())
+                let content = format!(
+                    "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"{}\" {}/></svg>",
+                    formatter.icon(theme),
+                    icon.as_ref()
+                );
+                HtmlRenderer::wrap_tag("i", &formatter.icon(theme), content.as_str())
             }
 
             Component::Frame(frame) => {
@@ -97,18 +80,12 @@ impl ComponentLayout for HtmlRenderer {
                     .collect();
                 HtmlRenderer::wrap_tag("div", &class, &content)
             }
-        }
-    }
+        };
 
-    /// Wraps the rendered component in a complete HTML document.
-    ///
-    /// # Arguments
-    /// * `formatter` - Formatter that provides Tailwind CSS classes
-    /// * `theme` - Theme colors and styling to apply
-    /// * `component` - Component HTML to wrap in document
-    ///
-    /// # Returns
-    /// Complete HTML document as a string
+        // Оборачиваем в внешний frame
+        HtmlRenderer::wrap_tag("div", &formatter.frame(theme), &rendered)
+    }
+    // Добавь в theme данные шрифтов (cdn), скриптов, метатегов
     fn finallyse(
         formatter: &Self::Formatter,
         theme: &impl Shading,
@@ -121,6 +98,20 @@ impl ComponentLayout for HtmlRenderer {
                 <meta charset=\"UTF-8\">\n\
                 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n\
                 <script src=\"https://cdn.tailwindcss.com\"></script>\n\
+                <script>\n\
+                    tailwind.config = {{\n\
+                        theme: {{\n\
+                            extend: {{\n\
+                                fontFamily: {{\n\
+                                    mono: ['PT Mono', 'monospace'],\n\
+                                }},\n\
+                            }},\n\
+                        }},\n\
+                    }};\n\
+                </script>\n\
+                <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n\
+                <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n\
+                <link href=\"https://fonts.googleapis.com/css2?family=PT+Mono&display=swap\" rel=\"stylesheet\">\n\
             </head>\n\
             <body class=\"{}\">\n\
                 {}\n\

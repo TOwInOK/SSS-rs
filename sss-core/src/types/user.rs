@@ -48,7 +48,7 @@ fn default_max_length() -> usize {
     100
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Blank {
     /// Провайдер репозитория
     pub provider: String,
@@ -63,7 +63,7 @@ pub struct Blank {
     pub main: bool, // по умолчанию false
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Skill {
     /// Навык
     pub skill: String,
@@ -81,11 +81,21 @@ pub struct Skill {
     pub maintainer_site: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Since {
     /// Год начала
     pub start: usize,
     /// Год окончания
     #[serde(default)]
     pub end: usize, // по умолчанию 0
+}
+
+impl std::fmt::Display for Since {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.end == 0 {
+            write!(f, "{} -> today", self.start)
+        } else {
+            write!(f, "{} -> {}", self.start, self.end)
+        }
+    }
 }

@@ -1,7 +1,5 @@
 use std::fmt::Debug;
 
-pub mod umbrella;
-
 /// Represents hexadecimal color values as static string references.
 /// These are used to define theme colors throughout the application.
 /// The values should be valid hex color codes like "#FF0000".
@@ -102,6 +100,14 @@ pub trait Shading: Sync + Send + Debug + Default {
     /// Retrieves the gap configuration for the theme
     /// Returns a reference to the Gaps struct containing spacing measurements
     fn get_gaps(&self) -> &Gaps;
+
+    // for body
+    /// some meta tags
+    fn get_meta(&self) -> &str;
+    /// some tailwind or any scripts
+    fn get_scripts(&self) -> &str;
+    /// fonts
+    fn get_links(&self) -> &str;
 }
 
 /// Implements the Shading trait for the Theme struct, providing
@@ -120,6 +126,18 @@ impl Shading for Theme {
     /// Returns a reference to this theme's Gaps configuration
     fn get_gaps(&self) -> &Gaps {
         &self.gap
+    }
+
+    fn get_meta(&self) -> &str {
+        todo!()
+    }
+
+    fn get_scripts(&self) -> &str {
+        todo!()
+    }
+
+    fn get_links(&self) -> &str {
+        todo!()
     }
 }
 
@@ -145,5 +163,17 @@ impl<T: Shading> Shading for Shade<T> {
         match self {
             Shade::Dark(theme) | Shade::Light(theme) => theme.get_gaps(),
         }
+    }
+
+    fn get_meta(&self) -> &str {
+        todo!()
+    }
+
+    fn get_scripts(&self) -> &str {
+        todo!()
+    }
+
+    fn get_links(&self) -> &str {
+        todo!()
     }
 }

@@ -1,15 +1,14 @@
 #[cfg(test)]
 mod components {
-    use card::{
+    use components::{
         component::{
-            field::Field,
             frame::{Direction, Frame},
             icon::{Filled, Icon, Outline},
             link::Link,
             text::{Font, Text},
             Component,
         },
-        create_icon, icon, text,
+        create_icon, text,
     };
 
     #[test]
@@ -38,14 +37,6 @@ mod components {
         let frame = Frame::new(vec![], Direction::Vertical);
         assert!(frame.data.is_empty());
         assert_eq!(frame.direction, Direction::Vertical);
-    }
-    #[test]
-    fn field() {
-        let text = Component::Text(Text::new("some text", Some(Font::Label)));
-        let tt = text!("some text");
-        let field = Field::new(tt, None, Some(icon!(Filled, GitHub)));
-        assert!(field.element.is_none());
-        assert_eq!(field.title, Box::new(text));
     }
     #[test]
     fn test_icon() {

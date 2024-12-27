@@ -17,7 +17,7 @@ use leptos::*;
 use prelude::{AnyView, ClassAttribute, CustomAttribute, IntoAny, RenderHtml};
 
 use crate::{
-    format::{tailwindcss::TailwindFormatter, StyleFormatter},
+    format::{umberella::TailwindFormatter, StyleFormatter},
     theme::Shading,
 };
 
@@ -110,7 +110,7 @@ impl ComponentLayout for LeptosRenderer {
             }
             card::component::Component::Icon(item) => {
                 let class = formatter.icon(theme);
-                div().class(class).child(item.as_str().to_html()).into_any()
+                div().class(class).child(item.as_ref().to_html()).into_any()
             }
         }
     }

@@ -7,6 +7,8 @@
 //! - Output formatting and rendering
 
 pub mod component_layout;
-pub mod format;
 pub mod layout;
+/// Just prelude, no more
+pub mod prelude;
 pub mod theme;
+pub mod theming;
