@@ -1,14 +1,14 @@
 use super::Component;
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Link<'a> {
-    pub text: Option<Box<Component<'a>>>,
-    pub href: &'a str,
-    pub icon: Option<Box<Component<'a>>>,
+pub struct Link {
+    pub text: Option<Box<Component>>,
+    pub href: String,
+    pub icon: Option<Box<Component>>,
 }
 
-impl<'a> Link<'a> {
-    pub fn new(text: Option<Component<'a>>, href: &'a str, icon: Option<Component<'a>>) -> Self {
+impl Link {
+    pub fn new(text: Option<Component>, href: String, icon: Option<Component>) -> Self {
         Self {
             text: text.map(Box::new),
             href,

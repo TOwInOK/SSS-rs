@@ -1,14 +1,12 @@
-use std::borrow::Cow;
-
 /// Just a text.
 #[derive(Debug, Clone, PartialEq)]
-pub struct Text<'a> {
-    pub text: Cow<'a, str>,
+pub struct Text {
+    pub text: String,
     pub font: Font,
 }
 
-impl<'a> Text<'a> {
-    pub fn new(data: impl Into<Cow<'a, str>>, font: Option<Font>) -> Self {
+impl Text {
+    pub fn new(data: impl Into<String>, font: Option<Font>) -> Self {
         Self {
             text: data.into(),
             font: font.unwrap_or_default(),

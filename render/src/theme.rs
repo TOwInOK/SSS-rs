@@ -1,5 +1,3 @@
-use std::fmt::Debug;
-
 /// Represents hexadecimal color values as static string references.
 /// These are used to define theme colors throughout the application.
 /// The values should be valid hex color codes like "#FF0000".
@@ -18,7 +16,7 @@ type Gap = usize;
 /// Defines the overall theme configuration by combining colors, padding values,
 /// and gap settings into a single coherent theme structure.
 /// This serves as the root theme configuration object.
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Theme {
     pub color: Colors,
     pub padding: Paddings,
@@ -29,7 +27,7 @@ pub struct Theme {
 /// Defines colors for different hierarchy levels (primary, secondary, tertiary)
 /// as well as border colors.
 /// All colors are specified as hex color codes.
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Colors {
     /// Primary theme color used for main UI elements
     pub primary: Color,
@@ -44,7 +42,7 @@ pub struct Colors {
 /// Specifies padding measurements for different UI element types.
 /// Controls internal spacing for buttons, borders, and frames.
 /// All measurements are in pixels.
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Paddings {
     /// Internal padding for button elements
     pub button: Padding,
@@ -57,7 +55,7 @@ pub struct Paddings {
 /// Defines spacing measurements between distinct UI components.
 /// Currently supports frame-level gap configuration.
 /// All measurements are in pixels.
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Gaps {
     /// Spacing between frame elements
     pub frame: Gap,
@@ -67,7 +65,6 @@ pub struct Gaps {
 /// Generic parameter T must implement the Shading trait to provide
 /// necessary theming functionality.
 /// Used to switch between dark and light theme variants.
-#[derive(Debug)]
 pub enum Shade<T: Shading> {
     /// Dark theme variant
     Dark(T),
@@ -88,7 +85,7 @@ impl<T: Default + Shading> Default for Shade<T> {
 /// Defines core functionality required for theme implementation.
 /// Implementors must be thread-safe (Sync + Send) and support
 /// debugging and default initialization.
-pub trait Shading: Sync + Send + Debug + Default {
+pub trait Shading: Sync + Send + Default {
     /// Retrieves the color configuration for the theme
     /// Returns a reference to the Colors struct containing the theme's color palette
     fn get_colors(&self) -> &Colors;

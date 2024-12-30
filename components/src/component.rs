@@ -13,30 +13,30 @@ use icon::Icon;
 use link::Link;
 use text::Text;
 #[derive(Debug, Clone, PartialEq)]
-pub enum Component<'a> {
-    Text(Text<'a>),
-    Frame(Frame<'a>),
-    Link(Link<'a>),
+pub enum Component {
+    Text(Text),
+    Frame(Frame),
+    Link(Link),
     Icon(Icon),
 }
 
-impl<'a> From<Text<'a>> for Component<'a> {
-    fn from(value: Text<'a>) -> Self {
+impl From<Text> for Component {
+    fn from(value: Text) -> Self {
         Self::Text(value)
     }
 }
-impl<'a> From<Frame<'a>> for Component<'a> {
-    fn from(value: Frame<'a>) -> Self {
+impl From<Frame> for Component {
+    fn from(value: Frame) -> Self {
         Self::Frame(value)
     }
 }
 
-impl<'a> From<Link<'a>> for Component<'a> {
-    fn from(value: Link<'a>) -> Self {
+impl From<Link> for Component {
+    fn from(value: Link) -> Self {
         Self::Link(value)
     }
 }
-impl<'a> From<Icon> for Component<'a> {
+impl From<Icon> for Component {
     fn from(value: Icon) -> Self {
         Self::Icon(value)
     }

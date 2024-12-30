@@ -11,4 +11,3 @@ pub mod layout;
 /// Just prelude, no more
 pub mod prelude;
 pub mod theme;
-pub mod theming;

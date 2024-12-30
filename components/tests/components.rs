@@ -1,4 +1,3 @@
-#[cfg(test)]
 mod components {
     use components::{
         component::{
@@ -27,7 +26,11 @@ mod components {
     fn link() {
         let text = Component::Text(Text::new("some text", Some(Font::Label)));
         let icon = Component::Icon(Icon::Filled(Filled::GitHub));
-        let link = Link::new(Some(text.clone()), "some ref", Some(icon.clone()));
+        let link = Link::new(
+            Some(text.clone()),
+            "some ref".to_string(),
+            Some(icon.clone()),
+        );
         assert_eq!(link.href, "some ref");
         assert_eq!(link.text.unwrap(), Box::new(text));
         assert_eq!(link.icon.unwrap(), Box::new(icon));
