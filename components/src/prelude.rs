@@ -1,9 +1,4 @@
-pub use crate::component::{
-    frame::{Direction, Frame},
+pub use crate::sections::{
     icon::{Filled, Icon, Outline},
-    link::Link,
-    text::{Font, Text},
-    Component,
+    sections, Sections,
 };
-
-pub use crate::{create_icon, field, frame, icon, link, text};

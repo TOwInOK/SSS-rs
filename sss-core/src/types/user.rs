@@ -6,96 +6,251 @@ pub type Specifications = Vec<String>;
 pub type SocialMedias = Vec<Blank>;
 pub type TopProjects = Vec<Blank>;
 
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct User {
-    /// Имя
-    pub name: String,
-    /// Прозвище
-    pub nickname: Nickname,
-    /// Иные прозвища
-    pub other_nicknames: Nicknames,
-    /// Уклон в разработке
-    pub specifications: Specifications,
-    /// О пользователе
-    pub about: About,
-    /// Репозитории
-    pub repos: TopProjects,
-    /// Социальные сети
-    pub social_media: SocialMedias,
-    /// Список навыков
-    pub skills: Skills,
+pub fn user() -> User {
+    User::default()
+}
+
+pub fn nickname() -> Nickname {
+    Nickname::default()
+}
+
+pub fn about() -> About {
+    About::default()
+}
+
+pub fn blank() -> Blank {
+    Blank::default()
+}
+
+pub fn skill() -> Skill {
+    Skill::default()
+}
+
+pub fn since() -> Since {
+    Since::default()
 }
 #[derive(Debug, Serialize, Deserialize, Default)]
+pub struct User {
+    pub name: String,
+    pub nickname: Nickname,
+    pub other_nicknames: Nicknames,
+}
+
+impl User {
+    pub fn name(
+        mut self,
+        name: String,
+    ) -> Self {
+        self.name = name;
+        self
+    }
+
+    pub fn nickname(
+        mut self,
+        nickname: Nickname,
+    ) -> Self {
+        self.nickname = nickname;
+        self
+    }
+
+    pub fn other_nicknames(
+        mut self,
+        other_nicknames: Nicknames,
+    ) -> Self {
+        self.other_nicknames = other_nicknames;
+        self
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Nickname {
-    /// Прозвище
     pub word: String,
-    /// Произношение
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pronounce: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
-pub struct About {
-    /// Текст о пользователе
-    pub text: String,
-    /// Максимальная длина текста
-    #[serde(default = "default_max_length")]
-    pub max_length: usize, // по умолчанию 100
+impl Nickname {
+    pub fn word(
+        mut self,
+        word: String,
+    ) -> Self {
+        self.word = word;
+        self
+    }
+
+    pub fn pronounce(
+        mut self,
+        pronounce: Option<String>,
+    ) -> Self {
+        self.pronounce = pronounce;
+        self
+    }
 }
 
-fn default_max_length() -> usize {
-    100
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct About {
+    pub text: String,
+    #[serde(default = "default_max_length")]
+    pub max_length: usize,
+}
+
+impl About {
+    pub fn text(
+        mut self,
+        text: String,
+    ) -> Self {
+        self.text = text;
+        self
+    }
+
+    pub fn max_length(
+        mut self,
+        max_length: usize,
+    ) -> Self {
+        self.max_length = max_length;
+        self
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Blank {
-    /// Провайдер репозитория
     pub provider: String,
-    /// Ссылка на репозиторий
     pub link: String,
-    /// Логотип репозитория
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logo: Option<String>,
-    /// Основной репозиторий
     #[serde(default)]
-    pub main: bool, // по умолчанию false
+    pub main: bool,
+}
+
+impl Blank {
+    pub fn provider(
+        mut self,
+        provider: String,
+    ) -> Self {
+        self.provider = provider;
+        self
+    }
+
+    pub fn link(
+        mut self,
+        link: String,
+    ) -> Self {
+        self.link = link;
+        self
+    }
+
+    pub fn logo(
+        mut self,
+        logo: Option<String>,
+    ) -> Self {
+        self.logo = logo;
+        self
+    }
+
+    pub fn main(
+        mut self,
+        main: bool,
+    ) -> Self {
+        self.main = main;
+        self
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Skill {
-    /// Навык
     pub skill: String,
-    /// Топ проектов
     pub top_projects: TopProjects,
-    /// Даты
     #[serde(default)]
-    pub since: Option<Since>, // опциональная структура
-    /// Основной навык
+    pub since: Option<Since>,
     #[serde(default)]
-    pub main: bool, // по умолчанию false
-    /// Сайт поддержателя
+    pub main: bool,
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maintainer_site: Option<String>,
 }
 
+impl Skill {
+    pub fn skill(
+        mut self,
+        skill: String,
+    ) -> Self {
+        self.skill = skill;
+        self
+    }
+
+    pub fn top_projects(
+        mut self,
+        top_projects: TopProjects,
+    ) -> Self {
+        self.top_projects = top_projects;
+        self
+    }
+
+    pub fn since(
+        mut self,
+        since: Option<Since>,
+    ) -> Self {
+        self.since = since;
+        self
+    }
+
+    pub fn main(
+        mut self,
+        main: bool,
+    ) -> Self {
+        self.main = main;
+        self
+    }
+
+    pub fn maintainer_site(
+        mut self,
+        maintainer_site: Option<String>,
+    ) -> Self {
+        self.maintainer_site = maintainer_site;
+        self
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Since {
-    /// Год начала
     pub start: usize,
-    /// Год окончания
     #[serde(default)]
-    pub end: usize, // по умолчанию 0
+    pub end: usize,
+}
+
+impl Since {
+    pub fn start(
+        mut self,
+        start: usize,
+    ) -> Self {
+        self.start = start;
+        self
+    }
+
+    pub fn end(
+        mut self,
+        end: usize,
+    ) -> Self {
+        self.end = end;
+        self
+    }
 }
 
 impl std::fmt::Display for Since {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+    ) -> std::fmt::Result {
         if self.end == 0 {
             write!(f, "{} -> today", self.start)
         } else {
             write!(f, "{} -> {}", self.start, self.end)
         }
     }
+}
+
+fn default_max_length() -> usize {
+    100
 }

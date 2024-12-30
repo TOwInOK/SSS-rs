@@ -21,6 +21,30 @@ pub enum Icon {
     Outline(Outline),
     Custom(String),
 }
+impl Icon {
+    pub fn to_svg(
+        &self,
+        class: &str,
+    ) -> String {
+        match self {
+            Icon::Filled(data) => format!(
+                r#"<svg xmlns="http://www.w3.org/2000/svg" class="{}" {}</svg>"#,
+                class,
+                data.as_str()
+            ),
+            Icon::Outline(data) => format!(
+                r#"<svg xmlns="http://www.w3.org/2000/svg" class="{}" {}</svg>"#,
+                class,
+                data.as_str()
+            ),
+            Icon::Custom(data) => format!(
+                r#"<svg xmlns="http://www.w3.org/2000/svg" class="{}" {}</svg>"#,
+                class,
+                data.as_str()
+            ),
+        }
+    }
+}
 
 impl AsRef<str> for Icon {
     fn as_ref(&self) -> &str {

@@ -1,12 +1,17 @@
-use sss_core::UserProvider;
-
 use crate::theme::Shading;
 
-pub trait Layout<Out, C, S, D>
+pub trait Layout<Out, C, S>
 where
-    D: UserProvider + UserProvider,
     S: Shading,
 {
     /// Transforms the profile layout into the requested output format
-    fn render(component: C, shade: &S, data: &D) -> Out;
+    fn render(
+        sections: C,
+        shade: &S,
+    ) -> Out;
+
+    fn finylize(
+        rendered: Out,
+        shade: &S,
+    ) -> Out;
 }

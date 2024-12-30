@@ -1,2 +1,2 @@
-pub mod component;
 pub mod prelude;
+pub mod sections;

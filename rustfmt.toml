@@ -1,0 +1,31 @@
+max_width = 100
+
+# Компактное форматирование параметров функций
+fn_params_layout = "Vertical"
+# Настройки ширины для разных конструкций
+array_width = 60
+attr_fn_like_width = 70
+chain_width = 60
+fn_call_width = 60
+struct_lit_width = 10
+struct_variant_width = 35
+
+# Использование максимально компактных эвристик
+use_small_heuristics = "Max"
+
+# Дополнительные настройки для компактности
+use_field_init_shorthand = true
+use_try_shorthand = true
+
+# Отключение trailing comma в match блоках для компактности
+match_block_trailing_comma = false
+
+# Стиль для match arms без leading pipes
+match_arm_leading_pipes = "Preserve"
+
+# Переупорядочивание импортов и модулей
+reorder_imports = true
+reorder_modules = true
+
+# Удаление вложенных скобок
+remove_nested_parens = true

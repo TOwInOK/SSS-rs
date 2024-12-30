@@ -6,4 +6,4 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-parser = { path = "../parser" }
+sss_core = { path = "../sss-core" }

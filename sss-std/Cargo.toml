@@ -1,5 +1,5 @@
 [package]
-name = "std"
+name = "sss-std"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -7,3 +7,6 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
+render = { path = "../render" }
+components = { path = "../components" }
+sss_core = { path = "../sss-core" }
