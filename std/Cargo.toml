@@ -1,5 +1,5 @@
 [package]
-name = "app-generator"
+name = "std"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
