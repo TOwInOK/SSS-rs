@@ -1,7 +1,7 @@
 use components::prelude::*;
 use render::prelude::*;
 use sss_core::prelude::*;
-use sss_std::{layouts::umbrella_html::UmbrellaHtmlRender, theme::umbrella::UMBRELLA};
+use sss_std::{layouts::umbrella_html::UmbrellaHtmlRender, themes::umbrella::UMBRELLA};
 
 #[test]
 fn test_umbrella_layout() {
@@ -35,33 +35,21 @@ fn test_umbrella_layout() {
     let github = blank()
         .provider("gh".to_string())
         .link("https://github.com/username".to_string())
-        .logo(Some(r#"viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"
-            />"#.to_string()));
+        .logo(Some(Icon::Outline(Outline::GitHub).as_ref().into()));
     socials.push(github);
 
     // LinkedIn
     let linkedin = blank()
         .provider("l.in".to_string())
         .link("https://linkedin.com/in/username".to_string())
-        .logo(Some(r#"viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M8 11v5"/><path d="M8 8v.01"/>
-            <path d="M12 16v-5"/>
-            <path d="M16 16v-3a2 2 0 1 0 -4 0"/>
-            <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z"/>
-            "#.to_string()));
+        .logo(Some(Icon::Outline(Outline::LinkedIn).as_ref().into()));
     socials.push(linkedin);
 
     // Telegram
     let telegram = blank()
         .provider("TG".to_string())
         .link("https://t.me/username".to_string())
-        .logo(Some(r#"viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4"/>
-            "#.to_string()));
+        .logo(Some(Icon::Outline(Outline::Telegram).as_ref().into()));
     socials.push(telegram);
 
     sections.set_socials(socials);
