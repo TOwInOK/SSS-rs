@@ -7,6 +7,3 @@ license.workspace = true
 
 [dependencies]
 sss_core = { path = "../sss-core" }
-leptos.workspace = true
-tracing.workspace = true
-tracing-subscriber.workspace = true
