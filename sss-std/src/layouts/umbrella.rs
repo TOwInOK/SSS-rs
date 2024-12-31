@@ -1,3 +1,11 @@
+pub mod html;
+pub mod img;
+pub mod leptos;
+pub mod pdf;
+pub use self::{
+    html::UmbrellaHtmlRender, img::UmbrellaImgRender, leptos::UmbrellaLeptosRender,
+    pdf::UmbrellaPdfRender,
+};
 use render::prelude::*;
 
 pub static UMBRELLA: Theme = Theme {

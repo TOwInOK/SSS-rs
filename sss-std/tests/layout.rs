@@ -1,7 +1,7 @@
 use components::prelude::*;
 use render::prelude::*;
 use sss_core::prelude::*;
-use sss_std::{layouts::umbrella_html::UmbrellaHtmlRender, themes::umbrella::UMBRELLA};
+use sss_std::prelude::*;
 
 #[test]
 fn test_umbrella_layout() {

@@ -1,1 +1,1 @@
-pub mod umbrella_html;
+pub mod umbrella;

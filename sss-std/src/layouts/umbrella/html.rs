@@ -1,6 +1,7 @@
 use components::prelude::*;
 use render::prelude::*;
 use sss_core::prelude::*;
+// TODO: Change to askama render
 pub struct UmbrellaHtmlRender;
 impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
     fn render(
@@ -41,7 +42,7 @@ impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
                     <div class="grid gap-2">
                         {}
                     </div>
-                    <div class="text-[{}] text-right font-mono text-sm md:text-base">
+                    <div class="text-[{}] text-right font-mono text-sm md:text-base max-h-[{}px]">
                         {}
                     </div>
                 </div>"#,
@@ -59,6 +60,7 @@ impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
                     .collect::<Vec<_>>()
                     .join(""),
                 shade.get_colors().thirdly,
+                component.about().max_length,
                 component.about().text
             )
         };
