@@ -20,16 +20,11 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
 - [x] User config parser
   - [x] Toml
   - [x] Json
-- [ ] Global settings
-  - under develop
-- [x] Card elements
-  - [x] Field
-  - [x] Frame
-  - [x] Link
+- [x] Card composition
+  - [x] Sections
   - [x] Svg(Icons)
-  - [x] Text
 - [x] Card generation
-  - [x] Leptos component
+  - [ ] Leptos component
   - [x] html
 - [ ] Website generation
   - [ ] Leptos
@@ -40,6 +35,7 @@ A tool to present you as a developer with Slick, Shark, Savvy skills and style.
 Themes will be added as soon as possible.
 If you **want** to see more **themes**, **make an issue!**
 
+- [x] Umbrella
 - [ ] Rosé Pine
   - [ ] Moon
 - [ ] GrooveBox
@@ -63,4 +59,13 @@ If you **want** to see more **themes**, **make an issue!**
 
 4. render
 
-- generate leptos component/html code by card
+- traits about how to render
+
+5. sss_std (folder: sss-std)
+
+- standart themes & components
+
+# Example
+- Umbrella(card)
+  - [img](.content/umbrella_card.png)
+  - [text](.content/umbrella_test_output.html)
