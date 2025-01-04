@@ -6,12 +6,13 @@ where
 {
     /// Transforms the profile layout into the requested output format
     fn render(
+        &self,
         sections: C,
         shade: &S,
     ) -> Out;
 
-    fn finylize(
-        rendered: Out,
-        shade: &S,
-    ) -> Out;
+    // fn finylize(
+    //     rendered: Out,
+    //     shade: &S,
+    // ) -> Out;
 }

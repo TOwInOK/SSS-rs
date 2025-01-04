@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 /// Represents hexadecimal color values as static string references.
 /// These are used to define theme colors throughout the application.
 /// The values should be valid hex color codes like "#FF0000".
@@ -6,16 +8,16 @@ type Color = &'static str;
 /// Defines the overall theme configuration by combining colors, padding values,
 /// and gap settings into a single coherent theme structure.
 /// This serves as the root theme configuration object.
-#[derive(Default)]
+#[derive(Default, Serialize)]
 pub struct Theme {
-    pub color: Colors,
+    pub colors: Colors,
 }
 
 /// Contains the complete color palette configuration for a theme.
 /// Defines colors for different hierarchy levels (primary, secondary, tertiary)
 /// as well as border colors.
 /// All colors are specified as hex color codes.
-#[derive(Default)]
+#[derive(Default, Serialize)]
 pub struct Colors {
     /// Primary theme color used for main UI elements
     pub primary: Color,
@@ -62,7 +64,7 @@ pub trait Shading: Sync + Send + Default {
 impl Shading for Theme {
     /// Returns a reference to this theme's Colors configuration
     fn get_colors(&self) -> &Colors {
-        &self.color
+        &self.colors
     }
 }
 

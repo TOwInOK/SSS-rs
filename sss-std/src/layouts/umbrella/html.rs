@@ -1,10 +1,11 @@
 use components::prelude::*;
 use render::prelude::*;
 use sss_core::prelude::*;
-// TODO: Change to askama render
+/// Pure HTML
 pub struct UmbrellaHtmlRender;
 impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
     fn render(
+        &self,
         component: Sections,
         shade: &Theme,
     ) -> String {
@@ -126,7 +127,7 @@ impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
             )
         };
 
-        format!(
+        let rendered = format!(
             r#"<div class="p-4 rounded-lg border-t-2 border-b-2 border-[{}] flex flex-col gap-4">
                      {}
                      {}
@@ -138,13 +139,7 @@ impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
             specs(component.specifications()),
             socials(component.socials()),
             skills(component.skills())
-        )
-    }
-
-    fn finylize(
-        rendered: String,
-        shade: &Theme,
-    ) -> String {
+        );
         format!(
             r#"<!DOCTYPE html>
                 <html lang="en">

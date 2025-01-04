@@ -11,4 +11,4 @@ leptos.workspace = true
 render = { path = "../render" }
 components = { path = "../components" }
 sss_core = { path = "../sss-core" }
-askama = "0.12.1"
+tera = "1.20.0"
