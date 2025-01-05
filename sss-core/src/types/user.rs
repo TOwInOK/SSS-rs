@@ -161,14 +161,17 @@ impl Blank {
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Skill {
     pub skill: String,
-    pub top_projects: TopProjects,
+    pub projects: TopProjects,
     #[serde(default)]
     pub since: Option<Since>,
     #[serde(default)]
     pub main: bool,
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub maintainer_site: Option<String>,
+    pub site_label: Option<String>,
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub site_link: Option<String>,
 }
 
 impl Skill {
@@ -184,7 +187,7 @@ impl Skill {
         mut self,
         top_projects: TopProjects,
     ) -> Self {
-        self.top_projects = top_projects;
+        self.projects = top_projects;
         self
     }
 
@@ -204,11 +207,19 @@ impl Skill {
         self
     }
 
-    pub fn maintainer_site(
+    pub fn site_label(
         mut self,
         maintainer_site: Option<String>,
     ) -> Self {
-        self.maintainer_site = maintainer_site;
+        self.site_label = maintainer_site;
+        self
+    }
+
+    pub fn site_link(
+        mut self,
+        site_link: Option<String>,
+    ) -> Self {
+        self.site_link = site_link;
         self
     }
 }

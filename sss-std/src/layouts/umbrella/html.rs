@@ -120,7 +120,7 @@ impl Layout<String, Sections, Theme> for UmbrellaHtmlRender {
                             .as_ref()
                             .map_or("".to_string(), |s| s.to_string()),
                         shade.get_colors().border,
-                        skill.maintainer_site.as_deref().unwrap_or("")
+                        skill.site_label.as_deref().unwrap_or("")
                     ))
                     .collect::<Vec<_>>()
                     .join("")

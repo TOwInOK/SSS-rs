@@ -4,7 +4,6 @@ members = [
     "components",
     "parser",
     "sss-core",
-    "tailwindcss-validator",
     "sss-std",
 ]
 resolver = "2"

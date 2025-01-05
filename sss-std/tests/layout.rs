@@ -1,9 +1,10 @@
-use std::fs;
+use std::{borrow::Cow, fs};
 
 use components::prelude::*;
+use encre_css::Preflight;
 use render::prelude::*;
 use sss_core::prelude::*;
-use sss_std::prelude::*;
+use sss_std::{gen_css::gen_css, prelude::*};
 
 #[test]
 fn test_umbrella_layout() {
@@ -64,7 +65,7 @@ fn test_umbrella_layout() {
         .skill("Rust".to_string())
         .main(true)
         .since(Some(since().start(2020)))
-        .maintainer_site(Some("crates.io".to_string()))
+        .site_label(Some("crates.io".to_string()))
         .top_projects(vec![]);
     skills.push(rust);
 
@@ -72,7 +73,8 @@ fn test_umbrella_layout() {
     let js = skill()
         .skill("JS/TS".to_string())
         .since(Some(since().start(2020)))
-        .maintainer_site(Some("gh.io".to_string()))
+        .site_label(Some("gh.io".to_string()))
+        .site_link(Some("#".to_string()))
         .top_projects(vec![]);
     skills.push(js);
 
@@ -107,5 +109,16 @@ fn test_umbrella_layout() {
     // std::fs::write("test_output.html", rendered).unwrap();
 
     let ub = UmbrellaHtmlTeraRender;
-    fs::write("test_output.html", &ub.render(sections, &UMBRELLA).unwrap()).unwrap()
+    let html = ub.render(sections, &UMBRELLA).unwrap();
+    let mut css_config = encre_css::Config::default();
+    css_config.preflight = Preflight::Full {
+        ring_color: None,
+        border_color: None,
+        placeholder_color: None,
+        font_family_sans: None,
+        font_family_mono: Some(Cow::Borrowed("PT Mono")),
+    };
+    let css = gen_css(Some(css_config), &html);
+    fs::write("card.html", html).unwrap();
+    fs::write("card.css", css).unwrap();
 }

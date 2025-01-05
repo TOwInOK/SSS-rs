@@ -12,3 +12,4 @@ render = { path = "../render" }
 components = { path = "../components" }
 sss_core = { path = "../sss-core" }
 tera = "1.20.0"
+encre-css = "0.14.1"
