@@ -11,8 +11,9 @@ where
         shade: &S,
     ) -> Out;
 
-    // fn finylize(
-    //     rendered: Out,
-    //     shade: &S,
-    // ) -> Out;
+    fn finalize(
+        &self,
+        rendered: Out,
+        shade: &S,
+    ) -> Out;
 }

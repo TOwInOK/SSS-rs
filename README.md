@@ -57,8 +57,7 @@ We have 2 components:
 # Example
 - Umbrella (card)
   - ![theme.layout.png](.content/umbrella.umbrella.png)
-  - [html](sss-std/card.html)
-  - [css](sss-std/card.css)
+  - [html + css](sss-std/card.html)
 
 # License
 [Apache 2.0](LICENSE)

@@ -8,9 +8,11 @@ type Color = &'static str;
 /// Defines the overall theme configuration by combining colors, padding values,
 /// and gap settings into a single coherent theme structure.
 /// This serves as the root theme configuration object.
-#[derive(Default, Serialize)]
+#[derive(Serialize)]
 pub struct Theme {
     pub colors: Colors,
+    pub gfont_regular: (&'static str, &'static str),
+    pub gfont_mono: (&'static str, &'static str),
 }
 
 /// Contains the complete color palette configuration for a theme.
@@ -32,7 +34,7 @@ pub struct Colors {
 /// Defines core functionality required for theme implementation.
 /// Implementors must be thread-safe (Sync + Send) and support
 /// debugging and default initialization.
-pub trait Shade: Sync + Send + Default {
+pub trait Shade: Sync + Send {
     /// Retrieves the color configuration for the theme
     /// Returns a reference to the Colors struct containing the theme's color palette
     fn get_colors(&self) -> &Colors;

@@ -1,10 +1,9 @@
-use std::{borrow::Cow, fs};
+use std::fs;
 
 use components::prelude::*;
-use encre_css::Preflight;
 use render::prelude::*;
 use sss_core::prelude::*;
-use sss_std::{gen_css::gen_css, prelude::*};
+use sss_std::prelude::*;
 
 #[test]
 fn test_umbrella_layout() {
@@ -81,16 +80,7 @@ fn test_umbrella_layout() {
     sections.set_skills(skills);
 
     let ub = UmbrellaHtmlTeraRender;
-    let html = ub.render(sections, &UMBRELLA).unwrap();
-    let mut css_config = encre_css::Config::default();
-    css_config.preflight = Preflight::Full {
-        ring_color: None,
-        border_color: None,
-        placeholder_color: None,
-        font_family_sans: Some(Cow::Borrowed("PT Mono")),
-        font_family_mono: Some(Cow::Borrowed("PT Mono")),
-    };
-    let css = gen_css(Some(css_config), &html);
+    let html = ub.render(sections, &UMBRELLA);
+    let html = ub.finalize(html, &UMBRELLA).unwrap();
     fs::write("card.html", html).unwrap();
-    fs::write("card.css", css).unwrap();
 }
