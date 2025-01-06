@@ -1,4 +1,2 @@
-pub use crate::sections::{
-    icon::{Filled, Icon, Outline},
-    sections, Sections,
-};
+pub use crate::icon::{Filled, Icon, Outline};
+pub use crate::sections::{sections, Sections};

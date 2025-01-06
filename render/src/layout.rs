@@ -1,8 +1,8 @@
-use crate::theme::Shading;
+use crate::theme::Shade;
 
 pub trait Layout<Out, C, S>
 where
-    S: Shading,
+    S: Shade,
 {
     /// Transforms the profile layout into the requested output format
     fn render(

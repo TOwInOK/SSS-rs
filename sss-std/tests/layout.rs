@@ -80,34 +80,6 @@ fn test_umbrella_layout() {
 
     sections.set_skills(skills);
 
-    // // Рендерим layout
-    // let ub = UmbrellaHtmlRender;
-    // let rendered = &ub.render(sections, &UMBRELLA);
-
-    // // Проверяем наличие ключевых элементов в результате
-    // assert!(rendered.contains("TOwInOK"));
-    // assert!(rendered.contains("Ту́винок"));
-    // assert!(rendered.contains("backend"));
-    // assert!(rendered.contains("frontend"));
-    // assert!(rendered.contains("Разработчик на Rust"));
-    // assert!(rendered.contains("gh"));
-    // assert!(rendered.contains("l.in"));
-    // assert!(rendered.contains("TG"));
-    // assert!(rendered.contains("Rust"));
-    // assert!(rendered.contains("JS/TS"));
-    // assert!(rendered.contains("2020 -> today"));
-    // assert!(rendered.contains("crates.io"));
-    // assert!(rendered.contains("gh.io"));
-
-    // // Проверяем наличие необходимых стилей и структуры
-    // assert!(rendered.contains("tailwind.config"));
-    // assert!(rendered.contains("PT Mono"));
-    // assert!(rendered.contains("min-h-screen"));
-    // assert!(rendered.contains("flex justify-center"));
-
-    // // Можно также сохранить результат в файл для визуальной проверки
-    // std::fs::write("test_output.html", rendered).unwrap();
-
     let ub = UmbrellaHtmlTeraRender;
     let html = ub.render(sections, &UMBRELLA).unwrap();
     let mut css_config = encre_css::Config::default();
@@ -115,7 +87,7 @@ fn test_umbrella_layout() {
         ring_color: None,
         border_color: None,
         placeholder_color: None,
-        font_family_sans: None,
+        font_family_sans: Some(Cow::Borrowed("PT Mono")),
         font_family_mono: Some(Cow::Borrowed("PT Mono")),
     };
     let css = gen_css(Some(css_config), &html);

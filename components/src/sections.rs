@@ -1,5 +1,4 @@
 use sss_core::prelude::{About, Blank, Skill, Skills, SocialMedias, Specifications, User};
-pub mod icon;
 
 #[derive(Debug, Default)]
 pub struct Sections {
