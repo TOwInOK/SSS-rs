@@ -1,29 +1,26 @@
-use sss_core::types::user::User;
+use sss_core::Settings;
 
-use crate::error::Result;
+use crate::error::{Error, Result};
 use std::fs;
-
-pub const DEFAULT_USER_PATH_TOML: &str = "./user.toml";
-pub const DEFAULT_USER_PATH_JSON: &str = "./user.json";
 
 fn fetch(path: &str) -> Result<String> {
     Ok(fs::read_to_string(path)?)
 }
-/// Parse config [User] from toml file
-pub fn parse_toml(path: Option<&str>) -> Result<User> {
+/// Parse config [Settings] from toml file
+pub fn parse_toml(path: Option<&str>) -> Result<Settings> {
     if let Some(path) = path {
         let file = fetch(path)?;
-        return Ok(toml::from_str(&file)?);
+        Ok(toml::from_str(&file)?)
+    } else {
+        Err(Error::ArgumentIncorrect("path".to_string()))
     }
-    let file = fetch(DEFAULT_USER_PATH_TOML)?;
-    Ok(toml::from_str(&file)?)
 }
-/// Parse config [User] from json file
-pub fn parse_json(path: Option<&str>) -> Result<User> {
+/// Parse config [Settings] from json file
+pub fn parse_json(path: Option<&str>) -> Result<Settings> {
     if let Some(path) = path {
         let file = fetch(path)?;
-        return Ok(serde_json::from_str(&file)?);
+        Ok(serde_json::from_str(&file)?)
+    } else {
+        Err(Error::ArgumentIncorrect("path".to_string()))
     }
-    let file = fetch(DEFAULT_USER_PATH_JSON)?;
-    Ok(serde_json::from_str(&file)?)
 }

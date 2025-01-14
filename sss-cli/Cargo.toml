@@ -1,0 +1,15 @@
+[package]
+name = "sss_cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[dependencies]
+clap = { version = "4.5.23", features = ["derive"] }
+sss_core = { path="../sss-core" }
+sss_std = {path="../sss-std" }
+render = {path = "../render"}
+parser = {path = "../parser"}
+anyhow = "1.0.95"

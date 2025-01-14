@@ -8,6 +8,8 @@ pub enum Error {
     TomlParse(#[from] toml::de::Error),
     #[error("fail to parse json")]
     JsonParse(#[from] serde_json::Error),
+    #[error("Argument incorrect: {0}")]
+    ArgumentIncorrect(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

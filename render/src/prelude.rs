@@ -1,4 +1,4 @@
 pub use crate::{
-    layout::Layout,
+    layout::{Finalize, Layout},
     theme::{Colors, Shade, Theme},
 };

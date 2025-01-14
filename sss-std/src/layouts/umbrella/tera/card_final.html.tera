@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="{{ font_regular }}" rel="stylesheet">
-    <link href="{{ font_mono }}" rel="stylesheet">
+    <link href="{{ font_regular | safe}}" rel="stylesheet">
+    <link href="{{ font_mono | safe }}" rel="stylesheet">
 </head>
   <body>
-    {{ content }}
+    {{ content | safe }}
   </body>
 </html>

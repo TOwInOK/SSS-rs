@@ -8,7 +8,7 @@ type Color = &'static str;
 /// Defines the overall theme configuration by combining colors, padding values,
 /// and gap settings into a single coherent theme structure.
 /// This serves as the root theme configuration object.
-#[derive(Serialize)]
+#[derive(Serialize, Default, Debug)]
 pub struct Theme {
     pub colors: Colors,
     pub gfont_regular: (&'static str, &'static str),
@@ -19,7 +19,7 @@ pub struct Theme {
 /// Defines colors for different hierarchy levels (primary, secondary, tertiary)
 /// as well as border colors.
 /// All colors are specified as hex color codes.
-#[derive(Default, Serialize)]
+#[derive(Default, Serialize, Debug)]
 pub struct Colors {
     /// Primary theme color used for main UI elements
     pub primary: Color,

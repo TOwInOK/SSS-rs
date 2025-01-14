@@ -20,10 +20,6 @@ We have 2 components:
   - [x] User config parser
     - [x] Toml
     - [x] Json
-  - [x] Base card composition
-    - [x] Sections
-    - [x] Svg (Icons)
-      - [ ] Generator from Tabler source
   - [x] Render
     - [x] Layouts
       - [x] Umbrella (default)
@@ -38,6 +34,8 @@ We have 2 components:
 
 ## Structure of Theme
 
+default colors use
+
 - `Colors`
   - `primary` -> for text
   - `secondary` -> for background
@@ -48,11 +46,10 @@ We have 2 components:
 
 **Note** still under development.
 
-1. components - base elements
 2. parser - config parser
 3. render - theme & render traits
-4. sss-core - base structures
-5. sss-std - base themes & layouts
+4. sss-core - standart structures
+5. sss-std - base themes & layouts & tools
 
 # Example
 - Umbrella (card)

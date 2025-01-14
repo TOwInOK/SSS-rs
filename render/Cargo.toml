@@ -9,3 +9,4 @@ license.workspace = true
 sss_core = { path = "../sss-core" }
 serde.workspace = true
 serde_json.workspace = true
+encre-css.workspace = true
