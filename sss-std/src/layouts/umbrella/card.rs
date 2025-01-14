@@ -7,7 +7,7 @@ use tera::{Context, Tera};
 const UMBRELLA_TERA_CARD_TEMPLATE: &str = include_str!("tera/card.html.tera");
 const UMBRELLA_TERA_TEMPLATE: &str = include_str!("tera/card_final.html.tera");
 
-use crate::tools::{css_inject, gen_css};
+use crate::tools::gen_css;
 
 /// Tera templater
 #[derive(Clone, Debug)]
@@ -54,12 +54,12 @@ impl<'a, 'b, 'c> Finalize<'a, 'b, 'c, Result<String, Box<dyn Error>>>
         let content = rendered?;
 
         let css = gen_css(encre_css_config, &content);
-        let content = css_inject(content, css);
 
         let mut tera = Tera::default();
         tera.add_raw_template("layout.html", UMBRELLA_TERA_TEMPLATE)?;
         let mut context = Context::new();
         context.insert("content", &content);
+        context.insert("style", &css);
         context.insert("font_regular", theme.gfont_regular.1);
         context.insert("font_mono", theme.gfont_mono.1);
 
