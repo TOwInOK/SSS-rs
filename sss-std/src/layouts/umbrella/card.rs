@@ -15,6 +15,17 @@ pub struct UmbrellaHtmlTeraRender<'a, 'b> {
     pub data: &'a Settings,
     pub theme: &'b Theme,
 }
+impl<'a> UmbrellaHtmlTeraRender<'a, 'static> {
+    pub fn new<T: Into<&'static Theme>>(
+        settings: &'a Settings,
+        theme: T,
+    ) -> Self {
+        Self {
+            data: settings,
+            theme: theme.into(),
+        }
+    }
+}
 
 impl<'a, 'b> Layout<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTeraRender<'a, 'b> {
     fn render(&self) -> Result<String, Box<dyn Error>> {
