@@ -1,6 +1,5 @@
 use std::fs;
 
-use encre_css::Preflight;
 use render::prelude::*;
 use sss_core::{
     types::{
@@ -85,16 +84,11 @@ fn test_umbrella_layout() {
         ],
     };
 
-    let mut config = encre_css::Config::default();
-    config.preflight = Preflight::new_full()
-        .font_family_mono(format!("{}, monospace", &UMBRELLA.gfont_mono.0))
-        .font_family_sans(format!("{}, monospace", &UMBRELLA.gfont_mono.0));
-
     let ub = UmbrellaHtmlTeraRender {
         data: &settings,
         theme: &UMBRELLA,
-        encre_css: &config,
     };
     let html = ub.finalize().unwrap();
+
     fs::write("card2.html", html).unwrap();
 }

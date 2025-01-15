@@ -7,9 +7,12 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-clap = { version = "4.5.23", features = ["derive"] }
+clap = { version = "4.5.23", features = ["debug", "derive"] }
 sss_core = { path="../sss-core" }
-sss_std = {path="../sss-std" }
-render = {path = "../render"}
+sss_std = { path="../sss-std" }
 parser = {path = "../parser"}
-anyhow = "1.0.95"
+thiserror.workspace = true
+anyhow.workspace = true
+tokio = { workspace = true, features = ["full"] }
+tracing.workspace = true
+tracing-subscriber.workspace = true

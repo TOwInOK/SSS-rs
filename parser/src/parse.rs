@@ -24,3 +24,19 @@ pub fn parse_json(path: Option<&str>) -> Result<Settings> {
         Err(Error::ArgumentIncorrect("path".to_string()))
     }
 }
+
+pub fn parse(path: Option<&str>) -> Result<Settings> {
+    if let Some(path) = path {
+        let aspect = path
+            .split(".")
+            .last()
+            .ok_or(Error::ArgumentIncorrect("path".to_string()))?;
+        match aspect {
+            "json" => parse_json(Some(path)),
+            "toml" => parse_toml(Some(path)),
+            _ => Err(Error::ArgumentIncorrect("path".to_string())),
+        }
+    } else {
+        Err(Error::ArgumentIncorrect("path".to_string()))
+    }
+}

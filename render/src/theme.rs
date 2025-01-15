@@ -11,8 +11,6 @@ type Color = &'static str;
 #[derive(Serialize, Default, Debug)]
 pub struct Theme {
     pub colors: Colors,
-    pub gfont_regular: (&'static str, &'static str),
-    pub gfont_mono: (&'static str, &'static str),
 }
 
 /// Contains the complete color palette configuration for a theme.

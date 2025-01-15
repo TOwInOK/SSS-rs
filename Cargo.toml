@@ -4,6 +4,7 @@ members = [
     "parser",
     "sss-core",
     "sss-std",
+    "sss-cli"
 ]
 resolver = "2"
 
@@ -26,6 +27,8 @@ leptos = "0.7"
 tracing = "0.1.41"
 tracing-subscriber = "0.3.19"
 encre-css = "0.14.1"
+anyhow = "1.0.95"
+
 
 [profile.dev]
 opt-level = 0

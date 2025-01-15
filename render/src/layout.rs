@@ -1,15 +1,23 @@
-use encre_css::Config;
+use encre_css::{Config, Preflight};
 use sss_core::Settings;
 
 use crate::theme::Shade;
 
-pub trait GetSetData<'a, 'b, 'c, Data = Settings, Theme = crate::theme::Theme> {
+pub trait GetSetData<'a, 'b, Data = Settings, Theme = crate::theme::Theme> {
+    fn regular_font() -> (&'static str, &'static str);
+    fn mono_font() -> (&'static str, &'static str);
     /// Get data to render
     fn get_data(&self) -> &Data;
     /// Get theme to theming
     fn get_theme(&self) -> &Theme;
     /// Get css config
-    fn get_encre_css_config(&self) -> &Config;
+    fn get_encre_css_config() -> Config {
+        let mut config = encre_css::Config::default();
+        config.preflight = Preflight::new_full()
+            .font_family_mono(Self::mono_font().0.to_string())
+            .font_family_sans(Self::regular_font().0.to_string());
+        config
+    }
     /// Set data
     fn data(
         self,
@@ -20,25 +28,20 @@ pub trait GetSetData<'a, 'b, 'c, Data = Settings, Theme = crate::theme::Theme> {
         self,
         theme: &'b Theme,
     ) -> Self;
-    /// Set encre_config
-    fn encre_css_config(
-        self,
-        config: &'c Config,
-    ) -> Self;
 }
 
-pub trait Layout<'a, 'b, 'c, Out, Data = Settings, Theme = crate::theme::Theme>
+pub trait Layout<'a, 'b, Out, Data = Settings, Theme = crate::theme::Theme>
 where
     Theme: Shade,
-    Self: GetSetData<'a, 'b, 'c>,
+    Self: GetSetData<'a, 'b>,
 {
     /// Render layout
     fn render(&self) -> Out;
 }
 
-pub trait Finalize<'a, 'b, 'c, Out>
+pub trait Finalize<'a, 'b, Out>
 where
-    Self: Layout<'a, 'b, 'c, Out>,
+    Self: Layout<'a, 'b, Out>,
 {
     /// Packing render to out format
     fn finalize(&self) -> Out;

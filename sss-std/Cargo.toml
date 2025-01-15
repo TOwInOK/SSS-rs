@@ -1,5 +1,5 @@
 [package]
-name = "sss-std"
+name = "sss_std"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -12,3 +12,5 @@ render = { path = "../render" }
 sss_core = { path = "../sss-core" }
 tera = "1.20.0"
 encre-css.workspace = true
+serde = { workspace = true, features = ["derive"] }
+clap = { version = "4.5.23", features = [ "derive"] }

@@ -1,4 +1,40 @@
+use std::fmt::Display;
+
 use render::prelude::{Colors, Theme};
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum)]
+pub enum Themes {
+    #[default]
+    Umbrella,
+    RosePine,
+    GrooveBox,
+    Dracula,
+}
+
+impl Display for Themes {
+    fn fmt(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+    ) -> std::fmt::Result {
+        match self {
+            Themes::Umbrella => write!(f, "umbrella"),
+            Themes::RosePine => write!(f, "rose-pine"),
+            Themes::GrooveBox => write!(f, "groovebox"),
+            Themes::Dracula => write!(f, "dracula"),
+        }
+    }
+}
+impl From<Themes> for &'static Theme {
+    fn from(value: Themes) -> &'static Theme {
+        match value {
+            Themes::Umbrella => &UMBRELLA,
+            Themes::RosePine => &ROSE_PINE,
+            Themes::GrooveBox => &GROOVEBOX,
+            Themes::Dracula => &DRACULA,
+        }
+    }
+}
 
 pub static UMBRELLA: Theme = Theme {
     colors: Colors {
@@ -7,14 +43,6 @@ pub static UMBRELLA: Theme = Theme {
         thirdly: "#de8cc5",   // Accent color (pink)
         border: "#7640bd",    // Color for secondary elements (dark purple)
     },
-    gfont_regular: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
-    gfont_mono: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
 };
 
 pub static ROSE_PINE: Theme = Theme {
@@ -24,14 +52,6 @@ pub static ROSE_PINE: Theme = Theme {
         thirdly: "#C3BAC6",   // Accent color (rosy-lilac)
         border: "#564F5E",    // Color for secondary elements (dark purple)
     },
-    gfont_regular: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
-    gfont_mono: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
 };
 
 pub static GROOVEBOX: Theme = Theme {
@@ -41,14 +61,6 @@ pub static GROOVEBOX: Theme = Theme {
         thirdly: "#fb4934",   // Accent color
         border: "#32302f",    // Color for secondary elements
     },
-    gfont_regular: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
-    gfont_mono: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
 };
 
 pub static DRACULA: Theme = Theme {
@@ -58,12 +70,4 @@ pub static DRACULA: Theme = Theme {
         thirdly: "#FF79C6",   // Accent color (pink)
         border: "#44475A",    // Color for secondary elements (dark gray)
     },
-    gfont_regular: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
-    gfont_mono: (
-        "PT Mono",
-        "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-    ),
 };

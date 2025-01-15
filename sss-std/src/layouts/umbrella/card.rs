@@ -11,15 +11,12 @@ use crate::tools::gen_css;
 
 /// Tera templater
 #[derive(Clone, Debug)]
-pub struct UmbrellaHtmlTeraRender<'a, 'b, 'c> {
+pub struct UmbrellaHtmlTeraRender<'a, 'b> {
     pub data: &'a Settings,
     pub theme: &'b Theme,
-    pub encre_css: &'c encre_css::Config,
 }
 
-impl<'a, 'b, 'c> Layout<'a, 'b, 'c, Result<String, Box<dyn Error>>>
-    for UmbrellaHtmlTeraRender<'a, 'b, 'c>
-{
+impl<'a, 'b> Layout<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTeraRender<'a, 'b> {
     fn render(&self) -> Result<String, Box<dyn Error>> {
         let theme = self.get_theme();
         let data = self.get_data();
@@ -30,7 +27,6 @@ impl<'a, 'b, 'c> Layout<'a, 'b, 'c, Result<String, Box<dyn Error>>>
         let mut context = Context::new();
 
         context.insert("theme", &theme.colors);
-        context.insert("font", theme.gfont_mono.0);
 
         context.insert("user", &data.user);
         context.insert("about", &data.about);
@@ -44,24 +40,21 @@ impl<'a, 'b, 'c> Layout<'a, 'b, 'c, Result<String, Box<dyn Error>>>
     }
 }
 
-impl<'a, 'b, 'c> Finalize<'a, 'b, 'c, Result<String, Box<dyn Error>>>
-    for UmbrellaHtmlTeraRender<'a, 'b, 'c>
-{
+impl<'a, 'b> Finalize<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTeraRender<'a, 'b> {
     fn finalize(&self) -> Result<String, Box<dyn Error>> {
         let rendered = self.render();
-        let encre_css_config = self.get_encre_css_config();
-        let theme = self.get_theme();
+        let encre_css_config = Self::get_encre_css_config();
         let content = rendered?;
 
-        let css = gen_css(encre_css_config, &content);
+        let css = gen_css(&encre_css_config, &content);
 
         let mut tera = Tera::default();
         tera.add_raw_template("layout.html", UMBRELLA_TERA_TEMPLATE)?;
         let mut context = Context::new();
         context.insert("content", &content);
         context.insert("style", &css);
-        context.insert("font_regular", theme.gfont_regular.1);
-        context.insert("font_mono", theme.gfont_mono.1);
+        context.insert("font_regular", Self::regular_font().1);
+        context.insert("font_mono", Self::mono_font().1);
 
         let rendered = tera.render("layout.html", &context)?;
 
@@ -69,7 +62,7 @@ impl<'a, 'b, 'c> Finalize<'a, 'b, 'c, Result<String, Box<dyn Error>>>
     }
 }
 
-impl<'a, 'b, 'c> GetSetData<'a, 'b, 'c> for UmbrellaHtmlTeraRender<'a, 'b, 'c> {
+impl<'a, 'b> GetSetData<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
     fn get_data(&self) -> &Settings {
         self.data
     }
@@ -94,16 +87,18 @@ impl<'a, 'b, 'c> GetSetData<'a, 'b, 'c> for UmbrellaHtmlTeraRender<'a, 'b, 'c> {
         self
     }
 
-    fn get_encre_css_config(&self) -> &encre_css::Config {
-        self.encre_css
+    fn regular_font() -> (&'static str, &'static str) {
+        (
+            "PT Mono",
+            "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
+        )
     }
 
-    fn encre_css_config(
-        mut self,
-        config: &'c encre_css::Config,
-    ) -> Self {
-        self.encre_css = config;
-        self
+    fn mono_font() -> (&'static str, &'static str) {
+        (
+            "PT Mono",
+            "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
+        )
     }
 }
 

@@ -1,43 +1,24 @@
 use clap::{command, Parser};
 
-use sss_std::{prelude::UmbrellaHtmlRender, themes::*};
-use std::{fmt::Display, fs, str::FromStr};
+use parser::parse::parse;
+use sss_core::Settings;
+use sss_std::{prelude::Layouts, themes::Themes};
 
-fn main() -> anyhow::Result<()> {
+use std::sync::{Arc, LazyLock, Mutex};
+
+static SETTINGS: LazyLock<Arc<Mutex<Settings>>> =
+    LazyLock::new(|| Arc::new(Mutex::new(Settings::default())));
+
+fn refresh_settings(path: &str) {
+    let settings = parse(Some(path)).unwrap();
+    *SETTINGS.lock().expect("fail to unlock settings") = settings;
+}
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-    let file = args.file_output;
-    let theme = match &args.theme {
-        Themes::Umbrella => &UMBRELLA,
-        Themes::RosePine => &ROSE_PINE,
-        Themes::Groovebox => &GROOVEBOX,
-        Themes::Dracula => &DRACULA,
-    };
-    if args.config_path.is_empty() {
-        panic!("need file path for config");
-    }
-    // let config = match &args.config_path.split(".").last() {
-    //     Some(e) => match *e {
-    //         "toml" => parse_toml(Some(e)),
-    //         "json" => parse_json(Some(e)),
-    //         _ => panic!("unsuported extension: {e}"),
-    //     },
-    //     None => panic!("not found file extension?"),
-    // }?
-    // let rendered = match &args.layout {
-    //     Layouts::Umbrella => {
-    //         let ub = UmbrellaHtmlRender;
-    //         ub.render(config, theme)
-    //     }
-    // };
-    // let ub = UmbrellaHtmlRender;
-    // if !args.is_component {
-    //     let html = ub.finalize(rendered, theme).map_err(|x| anyhow!(x.to_string()))?;
-    //     fs::write(format!("{file}.html"), html)?;
-    // } else {
-    //     let html = rendered.map_err(|x| anyhow!(x.to_string()))?;
+    refresh_settings(&args.config_path);
 
-    //     fs::write(format!("{file}.html"), html)?;
-    // };
     Ok(())
 }
 
@@ -73,12 +54,13 @@ struct Args {
     #[arg(short = 'o', long = "out", default_value_t = default_file_output())]
     file_output: String,
 
-    // /// make file with css (not include css into html file)
-    // #[arg(short = 's', long = "separate", default_value_t = CssTunes::default())]
-    // separate_css: CssTunes,
-    /// Build only component (not finalyze)
-    #[arg(short = 'i', long = "ict", default_value_t = false)]
-    is_component: bool,
+    /// run web server?
+    #[arg(short = 's', long = "serve", default_value_t)]
+    serve: bool,
+
+    /// reload on save config?
+    #[arg(short = 'w', long = "watch", default_value_t)]
+    watch: bool,
 }
 
 fn default_file_output() -> String {
@@ -87,97 +69,4 @@ fn default_file_output() -> String {
 
 fn default_config_path() -> String {
     "config.toml".to_string()
-}
-
-#[derive(Debug, Clone, Default)]
-enum CssTunes {
-    /// Build in file
-    /// name.html <-- name.css (like style)
-    #[default]
-    Together,
-    /// name.html + name.css
-    Separate,
-    /// only name.html without css converation
-    None,
-}
-
-impl Display for CssTunes {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            CssTunes::Together => write!(f, "together"),
-            CssTunes::Separate => write!(f, "separate"),
-            CssTunes::None => write!(f, "none"),
-        }
-    }
-}
-impl FromStr for CssTunes {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
-            "together" => Ok(Self::Together),
-            "separate" => Ok(Self::Separate),
-            "none" => Ok(Self::None),
-            _ => Err(format!("Not found Css Moves! -> {s}")),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Default)]
-enum Themes {
-    #[default]
-    Umbrella,
-    RosePine,
-    Groovebox,
-    Dracula,
-}
-
-impl Display for Themes {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Themes::Umbrella => write!(f, "umbrella"),
-            Themes::RosePine => write!(f, "rosepine"),
-            Themes::Groovebox => write!(f, "groovebox"),
-            Themes::Dracula => write!(f, "dracula"),
-        }
-    }
-}
-
-impl FromStr for Themes {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
-            "umbrella" => Ok(Self::Umbrella),
-            "rosepine" => Ok(Self::RosePine),
-            "groovebox" => Ok(Self::Groovebox),
-            "dracula" => Ok(Self::Dracula),
-            _ => Err(format!("Not found theme! -> {}", s)),
-        }
-    }
-}
-
-#[derive(Debug, Clone, Default)]
-enum Layouts {
-    #[default]
-    Umbrella,
-}
-
-impl Display for Layouts {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Layouts::Umbrella => write!(f, "umbrella"),
-        }
-    }
-}
-
-impl FromStr for Layouts {
-    type Err = String;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s.to_lowercase().as_str() {
-            "umbrella" => Ok(Self::Umbrella),
-            _ => Err(format!("not found layout! -> {s}")),
-        }
-    }
 }
