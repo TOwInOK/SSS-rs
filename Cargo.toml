@@ -1,9 +1,9 @@
 [workspace]
 members = [
-    "render",
-    "parser",
-    "sss-core",
-    "sss-std",
+    "sss-lib/render",
+    "sss-lib/parser",
+    "sss-lib/sss-core",
+    "sss-lib/sss-std",
     "sss-cli"
 ]
 resolver = "2"

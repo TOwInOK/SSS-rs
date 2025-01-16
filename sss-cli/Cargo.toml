@@ -7,10 +7,10 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-sss_core = { path="../sss-core" }
-sss_std = { path="../sss-std" }
-render = { path="../render" }
-parser = {path = "../parser"}
+sss_core = { path="../sss-lib/sss-core" }
+sss_std = { path="../sss-lib/sss-std" }
+render = { path="../sss-lib/render" }
+parser = {path = "../sss-lib/parser"}
 thiserror.workspace = true
 anyhow.workspace = true
 tokio = { workspace = true, features = ["full"] }
