@@ -1,13 +1,15 @@
 use std::path::Path;
 
 use notify::{Event, RecommendedWatcher, RecursiveMode, Watcher};
+use sss_std::prelude::Layouts;
 use tokio::sync::mpsc;
 use tracing::info;
 
-use crate::tools::refresh_settings;
+use crate::tools::{refresh_html, refresh_settings};
 
 pub async fn check_file_loop(
     path: String,
+    layouts: Layouts,
     mut shutdown_rx: tokio::sync::broadcast::Receiver<()>,
 ) -> anyhow::Result<()> {
     let (tx, mut rx) = mpsc::channel(100);
@@ -35,7 +37,10 @@ pub async fn check_file_loop(
                         let now = std::time::Instant::now();
                         if now.duration_since(last_modified) >= debounce_duration {
                             info!("File content updated\nTry save into memory");
-                            refresh_settings(&path).await;
+                            refresh_settings(&path).await.map_err(|e| anyhow::anyhow!("Load failed: {}", e))?;
+                            refresh_html(&layouts)
+                                .await
+                                .map_err(|e| anyhow::anyhow!("Got error on refresh html: {}", e))?;
                             last_modified = now;
                         }
                     }

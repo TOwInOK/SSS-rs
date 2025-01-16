@@ -9,13 +9,14 @@ use sss_core::{
 use sss_std::{prelude::Layouts, themes::Themes};
 use tracing::instrument;
 
-use crate::{SETTINGS, THEME};
+use crate::{HTML, SETTINGS, THEME};
 
 #[instrument]
-pub async fn refresh_settings(path: &str) {
-    let settings = parse(Some(path)).unwrap();
+pub async fn refresh_settings(path: &str) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let settings = parse(Some(path))?;
     let mut new_settings = SETTINGS.write().await;
     *new_settings = settings;
+    Ok(())
 }
 
 #[instrument]
@@ -28,9 +29,12 @@ pub async fn refresh_theme(themes: &Themes) {
 pub async fn load(
     path: &str,
     themes: &Themes,
-) {
-    refresh_settings(path).await;
+    layouts: &Layouts,
+) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    refresh_settings(path).await?;
     refresh_theme(themes).await;
+    refresh_html(layouts).await?;
+    Ok(())
 }
 
 pub fn gen_example_config() -> Settings {
@@ -107,4 +111,13 @@ pub async fn layout_build(
     let settings = SETTINGS.read().await;
     let layout = layouts.to_layout(&settings, &theme);
     layout.finalize()
+}
+
+#[instrument]
+pub async fn refresh_html(
+    layouts: &Layouts
+) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let html = layout_build(layouts).await?;
+    *HTML.write().await = html;
+    Ok(())
 }

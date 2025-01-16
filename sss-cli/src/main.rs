@@ -31,6 +31,9 @@ pub static SETTINGS: LazyLock<Arc<RwLock<Settings>>> =
 pub static THEME: LazyLock<Arc<RwLock<&'static Theme>>> =
     LazyLock::new(|| Arc::new(RwLock::new(Themes::default().into())));
 
+pub static HTML: LazyLock<Arc<RwLock<String>>> =
+    LazyLock::new(|| Arc::new(RwLock::new(String::new())));
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     LazyLock::force(&TS);
