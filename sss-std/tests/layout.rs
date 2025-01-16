@@ -25,19 +25,11 @@ fn test_umbrella_layout() {
             "Full-Stack Development".to_string(),
             "Systems Programming".to_string(),
         ],
-        about:
-            "Пишет код в постеле, дома, на работе, в туалете, колледже и даже в сексе с девушкой"
-                .to_string(),
-        repos: vec![
-            Link {
-                provider: Provider::Github,
-                link: "https://github.com/TOwInOK/rust-awesome-project".to_string(),
-            },
-            Link {
-                provider: Provider::Github,
-                link: "https://github.com/TOwInOK/nextjs-dashboard".to_string(),
-            },
-        ],
+        about: "Учу находить пиво в холодильнике".to_string(),
+        repos: vec![Link {
+            provider: Provider::Github,
+            link: "https://github.com/TOwInOK".to_string(),
+        }],
         socials: vec![
             Link {
                 provider: Provider::Github,
@@ -53,7 +45,7 @@ fn test_umbrella_layout() {
                 skill: "Rust".to_string(),
                 projects: vec![Link {
                     provider: Provider::Github,
-                    link: "https://github.com/TOwInOK/rust-awesome-project".to_string(),
+                    link: "https://github.com/TOwInOK/sss-rs".to_string(),
                 }],
                 since: Since {
                     start: 2018,
@@ -67,18 +59,15 @@ fn test_umbrella_layout() {
             },
             Skill {
                 skill: "JS/TS".to_string(),
-                projects: vec![Link {
-                    provider: Provider::Github,
-                    link: "https://github.com/TOwInOK/nextjs-dashboard".to_string(),
-                }],
+                projects: vec![],
                 since: Since {
                     start: 2019,
                     end: 0,
                 },
-                main: true,
+                main: false,
                 repo_link: Link {
                     provider: Provider::Github,
-                    link: "https://www.npmjs.com/~towinok".to_string(),
+                    link: "#".to_string(),
                 },
             },
         ],

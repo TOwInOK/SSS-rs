@@ -8,12 +8,13 @@ pub enum Commands {
     /// Run web server
     Run {
         /// reload on save config?
+        /// it's linter too.
         #[arg(short, long, default_value_t)]
         watch: bool,
-        /// run web page shower?
+        /// run web server for page
         #[arg(short, long, default_value_t)]
         serve: bool,
-        /// address for server
+        /// address for web server
         #[arg(short, long, default_value_t = default_address())]
         address: String,
     },

@@ -7,7 +7,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
-    <style>*, ::before, ::after {
+    <style>
+            *, ::before, ::after {
   box-sizing: border-box;
   border-width: 0;
   border-style: solid;
@@ -23,7 +24,7 @@ html {
   -webkit-text-size-adjust: 100%;
   -moz-tab-size: 4;
   tab-size: 4;
-  font-family: PT Mono, monospace;
+  font-family: PT Mono;
 }
 
 body {
@@ -56,7 +57,7 @@ b, strong {
 }
 
 code, kbd, samp, pre {
-  font-family: PT Mono, monospace;
+  font-family: PT Mono;
   font-size: 1em;
 }
 
@@ -350,10 +351,6 @@ img, video {
   width: 100%;
 }
 
-.max-w-1\/3 {
-  max-width: 33.333333%;
-}
-
 .max-w-md {
   max-width: 28rem;
 }
@@ -533,11 +530,11 @@ img, video {
     <div class="min-h-screen bg-[#371b1b] flex justify-center items-center p-4 overflow-clip">
   <div class="max-w-md w-full bg-black/20 rounded-2xl border border-black p-1 overflow-scroll-x">
       <div class="p-4 rounded-lg border-t-2 border-b-2 border-[#de8cc5] flex flex-col gap-4">
-      <div class="flex justify-evenly items-center text-[#7f69b5]">
-          <div class="text-lg md:text-xl font-bold">
+      <div class=" items-center text-[#7f69b5] grid grid-cols-2">
+          <div class="text-lg md:text-xl font-bold flex justify-evenly">
               Some(Дмитрий)
           </div>
-          <div class="flex items-center justify-evenly w-full max-w-1/3 text-2xl md:text-3xl">
+          <div class="flex items-center justify-evenly w-full text-2xl md:text-3xl">
               <span>[</span>
               <div class="flex flex-col items-center text-sm md:text-md">
                   <span >TOwInOK</span>
@@ -569,7 +566,7 @@ img, video {
               
           </div>
           <div class="text-[#de8cc5] text-right  text-sm md:text-base text-balance max-h-[200]px]">
-              Пишет код в постеле, дома, на работе, в туалете, колледже и даже в сексе с девушкой
+              Учу находить пиво в холодильнике
           </div>
       </div>
           <div class="flex justify-evenly w-full text-[#7f69b5]">
@@ -622,7 +619,7 @@ img, video {
                       <div class="flex justify-center  text-xs md:text-sm text-[#de8cc5]">
                           2019 ->  today 
                       </div>
-                      <a href="https:&#x2F;&#x2F;www.npmjs.com&#x2F;~towinok" class="flex justify-center text-xs md:text-sm text-[#7640bd]">
+                      <a href="#" class="flex justify-center text-xs md:text-sm text-[#7640bd]">
                           Github
                       </a>
                   </div>

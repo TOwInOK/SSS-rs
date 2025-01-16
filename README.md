@@ -1,62 +1,119 @@
-# Under development ⚠️
+# SSS-rs
 
-# Skill, Slick, Style - rs
+SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish developer cards.
 
-A tool to present you as a developer with Slick, Shark, Savvy skills and style.
+## Available languages readme
+[RU](README_ru#SSS-rs) | [EN](README_ru#SSS-rs)
 
-## How it works?
+## Library
 
-We have 2 components:
-1. **Theme** (trait `Shade`)
-   - Allows you to get colors necessary for coloring.
-2. **Layout** (trait `Render`)
-   - Defines how to arrange data from the Config and Colors from Shade.
+### Core Components
 
-- Intended to create small cards with brief information about yourself, but no one stops you from creating a full one as well :)
+1. **Configuration** (`sss-core`)
+   - Data structures for developer information
 
-## Progress status
+2. **Themes** (`render`, trait `Shade`)
+   - Customizable color schemes
+   - Built-in themes:
+     - Umbrella (default)
+     - Rosé Pine
+     - GrooveBox
+     - Dracula
 
-- [x] Lib
-  - [x] User config parser
-    - [x] Toml
-    - [x] Json
-  - [x] Render
-    - [x] Layouts
-      - [x] Umbrella (default)
-  - [x] Themes
-    - [x] Umbrella
-    - [x] Rosé Pine
-    - [x] GrooveBox
-    - [x] Dracula
-  - If you **want** to see more **Themes**, **make an issue!**
-- [x] CLI app
-  - [x] viewer
-  - [x] site generator
+3. **Layouts** (`render`, trait `Render`)
+   - Tera-based templating system
+   - HTML and CSS support
+   - Responsive design
 
-## Structure of Theme
+### Library Usage
 
-default colors use
+```rust
+use sss_core::Settings;
+use sss_std::themes::Themes;
+use sss_std::layouts::Layouts;
 
-- `Colors`
-  - `primary` -> for text
-  - `secondary` -> for background
-  - `thirdly` -> for accent
-  - `border` -> for any accent elements
+// Create configuration
+let settings = Settings::default();
 
-## Structure of project
+// Choose theme and layout
+let theme = Themes::Umbrella;
+let layout = Layouts::Umbrella;
 
-**Note** still under development.
+// Generate HTML
+let html = layout.to_layout(&settings, &theme.into())
+    .finalize()
+    .unwrap();
+```
 
-1. parser - config parser
-2. render - theme & render traits
-3. sss-core - standart structures
-4. sss-std - base themes & layouts & tools
-5. sss-cli - ultimate cli tool for generating site, creating config
+# SSS-rs CLI
+
+CLI tool for generating HTML using SSS-rs themes and layouts.
+
+## Usage
+
+```bash
+sss_cli [OPTIONS] <COMMAND>
+```
+
+### Global Options
+
+- `-c, --config <PATH>` - path to config file (default: config.toml)
+- `-t, --theme <THEME>` - theme selection [possible values: umbrella, rose-pine, groove-box, dracula]
+- `-l, --layout <LAYOUT>` - layout selection [possible values: umbrella]
+- `-o, --out <FILE>` - output HTML filename (default: sss-rs.html)
+- `-h, --help` - print help
+- `-V, --version` - print version
+
+### Commands
+
+#### new - Generate new config
+```bash
+sss_cli new [OPTIONS]
+
+Options:
+  -c, --config-type <TYPE>    Configuration format [default: toml]
+                             [possible values: json, toml]
+```
+
+#### run - Start development server
+```bash
+sss_cli run [OPTIONS]
+
+Options:
+  -w, --watch                Watch for config changes
+  -s, --serve               Start web server
+  -a, --address <ADDRESS>   Web server address [default: 127.0.0.1:8081]
+```
+
+#### gen - Generate HTML
+```bash
+sss_cli gen
+```
+
+### Usage Examples
+
+```bash
+# Create new TOML configuration
+sss_cli new
+
+# Create JSON configuration
+sss_cli new --config-type json
+
+# Start development server with auto-reload
+sss_cli run --watch --serve
+
+# Generate HTML with custom theme
+sss_cli -t dracula gen
+
+# Generate HTML with custom output file
+sss_cli -o portfolio.html gen
+```
+
+## License
+[Apache 2.0](LICENSE)
+
+## Contributing
+If you want to add a new theme or layout, create an Issue!
 
 # Example
-- Umbrella (card)
-  - ![theme.layout.png](.content/umbrella.umbrella.png)
-  - [html + css](sss-std/card.html)
-
-# License
-[Apache 2.0](LICENSE)
+[Card Example](.content/umbrella.umbrella.jpeg)
