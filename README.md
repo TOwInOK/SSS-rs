@@ -3,7 +3,7 @@
 SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish developer cards.
 
 ## Available languages readme
-[RU](README_ru#SSS-rs) | [EN](README_ru#SSS-rs)
+[RU](README_ru.md) | [EN](README_ru.md)
 
 ## Library
 
