@@ -116,4 +116,4 @@ sss_cli -o portfolio.html gen
 Если вы хотите добавить новую тему или шаблон, создайте issue!
 
 # Пример
-[Пример карточки](.content/umbrella.umbrella.jpeg)
+![Пример карточки](.content/umbrella.umbrella.jpeg)

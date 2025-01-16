@@ -116,4 +116,4 @@ sss_cli -o portfolio.html gen
 If you want to add a new theme or layout, create an Issue!
 
 # Example
-[Card Example](.content/umbrella.umbrella.jpeg)
+![Card Example](.content/umbrella.umbrella.jpeg)
