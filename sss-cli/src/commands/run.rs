@@ -50,6 +50,7 @@ pub async fn command_run(
         });
     }
 
+    #[cfg(not(windows))]
     tokio::select! {
         _ = signal::ctrl_c() => {
             info!("Received Ctrl+C, initiating shutdown");
@@ -60,7 +61,14 @@ pub async fn command_run(
         } => {
             info!("Received SIGTERM, initiating shutdown");
         }
-    }
+    };
+
+    #[cfg(windows)]
+    tokio::select! {
+        _ = signal::ctrl_c() => {
+            info!("Received Ctrl+C, initiating shutdown");
+        }
+    };
 
     let _ = shutdown_tx.send(());
     info!("Shutting down gracefully...");
