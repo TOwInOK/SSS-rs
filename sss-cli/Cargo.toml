@@ -7,7 +7,6 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-clap = { version = "4.5.23", features = ["derive"] }
 sss_core = { path="../sss-core" }
 sss_std = { path="../sss-std" }
 render = { path="../render" }
@@ -19,6 +18,7 @@ tracing.workspace = true
 tracing-subscriber.workspace = true
 serde.workspace = true
 serde_json.workspace = true
-toml = "0.8.19"
+clap = { workspace = true, features = [ "derive"] }
+toml.workspace = true
 notify = "8.0.0"
 axum = "0.8.1"

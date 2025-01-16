@@ -10,4 +10,4 @@ sss_core = { path = "../sss-core" }
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 thiserror.workspace = true
-toml = "0.8"
+toml.workspace = true
