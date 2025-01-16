@@ -109,6 +109,16 @@ sss_cli -t dracula gen
 sss_cli -o portfolio.html gen
 ```
 
+## Как собрать CLI
+
+```bash
+git clone https://github.com/TOwInOK/SSS-rs
+cd SSS-rs
+cargo build -r -p sss_rs
+mv target/release/sss_cli sss-cli
+./sss-cli
+```
+
 ## Лицензия
 [Apache 2.0](LICENSE)
 
