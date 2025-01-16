@@ -10,6 +10,9 @@ pub enum Commands {
         /// reload on save config?
         #[arg(short, long, default_value_t)]
         watch: bool,
+        /// run web page shower?
+        #[arg(short, long, default_value_t)]
+        serve: bool,
     },
     /// Generate html
     Gen {},
