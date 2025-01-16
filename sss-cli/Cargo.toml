@@ -21,3 +21,4 @@ serde.workspace = true
 serde_json.workspace = true
 toml = "0.8.19"
 notify = "8.0.0"
+axum = "0.8.1"

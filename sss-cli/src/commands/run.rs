@@ -1,22 +1,32 @@
+use sss_std::{prelude::Layouts, themes::Themes};
 use tokio::signal::{self, unix::SignalKind};
-use tracing::{error, info, warn};
+use tracing::{error, info, instrument, warn};
 
-use crate::web::file_watcher::check_file_loop;
+use crate::{
+    tools::load,
+    web::{file_watcher::check_file_loop, serve::serve},
+};
 
+#[instrument(skip(is_web, is_watch, path, layouts, address, themes))]
 pub async fn command_run(
     is_watch: bool,
     is_web: bool,
-    path: String,
+    path: &str,
+    layouts: &Layouts,
+    address: &str,
+    themes: &Themes,
 ) -> anyhow::Result<()> {
+    info!("Start run command");
     if !is_web && !is_watch {
         warn!("Nothing to run!\nTry to use sss_cli run -h to show avaiable options");
         return Ok(());
     }
 
-    let (shutdown_tx, _) = tokio::sync::broadcast::channel(1);
+    load(path, themes).await;
 
+    let (shutdown_tx, _) = tokio::sync::broadcast::channel(1);
     if is_watch {
-        let path_clone = path.clone();
+        let path_clone = path.to_string();
         let shutdown_rx = shutdown_tx.subscribe();
 
         tokio::spawn(async move {
@@ -27,7 +37,15 @@ pub async fn command_run(
     }
 
     if is_web {
-        todo!()
+        let shutdown_rx = shutdown_tx.subscribe();
+        let layouts = layouts.clone();
+        let address = address.to_string();
+
+        tokio::spawn(async move {
+            if let Err(e) = serve(address, layouts, shutdown_rx).await {
+                error!("Web server error: {}", e);
+            }
+        });
     }
 
     tokio::select! {

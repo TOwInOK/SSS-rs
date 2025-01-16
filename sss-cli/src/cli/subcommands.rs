@@ -13,6 +13,9 @@ pub enum Commands {
         /// run web page shower?
         #[arg(short, long, default_value_t)]
         serve: bool,
+        /// address for server
+        #[arg(short, long, default_value_t = default_address())]
+        address: String,
     },
     /// Generate html
     Gen {},
@@ -35,4 +38,8 @@ impl std::fmt::Display for ConfigType {
             ConfigType::Toml => write!(f, "toml"),
         }
     }
+}
+
+fn default_address() -> String {
+    "127.0.0.1:8081".to_string()
 }

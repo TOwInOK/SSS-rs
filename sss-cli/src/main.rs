@@ -44,7 +44,18 @@ async fn main() -> anyhow::Result<()> {
         Commands::Run {
             watch,
             serve,
-        } => command_run(watch, serve, args.config_path).await,
+            address,
+        } => {
+            command_run(
+                watch,
+                serve,
+                &args.config_path,
+                &args.layout,
+                &address,
+                &args.theme,
+            )
+            .await
+        }
         Commands::Gen {} => command_gen(&args).await,
     }
 }
