@@ -29,8 +29,9 @@ We have 2 components:
     - [x] GrooveBox
     - [x] Dracula
   - If you **want** to see more **Themes**, **make an issue!**
-- [ ] Site viewer/generator
-- [ ] CLI app
+- [x] CLI app
+  - [x] viewer
+  - [x] site generator
 
 ## Structure of Theme
 
@@ -46,10 +47,11 @@ default colors use
 
 **Note** still under development.
 
-2. parser - config parser
-3. render - theme & render traits
-4. sss-core - standart structures
-5. sss-std - base themes & layouts & tools
+1. parser - config parser
+2. render - theme & render traits
+3. sss-core - standart structures
+4. sss-std - base themes & layouts & tools
+5. sss-cli - ultimate cli tool for generating site, creating config
 
 # Example
 - Umbrella (card)

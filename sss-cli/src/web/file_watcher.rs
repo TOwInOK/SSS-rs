@@ -3,7 +3,7 @@ use std::path::Path;
 use notify::{Event, RecommendedWatcher, RecursiveMode, Watcher};
 use sss_std::prelude::Layouts;
 use tokio::sync::mpsc;
-use tracing::info;
+use tracing::{error, info};
 
 use crate::tools::{refresh_html, refresh_settings};
 
@@ -36,11 +36,13 @@ pub async fn check_file_loop(
                     Event { kind, .. } if kind.is_modify() => {
                         let now = std::time::Instant::now();
                         if now.duration_since(last_modified) >= debounce_duration {
-                            info!("File content updated\nTry save into memory");
-                            refresh_settings(&path).await.map_err(|e| anyhow::anyhow!("Load failed: {}", e))?;
-                            refresh_html(&layouts)
-                                .await
-                                .map_err(|e| anyhow::anyhow!("Got error on refresh html: {}", e))?;
+                            info!("File content updated");
+                            if let Err(e) = refresh_settings(&path).await {
+                                error!("Load failed: {}", e);
+                            }
+                            if let Err(e) = refresh_html(&layouts).await {
+                                error!("Got error on refresh html: {}", e);
+                            }
                             last_modified = now;
                         }
                     }
