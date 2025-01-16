@@ -12,23 +12,23 @@ use crate::tools::gen_css;
 /// Tera templater
 #[derive(Clone, Debug)]
 pub struct UmbrellaHtmlTeraRender<'a, 'b> {
-    pub data: &'a Settings,
+    pub settings: &'a Settings,
     pub theme: &'b Theme,
 }
-impl<'a> UmbrellaHtmlTeraRender<'a, 'static> {
-    pub fn new<T: Into<&'static Theme>>(
+impl<'a, 'b> UmbrellaHtmlTeraRender<'a, 'b> {
+    pub fn new(
         settings: &'a Settings,
-        theme: T,
+        theme: &'b Theme,
     ) -> Self {
         Self {
-            data: settings,
-            theme: theme.into(),
+            settings,
+            theme,
         }
     }
 }
 
-impl<'a, 'b> Layout<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTeraRender<'a, 'b> {
-    fn render(&self) -> Result<String, Box<dyn Error>> {
+impl<'a, 'b> Layout<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
+    fn render(&self) -> Result<String, Box<dyn Error + Send + Sync>> {
         let theme = self.get_theme();
         let data = self.get_data();
         let mut tera = Tera::default();
@@ -51,8 +51,8 @@ impl<'a, 'b> Layout<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTera
     }
 }
 
-impl<'a, 'b> Finalize<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTeraRender<'a, 'b> {
-    fn finalize(&self) -> Result<String, Box<dyn Error>> {
+impl<'a, 'b> Finalize<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
+    fn finalize(&self) -> Result<String, Box<dyn Error + Send + Sync>> {
         let rendered = self.render();
         let encre_css_config = Self::get_encre_css_config();
         let content = rendered?;
@@ -75,7 +75,7 @@ impl<'a, 'b> Finalize<'a, 'b, Result<String, Box<dyn Error>>> for UmbrellaHtmlTe
 
 impl<'a, 'b> GetSetData<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
     fn get_data(&self) -> &Settings {
-        self.data
+        self.settings
     }
 
     fn get_theme(&self) -> &Theme {
@@ -86,7 +86,7 @@ impl<'a, 'b> GetSetData<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
         mut self,
         data: &'a Settings,
     ) -> Self {
-        self.data = data;
+        self.settings = data;
         self
     }
 

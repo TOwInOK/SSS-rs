@@ -36,6 +36,17 @@ impl From<Themes> for &'static Theme {
     }
 }
 
+impl From<&Themes> for &'static Theme {
+    fn from(value: &Themes) -> &'static Theme {
+        match value {
+            Themes::Umbrella => &UMBRELLA,
+            Themes::RosePine => &ROSE_PINE,
+            Themes::GrooveBox => &GROOVEBOX,
+            Themes::Dracula => &DRACULA,
+        }
+    }
+}
+
 pub static UMBRELLA: Theme = Theme {
     colors: Colors {
         primary: "#7f69b5",   // Primary text color (light purple)

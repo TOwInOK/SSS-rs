@@ -1,0 +1,61 @@
+specifications = [
+    "Your",
+    "cool",
+    "way",
+]
+about = "Something about yourself"
+
+[user]
+name = "Your name"
+
+[user.current_nickname]
+word = "Some Nickname"
+pronounce = "sÔme nIckname"
+
+[[user.prevision_nicknames]]
+word = "Your some old nickname"
+pronounce = "sÔme OLDER nIckname"
+
+[[repos]]
+provider = "Github"
+link = "your cool gh repo"
+
+[[socials]]
+provider = "Github"
+link = "https://github.com/your_nickname"
+
+[[socials]]
+provider = "Telegram"
+link = "https://t.me/your_nickname"
+
+[[skills]]
+skill = "Rust"
+main = true
+
+[[skills.projects]]
+provider = "Github"
+link = "https://github.com/your_nickname"
+
+[skills.since]
+start = 2020
+end = 0
+
+[skills.repo_link]
+provider = "Github"
+link = "https://github.com/your_nickname"
+
+[[skills]]
+skill = "JS/TS"
+main = false
+
+[[skills.projects]]
+provider = "Github"
+link = "https://github.com/your_nickname"
+
+[skills.since]
+start = 2020
+end = 2022
+
+[skills.repo_link]
+provider = "Github"
+link = "https://github.com/your_nickname"

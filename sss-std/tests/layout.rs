@@ -85,7 +85,7 @@ fn test_umbrella_layout() {
     };
 
     let ub = UmbrellaHtmlTeraRender {
-        data: &settings,
+        settings: &settings,
         theme: &UMBRELLA,
     };
     let html = ub.finalize().unwrap();

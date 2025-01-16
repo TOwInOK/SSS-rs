@@ -1,3 +1,5 @@
+use core::error;
+
 use encre_css::{Config, Preflight};
 use sss_core::Settings;
 
@@ -30,8 +32,13 @@ pub trait GetSetData<'a, 'b, Data = Settings, Theme = crate::theme::Theme> {
     ) -> Self;
 }
 
-pub trait Layout<'a, 'b, Out, Data = Settings, Theme = crate::theme::Theme>
-where
+pub trait Layout<
+    'a,
+    'b,
+    Out = Result<String, Box<dyn error::Error + Send + Sync>>,
+    Data = Settings,
+    Theme = crate::theme::Theme,
+> where
     Theme: Shade,
     Self: GetSetData<'a, 'b>,
 {
@@ -39,7 +46,7 @@ where
     fn render(&self) -> Out;
 }
 
-pub trait Finalize<'a, 'b, Out>
+pub trait Finalize<'a, 'b, Out = Result<String, Box<dyn error::Error + Send + Sync>>>
 where
     Self: Layout<'a, 'b, Out>,
 {

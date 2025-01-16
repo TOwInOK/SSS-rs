@@ -1,11 +1,11 @@
 <div class="min-h-screen bg-[{{ theme.secondary }}] flex justify-center items-center p-4 overflow-clip">
   <div class="max-w-md w-full bg-black/20 rounded-2xl border border-black p-1 overflow-scroll-x">
       <div class="p-4 rounded-lg border-t-2 border-b-2 border-[{{ theme.thirdly }}] flex flex-col gap-4">
-      <div class="flex justify-evenly items-center text-[{{ theme.primary }}]">
-          <div class="text-lg md:text-xl font-bold">
+      <div class=" items-center text-[{{ theme.primary }}] grid grid-cols-2">
+          <div class="text-lg md:text-xl font-bold flex justify-evenly">
               Some({{ user.name }})
           </div>
-          <div class="flex items-center justify-evenly w-full max-w-1/3 text-2xl md:text-3xl">
+          <div class="flex items-center justify-evenly w-full text-2xl md:text-3xl">
               <span>[</span>
               <div class="flex flex-col items-center text-sm md:text-md">
                   <span >{{ user.current_nickname.word }}</span>

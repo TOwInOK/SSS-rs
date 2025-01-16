@@ -1,5 +1,3 @@
-use std::error;
-
 use render::{
     layout::{Finalize, Layout},
     theme::Theme,
@@ -17,19 +15,13 @@ pub enum Layouts {
 }
 #[allow(clippy::type_complexity)]
 impl Layouts {
-    pub fn to_layout<'a>(
+    pub fn to_layout<'a, 'b>(
         &self,
-        theme: &'a Theme,
-        data: &'a Settings,
-    ) -> Box<
-        impl Layout<'a, 'a, Result<String, Box<dyn error::Error>>>
-            + Finalize<'a, 'a, Result<String, Box<dyn error::Error>>>,
-    > {
+        settings: &'a Settings,
+        theme: &'b Theme,
+    ) -> Box<impl Layout<'a, 'b> + Finalize<'a, 'b>> {
         match self {
-            Layouts::Umbrella => Box::new(UmbrellaHtmlTeraRender {
-                data,
-                theme,
-            }),
+            Layouts::Umbrella => Box::new(UmbrellaHtmlTeraRender::new(settings, theme)),
         }
     }
 }
