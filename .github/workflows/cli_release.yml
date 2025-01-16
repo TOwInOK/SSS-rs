@@ -3,7 +3,7 @@ name: Release CLI
 on:
   push:
     tags:
-      - "v*"
+      - "v*.*.*"
 
 env:
   CARGO_TERM_COLOR: always
@@ -77,11 +77,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             sss_cli-linux-amd64/sss_cli-linux-amd64
