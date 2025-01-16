@@ -1,5 +1,7 @@
 use sss_std::{prelude::Layouts, themes::Themes};
-use tokio::signal::{self, unix::SignalKind};
+use tokio::signal;
+#[cfg(not(windows))]
+use tokio::signal::unix::SignalKind;
 use tracing::{error, info, instrument, warn};
 
 use crate::{
