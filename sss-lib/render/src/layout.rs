@@ -3,13 +3,23 @@ use core::error;
 use encre_css::{Config, Preflight};
 use sss_core::Settings;
 
-use crate::theme::Shade;
+use crate::theme::Theme;
 
-pub trait GetSetData<'a, 'b, Data = Settings, Theme = crate::theme::Theme> {
-    fn regular_font() -> (&'static str, &'static str);
-    fn mono_font() -> (&'static str, &'static str);
+pub trait GetData<'a, 'b> {
+    fn regular_font() -> (&'static str, &'static str) {
+        (
+            "PT Serif",
+            "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap",
+        )
+    }
+    fn mono_font() -> (&'static str, &'static str) {
+        (
+            "PT Mono",
+            "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
+        )
+    }
     /// Get data to render
-    fn get_data(&self) -> &Data;
+    fn get_data(&self) -> &Settings;
     /// Get theme to theming
     fn get_theme(&self) -> &Theme;
     /// Get css config
@@ -20,36 +30,20 @@ pub trait GetSetData<'a, 'b, Data = Settings, Theme = crate::theme::Theme> {
             .font_family_sans(Self::regular_font().0.to_string());
         config
     }
-    /// Set data
-    fn data(
-        self,
-        data: &'a Data,
-    ) -> Self;
-    /// Set theme
-    fn theme(
-        self,
-        theme: &'b Theme,
-    ) -> Self;
 }
 
-pub trait Layout<
-    'a,
-    'b,
-    Out = Result<String, Box<dyn error::Error + Send + Sync>>,
-    Data = Settings,
-    Theme = crate::theme::Theme,
-> where
-    Theme: Shade,
-    Self: GetSetData<'a, 'b>,
+pub trait Layout<'a, 'b>
+where
+    Self: GetData<'a, 'b>,
 {
     /// Render layout
-    fn render(&self) -> Out;
+    fn render(&self) -> Result<String, Box<dyn error::Error + Send + Sync>>;
 }
 
-pub trait Finalize<'a, 'b, Out = Result<String, Box<dyn error::Error + Send + Sync>>>
+pub trait Finalize<'a, 'b>
 where
-    Self: Layout<'a, 'b, Out>,
+    Self: Layout<'a, 'b>,
 {
     /// Packing render to out format
-    fn finalize(&self) -> Out;
+    fn finalize(&self) -> Result<String, Box<dyn error::Error + Send + Sync>>;
 }

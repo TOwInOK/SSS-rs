@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use render::{layout::GetSetData, prelude::*};
+use render::{layout::GetData, prelude::*};
 use sss_core::{types::provider::Provider, Settings};
 use tera::{Context, Tera};
 
@@ -73,29 +73,13 @@ impl<'a, 'b> Finalize<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
     }
 }
 
-impl<'a, 'b> GetSetData<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
+impl<'a, 'b> GetData<'a, 'b> for UmbrellaHtmlTeraRender<'a, 'b> {
     fn get_data(&self) -> &Settings {
         self.settings
     }
 
     fn get_theme(&self) -> &Theme {
         self.theme
-    }
-
-    fn data(
-        mut self,
-        data: &'a Settings,
-    ) -> Self {
-        self.settings = data;
-        self
-    }
-
-    fn theme(
-        mut self,
-        theme: &'b Theme,
-    ) -> Self {
-        self.theme = theme;
-        self
     }
 
     fn regular_font() -> (&'static str, &'static str) {
