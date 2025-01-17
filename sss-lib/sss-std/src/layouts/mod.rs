@@ -1,27 +1,30 @@
-use render::{
-    layout::{Finalize, Layout},
-    theme::Theme,
-};
+pub mod html_tera_builder;
+pub mod templates;
+
+use html_tera_builder::HtmlTeraRender;
+use render::{layout::Finalize, theme::Theme};
 use serde::{Deserialize, Serialize};
 use sss_core::Settings;
-use umbrella::UmbrellaHtmlTeraRender;
-
-pub mod umbrella;
+use templates::{UMBRELLA_TERA_CARD_TEMPLATE, UMBRELLA_TERA_TEMPLATE};
 
 #[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum)]
 pub enum Layouts {
     #[default]
     Umbrella,
 }
-#[allow(clippy::type_complexity)]
 impl Layouts {
-    pub fn to_layout<'a, 'b>(
+    pub fn to_layout<'a>(
         &self,
         settings: &'a Settings,
-        theme: &'b Theme,
-    ) -> Box<impl Layout<'a, 'b> + Finalize<'a, 'b>> {
+        theme: &'static Theme,
+    ) -> Box<impl Finalize + 'a> {
         match self {
-            Layouts::Umbrella => Box::new(UmbrellaHtmlTeraRender::new(settings, theme)),
+            Layouts::Umbrella => Box::new(HtmlTeraRender::new(
+                settings,
+                theme,
+                UMBRELLA_TERA_CARD_TEMPLATE,
+                UMBRELLA_TERA_TEMPLATE,
+            )),
         }
     }
 }

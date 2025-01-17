@@ -20,8 +20,8 @@ Cargo.lock
 # macos
 .DS_Store
 
-sss-std/card.html
-sss-std/card2.html
+sss-lib/sss-std/card.html
+sss-lib/sss-std/card2.html
 
 sss-rs.html
 config.toml

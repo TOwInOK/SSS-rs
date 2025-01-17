@@ -2,7 +2,12 @@ use parser::parse::parse;
 use render::{layout::Finalize, theme::Theme};
 use sss_core::{
     types::{
-        link::Link, nickname::Nickname, provider::Provider, since::Since, skill::Skill, user::User,
+        link::Link,
+        nickname::Nickname,
+        provider::Provider,
+        since::Since,
+        skill::{Project, Skill},
+        user::User,
     },
     Settings,
 };
@@ -13,7 +18,7 @@ use crate::{HTML, SETTINGS, THEME};
 
 #[instrument]
 pub async fn refresh_settings(path: &str) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    let settings = parse(Some(path))?;
+    let settings = parse(path)?;
     let mut new_settings = SETTINGS.write().await;
     *new_settings = settings;
     Ok(())
@@ -52,10 +57,22 @@ pub fn gen_example_config() -> Settings {
         },
         specifications: vec!["Your".to_string(), "cool".to_string(), "way".to_string()],
         about: "Something about yourself".to_string(),
-        repos: vec![Link {
-            provider: Provider::Github,
-            link: "your cool gh repo".to_string(),
-        }],
+        repos: vec![
+            Project {
+                name: "Cool Project".to_string(),
+                link: Link {
+                    provider: Provider::Github,
+                    link: "https://github.com/your_nickname".to_string(),
+                },
+            },
+            Project {
+                name: "Cool Project".to_string(),
+                link: Link {
+                    provider: Provider::Github,
+                    link: "https://github.com/your_nickname".to_string(),
+                },
+            },
+        ],
         socials: vec![
             Link {
                 provider: Provider::Github,
@@ -69,9 +86,12 @@ pub fn gen_example_config() -> Settings {
         skills: vec![
             Skill {
                 skill: "Rust".to_string(),
-                projects: vec![Link {
-                    provider: Provider::Github,
-                    link: "https://github.com/your_nickname".to_string(),
+                projects: vec![Project {
+                    name: "Cool Project".to_string(),
+                    link: Link {
+                        provider: Provider::Github,
+                        link: "https://github.com/your_nickname".to_string(),
+                    },
                 }],
                 since: Since {
                     start: 2020,
@@ -85,9 +105,12 @@ pub fn gen_example_config() -> Settings {
             },
             Skill {
                 skill: "JS/TS".to_string(),
-                projects: vec![Link {
-                    provider: Provider::Github,
-                    link: "https://github.com/your_nickname".to_string(),
+                projects: vec![Project {
+                    name: "Cool Project".to_string(),
+                    link: Link {
+                        provider: Provider::Github,
+                        link: "https://github.com/your_nickname".to_string(),
+                    },
                 }],
                 since: Since {
                     start: 2020,

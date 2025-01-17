@@ -1,3 +1,2 @@
-pub use crate::layouts::umbrella::*;
-pub use crate::layouts::Layouts;
+pub use crate::layouts::*;
 pub use crate::themes::*;

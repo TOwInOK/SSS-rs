@@ -1,6 +1,10 @@
 use serde::{Deserialize, Serialize};
 use std::fmt::Debug;
-use types::{link::Link, skill::Skill, user::User};
+use types::{
+    link::Link,
+    skill::{Project, Skill},
+    user::User,
+};
 pub mod types;
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -12,7 +16,7 @@ pub struct Settings {
     /// О пользователе
     pub about: String,
     /// Репозитории
-    pub repos: Vec<Link>,
+    pub repos: Vec<Project>,
     /// Социальные сети
     pub socials: Vec<Link>,
     /// Список навыков

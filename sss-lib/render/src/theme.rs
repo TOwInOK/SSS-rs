@@ -19,13 +19,13 @@ pub struct Theme {
 /// All colors are specified as hex color codes.
 #[derive(Default, Serialize, Debug)]
 pub struct Colors {
-    /// Primary theme color used for main UI elements
+    /// Primary theme color used for main (like text) UI elements
     pub primary: Color,
-    /// Secondary theme color for supporting UI elements
+    /// Secondary theme color for background elements
     pub secondary: Color,
     /// Tertiary theme color for additional accent elements
     pub thirdly: Color,
-    /// Color used for borders and separators
+    /// Color used for borders, texts and separators
     pub border: Color,
 }
 

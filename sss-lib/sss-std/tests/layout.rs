@@ -1,9 +1,14 @@
-use std::fs;
+use std::{fs, path::Path};
 
-use render::prelude::*;
+use render::layout::Finalize;
 use sss_core::{
     types::{
-        link::Link, nickname::Nickname, provider::Provider, since::Since, skill::Skill, user::User,
+        link::Link,
+        nickname::Nickname,
+        provider::Provider,
+        since::Since,
+        skill::{Project, Skill},
+        user::User,
     },
     Settings,
 };
@@ -25,11 +30,30 @@ fn test_umbrella_layout() {
             "Full-Stack Development".to_string(),
             "Systems Programming".to_string(),
         ],
-        about: "Учу находить пиво в холодильнике".to_string(),
-        repos: vec![Link {
-            provider: Provider::Github,
-            link: "https://github.com/TOwInOK".to_string(),
-        }],
+        about: "Учу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильнике".to_string(),
+        repos: vec![
+            Project {
+                name: "Some".to_string(),
+                link: Link {
+                    provider: Provider::Github,
+                    link: "https://github.com/your_nickname".to_string(),
+                },
+            },
+            Project {
+                name: "Cool".to_string(),
+                link: Link {
+                    provider: Provider::Github,
+                    link: "https://github.com/your_nickname".to_string(),
+                },
+            },
+            Project {
+                name: "Project".to_string(),
+                link: Link {
+                    provider: Provider::Github,
+                    link: "https://github.com/your_nickname".to_string(),
+                },
+            },
+        ],
         socials: vec![
             Link {
                 provider: Provider::Github,
@@ -43,9 +67,12 @@ fn test_umbrella_layout() {
         skills: vec![
             Skill {
                 skill: "Rust".to_string(),
-                projects: vec![Link {
-                    provider: Provider::Github,
-                    link: "https://github.com/TOwInOK/sss-rs".to_string(),
+                projects: vec![Project {
+                    name: "Cool Project".to_string(),
+                    link: Link {
+                        provider: Provider::Github,
+                        link: "https://github.com/your_nickname".to_string(),
+                    },
                 }],
                 since: Since {
                     start: 2018,
@@ -73,11 +100,8 @@ fn test_umbrella_layout() {
         ],
     };
 
-    let ub = UmbrellaHtmlTeraRender {
-        settings: &settings,
-        theme: &UMBRELLA,
-    };
-    let html = ub.finalize().unwrap();
-
-    fs::write("card2.html", html).unwrap();
+    let ub = Layouts::Umbrella.to_layout(&settings, &UMBRELLA);
+    let html = ub.as_ref().finalize().unwrap();
+    println!("{:#?}", Path::new("./card2.html"));
+    fs::write(Path::new("./card2.html"), html).unwrap();
 }
