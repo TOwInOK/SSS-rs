@@ -18,7 +18,7 @@ use crate::subcommands::Commands;
     long_about = None
 )]
 pub struct Args {
-    /// path of config
+    /// name of config
     /// support .json and .toml
     #[arg(short = 'c', long = "config", default_value_t = default_config_path())]
     pub config_path: String,

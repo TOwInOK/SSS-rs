@@ -13,11 +13,12 @@ pub async fn command_new(
 ) -> anyhow::Result<()> {
     info!("Start generating new config");
     let settings = gen_example_config();
-    let path_to_settings = &args.config_path;
+    let mut path_to_settings = args.config_path.split(".").take(1).collect::<String>();
     info!("Convert to choosd type");
     let config = match config_type {
         ConfigType::Json => {
             info!("Convert to JSON");
+            path_to_settings.push_str(".json");
             serde_json::to_string_pretty(&settings).map_err(|x| {
                 anyhow::anyhow!(
                     "Got error with generating settings to json type {}",
@@ -27,6 +28,7 @@ pub async fn command_new(
         }
         ConfigType::Toml => {
             info!("Convert to TOML");
+            path_to_settings.push_str(".toml");
             toml::to_string_pretty(&settings).map_err(|x| {
                 anyhow::anyhow!(
                     "Got error with generating settings to toml type {}",
