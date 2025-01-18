@@ -127,6 +127,12 @@ mv target/release/sss_cli sss-cli
 ./sss-cli
 ```
 
+## How to run file downloaded from github on macos
+```sh
+xattr -rd com.apple.quarantine name_of_file
+./name_of_file
+```
+
 ## License
 [Apache 2.0](LICENSE)
 
