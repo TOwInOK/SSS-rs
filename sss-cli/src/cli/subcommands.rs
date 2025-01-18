@@ -42,5 +42,5 @@ impl std::fmt::Display for ConfigType {
 }
 
 fn default_address() -> String {
-    "127.0.0.1:8081".to_string()
+    "0.0.0.0:8081".to_string()
 }

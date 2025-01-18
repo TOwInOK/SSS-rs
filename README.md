@@ -1,8 +1,6 @@
-# SSS-rs
-
 SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish developer cards.
 
-## Available languages readme
+## Available languages README
 [RU](README_ru.md) | [EN](README_ru.md)
 
 ## Library
@@ -48,6 +46,7 @@ let html = layout.to_layout(&settings, &theme.into())
 # SSS-rs CLI
 
 CLI tool for generating HTML using SSS-rs themes and layouts.
+Allows you to host generated pages with hot reload for themes and layouts.
 
 ## Usage
 
@@ -59,8 +58,9 @@ sss_cli [OPTIONS] <COMMAND>
 
 - `-c, --config <PATH>` - path to config file (default: config.toml)
 - `-t, --theme <THEME>` - theme selection [possible values: umbrella, rose-pine, groove-box, dracula]
-- `-l, --layout <LAYOUT>` - layout selection [possible values: umbrella]
+- `-l, --layout <LAYOUT>` - layout selection [possible values: umbrella, castle, github]
 - `-o, --out <FILE>` - output HTML filename (default: sss-rs.html)
+- `--tracing <TRACING>` - Log level [default: info] [possible values: info, trace, debug, error, warn]
 - `-h, --help` - print help
 - `-V, --version` - print version
 
@@ -82,7 +82,7 @@ sss_cli run [OPTIONS]
 Options:
   -w, --watch                Watch for config changes
   -s, --serve               Start web server
-  -a, --address <ADDRESS>   Web server address [default: 127.0.0.1:8081]
+  -a, --address <ADDRESS>   Web server address [default: 0.0.0.0:8081]
 ```
 
 #### gen - Generate HTML
@@ -95,18 +95,26 @@ sss_cli gen
 ```bash
 # Create new TOML configuration
 sss_cli new
-
+# or
 # Create JSON configuration
 sss_cli new --config-type json
 
 # Start development server with auto-reload
 sss_cli run --watch --serve
+# or
+sss_cli run -w -s
 
-# Generate HTML with custom theme
-sss_cli -t dracula gen
+# Additional options
 
 # Generate HTML with custom output file
 sss_cli -o portfolio.html gen
+
+# Commands below disable hot reload for applied value
+# Generate HTML with theme
+sss_cli -t dracula gen
+
+# Generate HTML with layout
+sss_cli -l github gen
 ```
 
 ## How to build CLI
