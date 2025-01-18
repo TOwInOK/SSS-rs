@@ -23,14 +23,17 @@ fn test_umbrella_layout() {
                 word: "TOwInOK".to_string(),
                 pronounce: "ту́винок".to_string(),
             },
-            ..Default::default()
+            prevision_nicknames: vec![Nickname {
+                word: "TOwInOK".to_string(),
+                pronounce: "ту́винок".to_string(),
+            }],
         },
         specifications: vec![
             "Backend Development".to_string(),
             "Full-Stack Development".to_string(),
             "Systems Programming".to_string(),
         ],
-        about: "Учу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильникеУчу находить пиво в холодильнике".to_string(),
+        about: "Учу находить пиво в холодильнике".to_string(),
         repos: vec![
             Project {
                 name: "Some".to_string(),
@@ -100,7 +103,7 @@ fn test_umbrella_layout() {
         ],
     };
 
-    let ub = Layouts::Umbrella.to_layout(&settings, &UMBRELLA);
+    let ub = Layouts::CASTLE.to_layout(&settings, &GROOVEBOX);
     let html = ub.as_ref().finalize().unwrap();
     println!("{:#?}", Path::new("./card2.html"));
     fs::write(Path::new("./card2.html"), html).unwrap();

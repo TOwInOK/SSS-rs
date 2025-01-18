@@ -4,8 +4,9 @@ members = [
     "sss-lib/parser",
     "sss-lib/sss-core",
     "sss-lib/sss-std",
-    "sss-cli"
-]
+    "sss-cli",
+    "layouts-derive"
+    ]
 resolver = "2"
 
 [workspace.package]

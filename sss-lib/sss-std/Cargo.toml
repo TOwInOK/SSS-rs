@@ -9,6 +9,7 @@ license.workspace = true
 [dependencies]
 render = { path = "../render" }
 sss_core = { path = "../sss-core" }
+layouts-derive = { path = "../../layouts-derive" }
 tera = "1.20.0"
 encre-css.workspace = true
 serde = { workspace = true, features = ["derive"] }
