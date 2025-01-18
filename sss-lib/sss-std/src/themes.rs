@@ -14,6 +14,7 @@ macro_rules! define_themes {
     ),* $(,)?) => {
         #[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum)]
         #[allow(non_camel_case_types)]
+        /// Provide all themes in sss-std
         pub enum Themes {
             #[default]
             $($theme_name,)*

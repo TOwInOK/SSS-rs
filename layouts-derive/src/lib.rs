@@ -90,10 +90,14 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
         #(#template_consts)*
 
         // Generate Layouts enum with derived traits
-        #[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum)]
+        #[derive(Debug, Deserialize, Serialize, Clone, clap::ValueEnum)]
         pub enum Layouts {
-            #[default]
             #(#variants),*
+        }
+        impl Default for Layouts {
+            fn default() -> Self {
+                Layouts::UMBRELLA
+            }
         }
 
         impl Layouts {

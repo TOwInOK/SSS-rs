@@ -5,7 +5,7 @@ use tokio::signal::unix::SignalKind;
 use tracing::{error, info, instrument, warn};
 
 use crate::{
-    tools::load,
+    tools::refresh,
     web::{file_watcher::check_file_loop, serve::serve},
 };
 
@@ -14,9 +14,9 @@ pub async fn command_run(
     is_watch: bool,
     is_web: bool,
     path: &str,
-    layouts: &Layouts,
+    layouts: &Option<Layouts>,
     address: &str,
-    themes: &Themes,
+    themes: &Option<Themes>,
 ) -> anyhow::Result<()> {
     info!("Start run command");
     if !is_web && !is_watch {
@@ -24,18 +24,21 @@ pub async fn command_run(
         return Ok(());
     }
 
-    load(path, themes, layouts)
+    refresh(path, themes.as_ref(), layouts.as_ref())
         .await
         .map_err(|e| anyhow::anyhow!("Load failed: {}", e))?;
 
     let (shutdown_tx, _) = tokio::sync::broadcast::channel(1);
     if is_watch {
         let path_clone = path.to_string();
-        let shutdown_rx = shutdown_tx.subscribe();
+        let themes = themes.clone();
         let layouts = layouts.clone();
+        let shutdown_rx = shutdown_tx.subscribe();
 
         tokio::spawn(async move {
-            if let Err(e) = check_file_loop(path_clone, layouts, shutdown_rx).await {
+            if let Err(e) =
+                check_file_loop(path_clone, themes.as_ref(), layouts.as_ref(), shutdown_rx).await
+            {
                 error!("File watching error: {}", e);
             }
         });

@@ -23,5 +23,6 @@ Cargo.lock
 sss-lib/sss-std/card.html
 sss-lib/sss-std/card2.html
 
-sss-rs.html
+sss_rs.html
 config.toml
+config.json
