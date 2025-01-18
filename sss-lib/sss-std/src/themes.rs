@@ -4,7 +4,7 @@ use render::prelude::{Colors, Theme};
 use serde::{Deserialize, Serialize};
 
 macro_rules! define_themes {
-    ($(
+     ($(
         $theme_name:ident => {
             primary: $primary:literal,
             secondary: $secondary:literal,
@@ -13,9 +13,8 @@ macro_rules! define_themes {
         }
     ),* $(,)?) => {
         #[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum)]
-        #[allow(non_camel_case_types)]
-        /// Provide all themes in sss-std
-        pub enum Themes {
+        #[allow(non_camel_case_types)] /// Provide all themes in sss-std
+    pub enum Themes {
             #[default]
             $($theme_name,)*
         }
@@ -51,7 +50,9 @@ macro_rules! define_themes {
                     secondary: $secondary,
                     thirdly: $thirdly,
                     border: $border,
-                }
+                },
+                regular_font: ("PT Serif", "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"),
+                mono_font: ("PT Mono", "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap"),
             };
         )*
     };
@@ -63,6 +64,8 @@ define_themes! {
         secondary: "#371b1b",
         thirdly: "#de8cc5",
         border: "#7640bd"
+        // regular_font: ("PT Serif", "https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"),
+        // mono_font: ("PT Mono", "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap")
     },
     ROSE_PINE => {
         primary: "#F7D5C4",
@@ -77,6 +80,12 @@ define_themes! {
         border: "#32302f"
     },
     DRACULA => {
+        primary: "#F8F8F2",
+        secondary: "#282A36",
+        thirdly: "#FF79C6",
+        border: "#44475A"
+    },
+    DRAC2ULA => {
         primary: "#F8F8F2",
         secondary: "#282A36",
         thirdly: "#FF79C6",

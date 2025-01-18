@@ -150,7 +150,7 @@ impl Finalize for HtmlTeraRender<'_> {
         // render card
         let card = self.render()?;
         // render css
-        let css = gen_css(&Self::get_encre_css_config(), &card);
+        let css = gen_css(&self.get_theme().get_encre_css_config(), &card);
         // Init tera
         let mut tera = Tera::default();
         // Add template
@@ -168,8 +168,8 @@ impl Finalize for HtmlTeraRender<'_> {
 
         // fonts
 
-        context.insert("regular", Self::regular_font().1);
-        context.insert("mono", Self::mono_font().1);
+        context.insert("regular", &self.get_theme().regular_font().1);
+        context.insert("mono", &self.get_theme().mono_font().1);
 
         let rendered = tera.render("layout.html", &context)?;
         Ok(rendered)
@@ -177,22 +177,6 @@ impl Finalize for HtmlTeraRender<'_> {
 }
 
 impl AdditionTeraData for HtmlTeraRender<'_> {
-    #[inline]
-    fn regular_font() -> (&'static str, &'static str) {
-        (
-            "PT Mono",
-            "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-        )
-    }
-
-    #[inline]
-    fn mono_font() -> (&'static str, &'static str) {
-        (
-            "PT Mono",
-            "https://fonts.googleapis.com/css2?family=PT+Mono&display=swap",
-        )
-    }
-
     #[inline]
     fn get_data(&self) -> &Settings {
         self.settings
