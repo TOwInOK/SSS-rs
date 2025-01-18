@@ -21,15 +21,30 @@ jobs:
             artifact_name: sss_cli
             asset_name: sss_cli-linux-amd64
 
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            artifact_name: sss_cli
+            asset_name: sss_cli-linux-arm
+
           - os: windows-latest
-            target: x86_64-pc-windows-msvc
+            target: x86_64-pc-windows-gnu
             artifact_name: sss_cli.exe
             asset_name: sss_cli-windows-amd64.exe
+
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
+            artifact_name: sss_cli.exe
+            asset_name: sss_cli-windows-arm.exe
 
           - os: macos-latest
             target: x86_64-apple-darwin
             artifact_name: sss_cli
             asset_name: sss_cli-macos-amd64
+
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact_name: sss_cli
+            asset_name: sss_cli-macos-arm
 
     steps:
       - uses: actions/checkout@v4
@@ -87,8 +102,13 @@ jobs:
             sss_cli-linux-amd64/sss_cli-linux-amd64
             sss_cli-windows-amd64.exe/sss_cli-windows-amd64.exe
             sss_cli-macos-amd64/sss_cli-macos-amd64
+            sss_cli-linux-arm/sss_cli-linux-arm
+            sss_cli-windows-arm.exe/sss_cli-windows-arm.exe
+            sss_cli-macos-arm/sss_cli-macos-arm
           draft: false
           prerelease: false
           generate_release_notes: true
+          append_bode: true
+          make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
