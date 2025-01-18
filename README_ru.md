@@ -129,6 +129,12 @@ mv target/release/sss_cli sss-cli
 ./sss-cli
 ```
 
+## Как запустить файл скаченный с github на macos
+```sh
+xattr -rd com.apple.quarantine name_of_file
+./name_of_file
+```
+
 ## Лицензия
 [Apache 2.0](LICENSE)
 
