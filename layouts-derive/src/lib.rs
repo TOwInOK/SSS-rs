@@ -68,7 +68,6 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
         }
     }
 
-    // Проверяем, что нашли хотя бы один вариант
     if variants.is_empty() {
         panic!("No valid layout directories found in {}", layouts_dir);
     }
