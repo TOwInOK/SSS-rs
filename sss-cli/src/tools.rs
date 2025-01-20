@@ -1,4 +1,4 @@
-use render::layout::Finalize;
+use render::layout::Finalise;
 use sss_core::{
     types::{
         link::Link,
@@ -10,15 +10,19 @@ use sss_core::{
     },
     Settings,
 };
-use sss_std::{prelude::Layouts, themes::Themes};
-use tracing::{debug, instrument};
+use sss_std::{
+    converter::{pdf::html_to_pdf, png::html_to_image},
+    prelude::Layouts,
+    themes::Themes,
+};
+use tracing::{debug, info, instrument};
 
-use crate::{settings::SSSCliSettings, HTML, SETTINGS};
+use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
 
 pub type Result<T = ()> =
     std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
 
-#[instrument]
+#[instrument(skip(path, themes, layouts))]
 #[inline]
 /// Update setting
 pub async fn refresh_settings(
@@ -37,7 +41,7 @@ pub async fn refresh_settings(
     Ok(())
 }
 
-#[instrument]
+#[instrument(skip(path, themes, layouts))]
 #[inline]
 /// Once load data
 /// if cli has themes or || and layouts, replace it permanently
@@ -50,6 +54,8 @@ pub async fn refresh(
     debug!("Layouts in cli: {:#?}", &layouts);
     refresh_settings(path, themes, layouts).await?;
     refresh_html().await?;
+    refresh_png().await?;
+    refresh_pdf().await?;
     Ok(())
 }
 
@@ -57,12 +63,35 @@ pub async fn refresh(
 #[inline]
 /// Generate final component
 pub async fn refresh_html() -> Result {
+    info!("Render HTML");
     let settings = SETTINGS.read().await;
     let layout = settings
         .layouts
         .to_layout(&settings.sss_user_settings, (&settings.themes).into());
 
     *HTML.write().await = layout.finalize()?;
+    Ok(())
+}
+
+#[instrument]
+#[inline]
+/// Generate final component
+pub async fn refresh_png() -> Result {
+    info!("Render PNG");
+    let html = HTML.read().await;
+    let image = html_to_image(&html, None, 12).await?;
+    *PNG.write().await = image;
+    Ok(())
+}
+
+#[instrument]
+#[inline]
+/// Generate final component
+pub async fn refresh_pdf() -> Result {
+    info!("Render PDF");
+    let html = HTML.read().await;
+    let image = html_to_pdf(&html, None).await?;
+    *PDF.write().await = image;
     Ok(())
 }
 

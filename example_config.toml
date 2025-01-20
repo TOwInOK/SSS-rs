@@ -1,3 +1,7 @@
+theme = "UMBRELLA"
+layout = "UMBRELLA"
+
+[user]
 specifications = [
     "Your",
     "cool",
@@ -5,57 +9,73 @@ specifications = [
 ]
 about = "Something about yourself"
 
-[user]
+[user.user]
 name = "Your name"
 
-[user.current_nickname]
+[user.user.current_nickname]
 word = "Some Nickname"
 pronounce = "sÔme nIckname"
 
-[[user.prevision_nicknames]]
+[[user.user.prevision_nicknames]]
 word = "Your some old nickname"
 pronounce = "sÔme OLDER nIckname"
 
-[[repos]]
-provider = "Github"
-link = "your cool gh repo"
+[[user.repos]]
+name = "Cool Project"
 
-[[socials]]
+[user.repos.link]
 provider = "Github"
 link = "https://github.com/your_nickname"
 
-[[socials]]
+[[user.repos]]
+name = "Cool Project"
+
+[user.repos.link]
+provider = "Github"
+link = "https://github.com/your_nickname"
+
+[[user.socials]]
+provider = "Github"
+link = "https://github.com/your_nickname"
+
+[[user.socials]]
 provider = "Telegram"
 link = "https://t.me/your_nickname"
 
-[[skills]]
+[[user.skills]]
 skill = "Rust"
 main = true
 
-[[skills.projects]]
+[[user.skills.projects]]
+name = "Cool Project"
+
+[user.skills.projects.link]
 provider = "Github"
 link = "https://github.com/your_nickname"
 
-[skills.since]
+[user.skills.since]
 start = 2020
 end = 0
 
-[skills.repo_link]
+[user.skills.repo_link]
 provider = "Github"
 link = "https://github.com/your_nickname"
 
-[[skills]]
+[[user.skills]]
 skill = "JS/TS"
 main = false
 
-[[skills.projects]]
+[[user.skills.projects]]
+name = "Cool Project"
+
+[user.skills.projects.link]
 provider = "Github"
 link = "https://github.com/your_nickname"
 
-[skills.since]
+[user.skills.since]
 start = 2020
 end = 2022
 
-[skills.repo_link]
+[user.skills.repo_link]
 provider = "Github"
 link = "https://github.com/your_nickname"

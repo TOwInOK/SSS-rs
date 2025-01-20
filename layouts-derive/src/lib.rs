@@ -90,6 +90,7 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
         #(#template_consts)*
 
         // Generate Layouts enum with derived traits
+        #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
         #[derive(Debug, Deserialize, Serialize, Clone, clap::ValueEnum)]
         pub enum Layouts {
             #(#variants),*
@@ -106,7 +107,7 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
                 &self,
                 settings: &'a Settings,
                 theme: &'static Theme,
-            ) -> Box<impl Finalize + 'a> {
+            ) -> Box<impl Finalise + 'a> {
                 match self {
                     #(#to_layout_matches),*
                 }

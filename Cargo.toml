@@ -30,6 +30,7 @@ encre-css = "0.14.1"
 anyhow = "1.0.95"
 clap = { version = "4.5.23", features = [ "derive"] }
 toml = "0.8.19"
+utoipa = "5.3.1"
 
 [profile.dev]
 opt-level = 0

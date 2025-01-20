@@ -2,7 +2,7 @@ use sss_core::Settings;
 
 use crate::error::{Error, Result};
 use std::fs;
-
+/// Fetch file by path
 fn fetch(path: &str) -> Result<String> {
     Ok(fs::read_to_string(path)?)
 }
@@ -16,7 +16,7 @@ pub fn parse_json(path: &str) -> Result<Settings> {
     let file = fetch(path)?;
     Ok(serde_json::from_str(&file)?)
 }
-
+/// Fetch [Settings] by path
 pub fn parse(path: &str) -> Result<Settings> {
     let aspect = path
         .split(".")

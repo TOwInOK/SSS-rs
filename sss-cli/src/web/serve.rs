@@ -1,19 +1,72 @@
-use std::net::SocketAddr;
-
-use axum::{response::Html, routing::get, Router};
+use axum::{
+    body::Bytes,
+    http::{header, StatusCode},
+    response::{Html, IntoResponse},
+    routing::get,
+    Json, Router,
+};
+use serde::Serialize;
 use tokio::sync::broadcast::Receiver;
-use tracing::info;
+use tracing::{info, instrument};
+use utoipa::{OpenApi, ToSchema};
+use utoipa_scalar::{Scalar, Servable};
 
-use crate::HTML;
+use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
+
+#[derive(OpenApi)]
+#[openapi(
+    paths(
+        root,
+        get_image,
+        get_pdf,
+        get_json,
+        healthcheck
+    ),
+    components(
+        schemas(SSSCliSettings)
+    ),
+    tags(
+        (name = "card-generator", description = "Endpoints for generating and retrieving card html/png/pdf documents"),
+        (name = "raw-data", description = "Endpoints for accessing raw configuration data"),
+        (name = "system", description = "System and monitoring endpoints")
+    ),
+    security(()),
+    info(
+        title = "SSS-cli",
+        description = "SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish developer cards.",
+        license(
+            name = "Apache License 2.0",
+            url = "https://github.com/TOwInOK/SSS-rs/blob/main/LICENSE"
+        ),
+        contact(
+            name = "TOwInOK",
+            url = "https://github.com/TOwInOK"
+        )
+    ),
+    external_docs(
+        url = "https://github.com/TOwInOK/SSS-rs",
+        description = "Main repo"
+    ),
+    servers(
+        (url = "http://localhost:8081", description = "Local development server")
+    )
+)]
+struct ApiDoc;
 
 pub async fn serve(
     address: String,
     mut shutdown_rx: Receiver<()>,
 ) -> anyhow::Result<()> {
-    let app = Router::new().route("/", get(root));
+    let app = Router::new()
+        .route("/", get(root))
+        .route("/image", get(get_image))
+        .route("/pdf", get(get_pdf))
+        .route("/json", get(get_json))
+        .route("/health", get(healthcheck))
+        .merge(Scalar::with_url("/scalar", ApiDoc::openapi()));
 
     info!("try to bind {} address", &address);
-    let addr = address.parse::<SocketAddr>()?;
+    let addr = address.parse::<std::net::SocketAddr>()?;
     let listener = tokio::net::TcpListener::bind(addr).await?;
     info!("address {} binded", &address);
 
@@ -28,6 +81,129 @@ pub async fn serve(
     Ok(())
 }
 
+#[utoipa::path(
+    get,
+    path = "/",
+    tag = "card-generator",
+    responses(
+        (status = 200, description = "Successfully retrieved HTML page with card generator interface", content_type = "text/html")
+    ),
+    summary = "Get card generator HTML page",
+    description = "Returns the main HTML page containing the card generator interface"
+)]
+#[instrument]
 async fn root() -> Html<String> {
     Html(HTML.read().await.clone())
+}
+
+#[utoipa::path(
+    get,
+    path = "/pdf",
+    tag = "card-generator",
+    responses(
+        (status = 200, description = "Successfully retrieved PDF document", content_type = "application/pdf"),
+        (status = 404, description = "PDF document has not been generated yet or is not available")
+    ),
+    summary = "Get generated PDF document",
+    description = "Returns the generated card document in PDF format"
+)]
+#[instrument]
+async fn get_pdf() -> impl IntoResponse {
+    let data = PDF.read().await.clone();
+
+    if data.is_empty() {
+        return (
+            StatusCode::NOT_FOUND,
+            [(header::CONTENT_TYPE, "text/plain")],
+            Bytes::from("PDF not found"),
+        )
+            .into_response();
+    }
+
+    (
+        StatusCode::OK,
+        [
+            (header::CONTENT_TYPE, "application/pdf"),
+            (header::CONTENT_LENGTH, data.len().to_string().as_str()),
+            (
+                header::CONTENT_DISPOSITION,
+                "inline; filename=\"document.pdf\"",
+            ),
+            (header::CACHE_CONTROL, "public, max-age=31536000"),
+            (header::EXPIRES, "31536000"),
+        ],
+        Bytes::from(data),
+    )
+        .into_response()
+}
+#[utoipa::path(
+    get,
+    path = "/image",
+    tag = "card-generator",
+    responses(
+        (status = 200, description = "Successfully retrieved PNG image", content_type = "image/png"),
+        (status = 404, description = "Image has not been generated yet or is not available")
+    ),
+    summary = "Get generated PNG image",
+    description = "Returns the generated card image in PNG format"
+)]
+#[instrument]
+async fn get_image() -> impl IntoResponse {
+    let data = PNG.read().await.clone();
+
+    if data.is_empty() {
+        return (
+            StatusCode::NOT_FOUND,
+            [(header::CONTENT_TYPE, "text/plain")],
+            Bytes::from("Image not found"),
+        )
+            .into_response();
+    }
+
+    (
+        StatusCode::OK,
+        [
+            (header::CONTENT_TYPE, "image/png"),
+            (header::CONTENT_LENGTH, data.len().to_string().as_str()),
+        ],
+        Bytes::from(data),
+    )
+        .into_response()
+}
+#[utoipa::path(
+    get,
+    path = "/json",
+    tag = "raw-data",
+    responses(
+        (status = 200, description = "Successfully retrieved current settings", body = SSSCliSettings)
+    ),
+    summary = "Get current settings",
+    description = "Returns the current configuration settings of the service"
+)]
+async fn get_json() -> Json<SSSCliSettings> {
+    Json(SETTINGS.read().await.clone())
+}
+
+#[derive(Serialize, ToSchema)]
+struct HealthResponse {
+    status: &'static str,
+    version: &'static str,
+}
+
+#[utoipa::path(
+    get,
+    path = "/health",
+    tag = "system",
+    responses(
+        (status = 200, description = "Service is healthy", body = HealthResponse)
+    ),
+    summary = "Check service health",
+    description = "Returns the health status of the service and its version"
+)]
+#[instrument]
+async fn healthcheck() -> Json<HealthResponse> {
+    Json(HealthResponse {
+        status: "healthy",
+        version: env!("CARGO_PKG_VERSION"),
+    })
 }

@@ -5,20 +5,23 @@ use types::{
     skill::{Project, Skill},
     user::User,
 };
+
 pub mod types;
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+/// SSS-rs settings
 pub struct Settings {
     /// User info
     pub user: User,
-    /// Уклон в разработке
+    /// Job specific
     pub specifications: Vec<String>,
-    /// О пользователе
+    /// About User
     pub about: String,
-    /// Репозитории
+    /// Repositories
     pub repos: Vec<Project>,
-    /// Социальные сети
+    /// Socials
     pub socials: Vec<Link>,
-    /// Список навыков
+    /// work skills
     pub skills: Vec<Skill>,
 }

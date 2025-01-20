@@ -1,15 +1,15 @@
-<div class="min-h-screen bg-[{{ secondary }}] flex justify-center items-center p-4 bg-gradient-to-b from-[{{ secondary }}] to-[{{ secondary }}]/90">
-  <div class="max-w-2xl w-full bg-white/30 backdrop-blur-sm rounded-lg border-2 border-[{{ border }}] p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+<div class="min-h-screen bg-[{{ secondary }}] flex justify-center items-center p-2 bg-gradient-to-b from-[{{ secondary }}] to-[{{ secondary }}]/90 overflow-auto">
+  <div class="max-w-2xl w-full bg-white/30 backdrop-blur-sm rounded-lg border-2 border-[{{ border }}] p-4 shadow-xl hover:shadow-2xl transition-shadow duration-300">
 
     {# Header section #}
-    <div class="flex items-center justify-between mb-8 text-[{{ primary }}] border-b-2 border-[{{ border }}]/30 pb-4">
+    <div class="flex items-center justify-between pb-4 text-[{{ primary }}] border-b-2 border-[{{ border }}]/30">
       <div class="text-3xl font-serif font-bold hover:scale-105 transition-transform duration-300 flex items-center">
         <span class="group-hover:scale-92 transition-transform duration-300">⚔️</span>
-        <span class="mx-2">{{ name }}</span>
+        <span class="px-2">{{ name }}</span>
         <span class="group-hover:scale-92 transition-transform duration-300">⚔️</span>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="flex flex-col items-center bg-[{{ thirdly }}]/10 px-4 py-2 rounded-lg hover:bg-[{{ thirdly }}]/20 transition-colors duration-300">
+      <div class="flex items-center gap-2">
+        <div class="flex flex-col items-center bg-[{{ thirdly }}]/10 px-3 py-1 rounded-lg hover:bg-[{{ thirdly }}]/20 transition-colors duration-300">
           <span class="font-serif hover:scale-105 transition-transform duration-300">{{ current_nickname.word }}</span>
           <span class="text-[{{ thirdly }}] text-sm italic">{{ current_nickname.pronounce }}</span>
         </div>
@@ -17,31 +17,31 @@
     </div>
 
     {# Info section #}
-    <div class="grid grid-cols-2 gap-8 mb-8">
-      <div class="space-y-3">
+    <div class="grid grid-cols-2 gap-4 py-4">
+      <div class="space-y-2">
         {% for spec in specifications %}
-        <div class="flex items-center text-[{{ primary }}] bg-[{{ thirdly }}]/5 rounded-lg p-3 border border-[{{ border }}]/20
+        <div class="flex items-center text-[{{ primary }}] bg-[{{ thirdly }}]/5 rounded-lg p-2 border border-[{{ border }}]/20
                     hover:bg-[{{ thirdly }}]/10 hover:scale-102 transition-all duration-300">
           <span class="flex-1 text-sm text-center font-medium">{{ spec }}</span>
         </div>
         {% endfor %}
       </div>
-      <div class="text-[{{ thirdly }}] text-sm border-l-2 border-[{{ border }}] pl-6 font-serif leading-relaxed
+      <div class="text-[{{ thirdly }}] text-sm border-l-2 border-[{{ border }}] pl-4 font-serif leading-relaxed
                   hover:border-l-4 transition-all duration-300">
         {{ about }}
       </div>
     </div>
 
     {# Repositories section #}
-    <div class="mb-8">
-      <h2 class="text-[{{ primary }}] text-xl font-serif font-bold mb-4 flex items-center gap-2
+    <div class="py-4">
+      <h2 class="text-[{{ primary }}] text-xl font-serif font-bold pb-2 flex items-center gap-2
                  hover:scale-105 transition-transform duration-300">
         <span>📚 Archives</span>
       </h2>
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-3">
         {% for repo in repos %}
         <a href="{{ repo.link.link }}"
-           class="group flex items-center gap-4 p-4 rounded-lg border-2 border-[{{ border }}]/20
+           class="group flex items-center gap-3 p-2 rounded-lg border-2 border-[{{ border }}]/20
                   hover:bg-[{{ thirdly }}]/5 hover:scale-102 transition-all duration-300">
           <div class="text-[{{ thirdly }}] group-hover:scale-110 transition-transform duration-300">
             {{ get_svg(provider=repo.link.provider) | safe }}
@@ -58,15 +58,15 @@
     </div>
 
     {# Social links #}
-    <div class="mb-8">
-      <h2 class="text-[{{ primary }}] text-xl font-serif font-bold mb-4 flex items-center gap-2
+    <div class="py-4">
+      <h2 class="text-[{{ primary }}] text-xl font-serif font-bold pb-2 flex items-center gap-2
                  hover:scale-105 transition-transform duration-300">
         <span>🏰 Grand Hall</span>
       </h2>
-      <div class="flex flex-wrap gap-4">
+      <div class="flex flex-wrap gap-3">
         {% for social in socials %}
         <a href="{{ social.link }}"
-           class="group flex items-center gap-3 p-3 rounded-lg border-2 border-[{{ border }}]/20
+           class="group flex items-center gap-2 p-2 rounded-lg border-2 border-[{{ border }}]/20
                   hover:bg-[{{ thirdly }}]/5 hover:scale-105 transition-all duration-300">
           <div class="text-[{{ thirdly }}] group-hover:scale-110 transition-transform duration-300">
             {{ get_svg(provider=social.provider) | safe }}
@@ -80,26 +80,26 @@
     </div>
 
     {# Skills section #}
-    <div>
-      <h2 class="text-[{{ primary }}] text-xl font-serif font-bold mb-4 flex items-center gap-2
+    <div class="pt-4">
+      <h2 class="text-[{{ primary }}] text-xl font-serif font-bold pb-2 flex items-center gap-2
                   hover:scale-105 transition-transform duration-300">
         <span class="group-hover:scale-92 transition-transform duration-300">⚔️</span>
         <span>Royal Arsenal</span>
         <span class="group-hover:scale-92 transition-transform duration-300">⚔️</span>
       </h2>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-3">
         {% for skill in skills %}
         <a href="{{ skill.repo_link.link }}"
-           class="group p-4 rounded-lg border-2 border-[{{ border }}]/20
+           class="group p-2 rounded-lg border-2 border-[{{ border }}]/20
                   hover:bg-[{{ thirdly }}]/5 hover:scale-102 transition-all duration-300
                   {% if skill.main %}bg-[{{ thirdly }}]/10{% else %}bg-transparent{% endif %}">
           <div class="text-[{{ primary }}] font-serif font-medium text-center group-hover:scale-105 transition-transform duration-300">
             {{ skill.skill }}
           </div>
-          <div class="text-[{{ thirdly }}] text-sm text-center mt-2">
+          <div class="text-[{{ thirdly }}] text-sm text-center pt-1">
             {{ skill.since.start }} ➜ {% if skill.since.end != 0 %}{{ skill.since.end }}{% else %}present{% endif %}
           </div>
-          <div class="text-[{{ border }}] text-sm text-center mt-1 group-hover:text-[{{ primary }}] transition-colors duration-300">
+          <div class="text-[{{ border }}] text-sm text-center pt-1 group-hover:text-[{{ primary }}] transition-colors duration-300">
             {{ skill.repo_link.provider }}
           </div>
         </a>

@@ -35,12 +35,17 @@ fn init_logger(level: Level) {
     .expect("Fail to set global default subscriber");
 }
 
+type Llar<T> = LazyLock<Arc<RwLock<T>>>;
+
 /// Settings pool
-pub static SETTINGS: LazyLock<Arc<RwLock<SSSCliSettings>>> =
+pub static SETTINGS: Llar<SSSCliSettings> =
     LazyLock::new(|| Arc::new(RwLock::new(SSSCliSettings::default())));
 /// Html pool
-pub static HTML: LazyLock<Arc<RwLock<String>>> =
-    LazyLock::new(|| Arc::new(RwLock::new(String::new())));
+pub static HTML: Llar<String> = LazyLock::new(|| Arc::new(RwLock::new(String::new())));
+/// HTML
+pub static PDF: Llar<Vec<u8>> = LazyLock::new(|| Arc::new(RwLock::new(Vec::new())));
+/// Html pool
+pub static PNG: Llar<Vec<u8>> = LazyLock::new(|| Arc::new(RwLock::new(Vec::new())));
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -49,25 +54,28 @@ async fn main() -> anyhow::Result<()> {
     // Init logger with level
     init_logger((&args.tracing).into());
 
-    match args.command {
+    match &args.command {
         Commands::New {
             config_type,
-        } => command_new(&config_type, &args).await,
+        } => command_new(config_type, &args).await,
         Commands::Run {
             watch,
             serve,
             address,
         } => {
             command_run(
-                watch,
-                serve,
+                *watch,
+                *serve,
                 &args.config_path,
                 &args.layout,
-                &address,
+                address,
                 &args.theme,
             )
             .await
         }
-        Commands::Gen {} => command_gen(&args).await,
+        Commands::Gen {
+            output_type,
+            output_name,
+        } => command_gen(output_type, output_name, &args).await,
     }
 }

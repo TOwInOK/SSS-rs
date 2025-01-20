@@ -2,7 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{link::Link, since::Since};
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Skill {
     /// Specific skill
     pub skill: String,
@@ -25,7 +26,8 @@ pub struct Skill {
     /// - gitlab
     pub repo_link: Link,
 }
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Project {
     /// Name of project
     pub name: String,

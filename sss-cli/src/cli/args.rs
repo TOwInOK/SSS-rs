@@ -34,10 +34,6 @@ pub struct Args {
     #[arg(short, long)]
     pub layout: Option<Layouts>,
 
-    /// name of file_name.html
-    #[arg(short = 'o', long = "out", default_value_t = default_file_output())]
-    pub file_output: String,
-
     /// Log level
     #[arg(long, default_value_t)]
     pub tracing: CliTracing,
@@ -81,10 +77,6 @@ impl From<&CliTracing> for tracing::Level {
             CliTracing::Warn => Level::WARN,
         }
     }
-}
-
-fn default_file_output() -> String {
-    "sss-rs.html".to_string()
 }
 
 pub fn default_config_path() -> String {

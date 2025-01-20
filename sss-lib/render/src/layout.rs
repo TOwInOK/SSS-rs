@@ -26,7 +26,7 @@ where
 }
 
 /// Allow to finaly build a component to string via pushing [Layout] into Final Layout
-pub trait Finalize
+pub trait Finalise
 where
     Self: Layout,
 {

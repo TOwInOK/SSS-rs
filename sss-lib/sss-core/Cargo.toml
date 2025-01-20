@@ -7,3 +7,14 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true, features = ["derive"] }
+utoipa = {workspace = true, optional = true}
+
+[dev-dependencies]
+# sss_core = { path = ".", features = ["full"] }
+
+[features]
+default = []
+full = ["utoipa"]
+utoipa = [
+    "dep:utoipa"
+]

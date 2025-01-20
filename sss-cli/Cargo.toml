@@ -8,8 +8,8 @@ license.workspace = true
 
 [dependencies]
 # Local deps
-sss_core = { path="../sss-lib/sss-core" }
-sss_std = { path="../sss-lib/sss-std" }
+sss_core = { path="../sss-lib/sss-core", features = ["full"]}
+sss_std = { path="../sss-lib/sss-std", features = ["full"] }
 render = { path="../sss-lib/render" }
 parser = {path = "../sss-lib/parser"}
 # Workspace deps
@@ -25,10 +25,12 @@ tracing-subscriber.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 toml.workspace = true
-## cli
+## cli deps
 clap = { workspace = true, features = [ "derive"] }
 # Local deps
 ## file checker
 notify = "8.0.0"
 ## web server
 axum = "0.8.1"
+utoipa = {workspace = true}
+utoipa-scalar = { version = "0.3.0", features = ["axum"] }

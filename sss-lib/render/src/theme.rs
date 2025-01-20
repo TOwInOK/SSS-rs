@@ -12,8 +12,7 @@ type Color = &'static str;
 #[derive(Serialize, Default, Debug)]
 pub struct Theme {
     pub colors: Colors,
-    pub regular_font: (&'static str, &'static str),
-    pub mono_font: (&'static str, &'static str),
+    pub font: (&'static str, &'static str),
 }
 
 /// Contains the complete color palette configuration for a theme.
@@ -22,13 +21,13 @@ pub struct Theme {
 /// All colors are specified as hex color codes.
 #[derive(Default, Serialize, Debug)]
 pub struct Colors {
-    /// Primary theme color used for main (like text) UI elements
+    /// Primary theme [Color] used for main (like text) UI elements
     pub primary: Color,
-    /// Secondary theme color for background elements
+    /// Secondary theme [Color] for background elements
     pub secondary: Color,
-    /// Tertiary theme color for additional accent elements
+    /// Tertiary theme [Color] for additional accent elements
     pub thirdly: Color,
-    /// Color used for borders, texts and separators
+    /// [Color] used for borders, texts and separators
     pub border: Color,
 }
 
@@ -37,18 +36,19 @@ pub struct Colors {
 /// debugging and default initialization.
 pub trait Shade: Sync + Send {
     /// Retrieves the color configuration for the theme
-    /// Returns a reference to the Colors struct containing the theme's color palette
+    ///
+    /// Returns a reference to the [Colors] struct containing the theme's color palette
     fn get_colors(&self) -> &Colors;
-    fn regular_font(&self) -> (&'static str, &'static str);
-    fn mono_font(&self) -> (&'static str, &'static str);
+    /// Retrieves the font configuration for the theme
+    ///
+    /// Returns a references to the font containing the (font name, google font url)
+    fn font(&self) -> (&'static str, &'static str);
 
     #[inline]
-    /// Get css config
+    /// Get css [Config]
     fn get_encre_css_config(&self) -> Config {
         let mut config = encre_css::Config::default();
-        config.preflight = Preflight::new_full()
-            .font_family_mono(self.mono_font().0.to_string())
-            .font_family_sans(self.regular_font().0.to_string());
+        config.preflight = Preflight::new_full().font_family_sans(self.font().0.to_string());
         config
     }
 }
@@ -62,11 +62,7 @@ impl Shade for Theme {
         &self.colors
     }
     #[inline]
-    fn regular_font(&self) -> (&'static str, &'static str) {
-        self.regular_font
-    }
-    #[inline]
-    fn mono_font(&self) -> (&'static str, &'static str) {
-        self.mono_font
+    fn font(&self) -> (&'static str, &'static str) {
+        self.font
     }
 }

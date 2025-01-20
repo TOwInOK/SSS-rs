@@ -1,6 +1,6 @@
 use std::{fs, path::Path};
 
-use render::layout::Finalize;
+use render::layout::Finalise;
 use sss_core::{
     types::{
         link::Link,
@@ -12,11 +12,38 @@ use sss_core::{
     },
     Settings,
 };
+#[cfg(feature = "image_generation")]
+use sss_std::converter::{pdf::html_to_pdf, png::html_to_image};
 use sss_std::prelude::*;
 
 #[test]
 fn test_umbrella_layout() {
-    let settings = Settings {
+    let settings = def_set();
+    let ub = Layouts::UMBRELLA.to_layout(&settings, &ROSE_PINE);
+    let html = ub.as_ref().finalize().unwrap();
+    fs::write(Path::new("./card2.html"), html).unwrap();
+}
+#[cfg(feature = "image_generation")]
+#[tokio::test]
+async fn create_image() {
+    let settings = def_set();
+    let ub = Layouts::CASTLE.to_layout(&settings, &ROSE_PINE);
+    let html = ub.as_ref().finalize().unwrap();
+    let imgage = html_to_image(&html, None, 12).await.unwrap();
+    fs::write(Path::new("./test.png"), imgage).unwrap();
+}
+#[cfg(feature = "image_generation")]
+#[tokio::test]
+async fn create_pdf() {
+    let settings = def_set();
+    let ub = Layouts::CASTLE.to_layout(&settings, &ROSE_PINE);
+    let html = ub.as_ref().finalize().unwrap();
+    let imgage = html_to_pdf(&html, None).await.unwrap();
+    fs::write(Path::new("./test.pdf"), imgage).unwrap();
+}
+
+fn def_set() -> Settings {
+    Settings {
         user: User {
             name: "Дмитрий".to_string(),
             current_nickname: Nickname {
@@ -101,10 +128,5 @@ fn test_umbrella_layout() {
                 },
             },
         ],
-    };
-
-    let ub = Layouts::CASTLE.to_layout(&settings, &GROOVEBOX);
-    let html = ub.as_ref().finalize().unwrap();
-    println!("{:#?}", Path::new("./card2.html"));
-    fs::write(Path::new("./card2.html"), html).unwrap();
+    }
 }

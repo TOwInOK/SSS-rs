@@ -145,7 +145,7 @@ impl Layout for HtmlTeraRender<'_> {
     }
 }
 
-impl Finalize for HtmlTeraRender<'_> {
+impl Finalise for HtmlTeraRender<'_> {
     fn finalize(&self) -> Result<String, Box<dyn Error + Send + Sync>> {
         // render card
         let card = self.render()?;
@@ -168,8 +168,7 @@ impl Finalize for HtmlTeraRender<'_> {
 
         // fonts
 
-        context.insert("regular", &self.get_theme().regular_font().1);
-        context.insert("mono", &self.get_theme().mono_font().1);
+        context.insert("font", &self.get_theme().font().1);
 
         let rendered = tera.render("layout.html", &context)?;
         Ok(rendered)

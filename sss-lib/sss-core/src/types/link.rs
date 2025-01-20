@@ -2,7 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use super::provider::Provider;
 
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Debug, Serialize, Deserialize, Default, Clone)]
 pub struct Link {
     pub provider: Provider,
     pub link: String,

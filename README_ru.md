@@ -12,7 +12,7 @@ SSS-rs (Skill, Slick, Style) - это библиотека и инструмен
 1. **Конфигурация** (`sss-core`)
    - Структуры данных для информации о разработчике
 
-2. **Темы** (`render`, trait `Shade`)
+2. **Темы** (`render`, trait `Shade` or structure `Theme`)
    - Настраиваемые цветовые схемы
    - Встроенные темы:
      - Umbrella (по умолчанию)
@@ -20,9 +20,9 @@ SSS-rs (Skill, Slick, Style) - это библиотека и инструмен
      - GrooveBox
      - Dracula
 
-3. **Макеты** (`render`, trait `Render`)
+3. **Макеты** (`render`, trait `Layout` + `Finalize`)
    - Система шаблонов на основе Tera
-   - Поддержка HTML и CSS
+   - Поддержка HTML и [TailwindCSS*](https://crates.io/crates/encre-css)
    - Адаптивный дизайн
 
 ### Использование библиотеки
@@ -50,6 +50,10 @@ let html = layout.to_layout(&settings, &theme.into())
 CLI инструмент для генерации HTML с использованием тем и макетов SSS-rs.
 Позволяет запускать сгенерированную страницу с автоматическим обновлением при изменении тем и макетов.
 
+## Зависимости
+- chromium/chrome (режим headless_chrome)
+  - для создания файлов PNG/PDF
+
 ## Использование
 
 ```bash
@@ -73,8 +77,8 @@ sss_cli [OPTIONS] <COMMAND>
 sss_cli new [OPTIONS]
 
 Параметры:
-  -c, --config-type <TYPE>    Формат конфигурации [по умолчанию: toml]
-                             [возможные значения: json, toml]
+  -t, --type <TYPE>    Фармат настроек [по умолчанию: toml]
+                           [возможные значения: json, toml]
 ```
 
 #### run - Запуск сервера разработки
@@ -82,14 +86,18 @@ sss_cli new [OPTIONS]
 sss_cli run [OPTIONS]
 
 Параметры:
-  -w, --watch                Отслеживание изменений конфигурации
+  -w, --watch               Отслеживание изменений конфигурации
   -s, --serve               Запуск веб-сервера
   -a, --address <ADDRESS>   Адрес веб-сервера [по умолчанию: 0.0.0.0:8081]
 ```
 
 #### gen - Генерация HTML
 ```bash
-sss_cli gen
+sss_cli gen [OPTIONS]
+
+Options:
+  -t, --type <OUTPUT_TYPE>  выходной тип [по умолчанию: html] [возможные значения: html, png, pdf]
+  -o, --out <OUTPUT_NAME>   выходное название [по умолчанию: sss-rs]
 ```
 
 ### Примеры использования
@@ -135,11 +143,23 @@ xattr -rd com.apple.quarantine name_of_file
 ./name_of_file
 ```
 
+## Как построить свой собственный макет
+
+[**Руководство**](How_to_construct_layout.md)
+
+- SSS cli
+  - На данный момент вы не можете использовать собственные шаблоны непосредственно в cli.
+  Вы можете создать [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue) для их добавления.
+- SSS-lib
+  - Вы можете создавать и использовать собственные шаблоны с помощью [HtmlTeraRender](sss-lib\sss-std\src\layouts\html_tera_builder.rs)
+  или
+  Создайте свою собственную реализацию с помощью трейтов: [Layout + Finalise](sss-lib\render\src\layout.rs)
+
 ## Лицензия
 [Apache 2.0](LICENSE)
 
 ## Как внести свой вклад
-Если вы хотите добавить новую тему или макет, создайте Issue!
+Если вы хотите добавить новую тему или макет, создайте [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue)!
 
 # Пример
 ![Пример карточки](.content/umbrella.umbrella.jpeg)

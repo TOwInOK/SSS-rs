@@ -10,7 +10,7 @@ SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish deve
 1. **Configuration** (`sss-core`)
    - Data structures for developer information
 
-2. **Themes** (`render`, trait `Shade`)
+2. **Themes** (`render`, trait `Shade` or structure `Theme`)
    - Customizable color schemes
    - Built-in themes:
      - Umbrella (default)
@@ -18,9 +18,9 @@ SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish deve
      - GrooveBox
      - Dracula
 
-3. **Layouts** (`render`, trait `Render`)
+3. **Layouts** (`render`, trait `Layout` + `Finalize`)
    - Tera-based templating system
-   - HTML and CSS support
+   - HTML and [TailwindCSS*](https://crates.io/crates/encre-css) support
    - Responsive design
 
 ### Library Usage
@@ -48,6 +48,10 @@ let html = layout.to_layout(&settings, &theme.into())
 CLI tool for generating HTML using SSS-rs themes and layouts.
 Allows you to host generated pages with hot reload for themes and layouts.
 
+## Dependencies
+- chromium/chrome (headless_chrome mode)
+  - to generate PNG/PDF files
+
 ## Usage
 
 ```bash
@@ -71,8 +75,8 @@ sss_cli [OPTIONS] <COMMAND>
 sss_cli new [OPTIONS]
 
 Options:
-  -c, --config-type <TYPE>    Configuration format [default: toml]
-                             [possible values: json, toml]
+  -t, --type <TYPE>    Configuration format [default: toml]
+                              [possible values: json, toml]
 ```
 
 #### run - Start development server
@@ -80,14 +84,18 @@ Options:
 sss_cli run [OPTIONS]
 
 Options:
-  -w, --watch                Watch for config changes
+  -w, --watch               Watch for config changes
   -s, --serve               Start web server
   -a, --address <ADDRESS>   Web server address [default: 0.0.0.0:8081]
 ```
 
 #### gen - Generate HTML
 ```bash
-sss_cli gen
+sss_cli gen [OPTIONS]
+
+Options:
+  -t, --type <OUTPUT_TYPE>  output type [default: html] [possible values: html, png, pdf]
+  -o, --out <OUTPUT_NAME>   output name [default: sss-rs]
 ```
 
 ### Usage Examples
@@ -133,11 +141,23 @@ xattr -rd com.apple.quarantine name_of_file
 ./name_of_file
 ```
 
+## How to build your own layout
+
+[**Guide**](How_to_construct_layout.md)
+
+- SSS cli
+  - At the moment you can't use your own templates directly with cli.
+  You can make an [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue) for adding them.
+- SSS-lib
+  - You can create and use your own templates with [HtmlTeraRender](sss-lib\sss-std\src\layouts\html_tera_builder.rs)
+  or
+  Create your own implementation with traits: [Layout + Finalise](sss-lib\render\src\layout.rs)
+
 ## License
 [Apache 2.0](LICENSE)
 
 ## Contributing
-If you want to add a new theme or layout, create an Issue!
+If you want to add a new theme or layout, create an [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue)!
 
 # Example
 ![Card Example](.content/umbrella.umbrella.jpeg)
