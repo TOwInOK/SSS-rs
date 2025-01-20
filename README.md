@@ -159,9 +159,9 @@ xattr -rd com.apple.quarantine name_of_file
   - At the moment you can't use your own templates directly with cli.
   You can make an [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue) for adding them.
 - SSS-lib
-  - You can create and use your own templates with [HtmlTeraRender](sss-lib\sss-std\src\layouts\html_tera_builder.rs)
+  - You can create and use your own templates with [HtmlTeraRender](sss-lib/sss-std/src/layouts/html_tera_builder.rs)
   or
-  Create your own implementation with traits: [Layout + Finalise](sss-lib\render\src\layout.rs)
+  Create your own implementation with traits: [Layout + Finalise](sss-lib/render/src/layout.rs)
 
 ## License
 [Apache 2.0](LICENSE)

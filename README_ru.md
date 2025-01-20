@@ -161,9 +161,9 @@ xattr -rd com.apple.quarantine name_of_file
   - На данный момент вы не можете использовать собственные шаблоны непосредственно в cli.
   Вы можете создать [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue) для их добавления.
 - SSS-lib
-  - Вы можете создавать и использовать собственные шаблоны с помощью [HtmlTeraRender](sss-lib\sss-std\src\layouts\html_tera_builder.rs)
+  - Вы можете создавать и использовать собственные шаблоны с помощью [HtmlTeraRender](sss-lib/sss-std/src/layouts/html_tera_builder.rs)
   или
-  Создайте свою собственную реализацию с помощью трейтов: [Layout + Finalise](sss-lib\render\src\layout.rs)
+  Создайте свою собственную реализацию с помощью трейтов: [Layout + Finalise](sss-lib/render/src/layout.rs)
 
 ## Лицензия
 [Apache 2.0](LICENSE)
