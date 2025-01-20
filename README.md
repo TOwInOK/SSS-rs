@@ -45,7 +45,7 @@ let html = layout.to_layout(&settings, &theme.into())
 
 # SSS-rs CLI
 
-CLI tool for generating HTML using SSS-rs themes and layouts.
+CLI tool for generating HTML/PNG/PDF using SSS-rs themes and layouts.
 Allows you to host generated pages with hot reload for themes and layouts.
 
 ## Dependencies
