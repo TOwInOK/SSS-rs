@@ -93,10 +93,10 @@ sss_cli run [OPTIONS]
 
 ### Доступные пути
 - Api документация
-  - Scalar API Page: /scalar
+  - Scalar API Page: /api
 - Пути
   - Основная карточка (html) page: /
-  - Png карточка: /image
+  - Png карточка: /png
   - Pdf карточка: /pdf
   - Json настройки экземпляра: /json
   - Проверка здоровья сервера : /health

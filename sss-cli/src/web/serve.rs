@@ -17,7 +17,7 @@ use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
 #[openapi(
     paths(
         root,
-        get_image,
+        get_png,
         get_pdf,
         get_json,
         healthcheck
@@ -59,11 +59,11 @@ pub async fn serve(
 ) -> anyhow::Result<()> {
     let app = Router::new()
         .route("/", get(root))
-        .route("/image", get(get_image))
+        .route("/png", get(get_png))
         .route("/pdf", get(get_pdf))
         .route("/json", get(get_json))
         .route("/health", get(healthcheck))
-        .merge(Scalar::with_url("/scalar", ApiDoc::openapi()));
+        .merge(Scalar::with_url("/api", ApiDoc::openapi()));
 
     info!("try to bind {} address", &address);
     let addr = address.parse::<std::net::SocketAddr>()?;
@@ -129,8 +129,6 @@ async fn get_pdf() -> impl IntoResponse {
                 header::CONTENT_DISPOSITION,
                 "inline; filename=\"document.pdf\"",
             ),
-            (header::CACHE_CONTROL, "public, max-age=31536000"),
-            (header::EXPIRES, "31536000"),
         ],
         Bytes::from(data),
     )
@@ -138,7 +136,7 @@ async fn get_pdf() -> impl IntoResponse {
 }
 #[utoipa::path(
     get,
-    path = "/image",
+    path = "/png",
     tag = "card-generator",
     responses(
         (status = 200, description = "Successfully retrieved PNG image", content_type = "image/png"),
@@ -148,7 +146,7 @@ async fn get_pdf() -> impl IntoResponse {
     description = "Returns the generated card image in PNG format"
 )]
 #[instrument]
-async fn get_image() -> impl IntoResponse {
+async fn get_png() -> impl IntoResponse {
     let data = PNG.read().await.clone();
 
     if data.is_empty() {

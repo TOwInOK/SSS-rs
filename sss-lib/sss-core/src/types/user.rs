@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use super::nickname::Nickname;
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, PartialEq)]
 pub struct User {
     /// Your name
     pub name: String,

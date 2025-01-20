@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::fmt::Display;
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum)]
+#[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum Themes {
     #[default]

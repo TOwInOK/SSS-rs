@@ -91,10 +91,10 @@ Options:
 
 ### Avaiable routes
 - Api doc
-  - Scalar API Page: /scalar
+  - Scalar API Page: /api
 - Routes
   - Main card (html) page: /
-  - Png card: /image
+  - Png card: /png
   - Pdf card: /pdf
   - Json settings of instance: /json
   - Health check : /health

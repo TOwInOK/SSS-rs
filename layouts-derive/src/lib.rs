@@ -91,7 +91,7 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
 
         // Generate Layouts enum with derived traits
         #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-        #[derive(Debug, Deserialize, Serialize, Clone, clap::ValueEnum)]
+        #[derive(Debug, Deserialize, Serialize, Clone, clap::ValueEnum, PartialEq)]
         pub enum Layouts {
             #(#variants),*
         }

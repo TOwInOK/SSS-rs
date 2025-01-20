@@ -5,7 +5,7 @@ use sss_core::Settings;
 use sss_std::{prelude::Layouts, themes::Themes};
 
 /// [Settings] wrapper for collecting theme and layout into config for reload on save
-#[derive(Debug, Default, Serialize, Deserialize, Clone, utoipa::ToSchema)]
+#[derive(Debug, Default, Serialize, Deserialize, Clone, utoipa::ToSchema, PartialEq)]
 #[serde(rename = "settings")]
 pub struct SSSCliSettings {
     /// User specific settings

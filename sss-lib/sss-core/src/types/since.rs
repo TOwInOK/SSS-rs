@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, PartialEq)]
 pub struct Since {
     pub start: usize,
     #[serde(default)]

@@ -7,7 +7,7 @@ const LINKED_IN_OTLINED: &str = include_str!("provider/linkedin_outlined.svg");
 const TELEGRAM_OTLINED: &str = include_str!("provider/telegram_ontlined.svg");
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, PartialEq)]
 /// Icon provider
 pub enum Provider {
     #[default]

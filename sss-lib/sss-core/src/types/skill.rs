@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use super::{link::Link, since::Since};
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, PartialEq)]
 pub struct Skill {
     /// Specific skill
     pub skill: String,
@@ -27,7 +27,7 @@ pub struct Skill {
     pub repo_link: Link,
 }
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, PartialEq)]
 pub struct Project {
     /// Name of project
     pub name: String,

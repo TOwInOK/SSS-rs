@@ -9,7 +9,7 @@ use types::{
 pub mod types;
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
-#[derive(Debug, Serialize, Deserialize, Default, Clone)]
+#[derive(Debug, Serialize, Deserialize, Default, Clone, PartialEq)]
 /// SSS-rs settings
 pub struct Settings {
     /// User info

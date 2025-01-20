@@ -15,7 +15,7 @@ use sss_std::{
     prelude::Layouts,
     themes::Themes,
 };
-use tracing::{debug, info, instrument};
+use tracing::{debug, error, info, instrument};
 
 use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
 
@@ -29,8 +29,16 @@ pub async fn refresh_settings(
     path: &str,
     themes: Option<&Themes>,
     layouts: Option<&Layouts>,
-) -> Result {
+) -> Result<SettingsUpdateType> {
     let mut settings = SSSCliSettings::load(path).await?;
+    {
+        let current_settings = SETTINGS.read().await;
+        if settings == *current_settings {
+            info!("Nothing to update, settings is actual");
+            return Ok(SettingsUpdateType::AlreadyActual);
+        }
+    }
+    info!("Settigns is't actual, updating...");
     if let Some(themes) = themes {
         settings.themes = themes.to_owned()
     }
@@ -38,7 +46,15 @@ pub async fn refresh_settings(
         settings.layouts = layouts.to_owned()
     }
     *SETTINGS.write().await = settings;
-    Ok(())
+    info!("Settings is actual now!");
+    Ok(SettingsUpdateType::NotActual)
+}
+/// Status of actual data
+pub enum SettingsUpdateType {
+    // Is Actual
+    AlreadyActual,
+    // Needs to be updated
+    NotActual,
 }
 
 #[instrument(skip(path, themes, layouts))]
@@ -52,11 +68,23 @@ pub async fn refresh(
 ) -> Result {
     debug!("Themes in cli: {:#?}", &themes);
     debug!("Layouts in cli: {:#?}", &layouts);
-    refresh_settings(path, themes, layouts).await?;
-    refresh_html().await?;
-    refresh_png().await?;
-    refresh_pdf().await?;
-    Ok(())
+    match refresh_settings(path, themes, layouts).await? {
+        SettingsUpdateType::AlreadyActual => Ok(()),
+        SettingsUpdateType::NotActual => {
+            refresh_html().await?;
+            tokio::spawn(async move {
+                if let Err(e) = refresh_png().await {
+                    error!("Got refresh error: {}", e);
+                }
+            });
+            tokio::spawn(async move {
+                if let Err(e) = refresh_pdf().await {
+                    error!("Got refresh error: {}", e);
+                }
+            });
+            Ok(())
+        }
+    }
 }
 
 #[instrument]
@@ -70,6 +98,7 @@ pub async fn refresh_html() -> Result {
         .to_layout(&settings.sss_user_settings, (&settings.themes).into());
 
     *HTML.write().await = layout.finalize()?;
+    info!("Done HTML");
     Ok(())
 }
 
@@ -81,6 +110,7 @@ pub async fn refresh_png() -> Result {
     let html = HTML.read().await;
     let image = html_to_image(&html, None, 12).await?;
     *PNG.write().await = image;
+    info!("Done PNG");
     Ok(())
 }
 
@@ -92,6 +122,7 @@ pub async fn refresh_pdf() -> Result {
     let html = HTML.read().await;
     let image = html_to_pdf(&html, None).await?;
     *PDF.write().await = image;
+    info!("Done PDF");
     Ok(())
 }
 
