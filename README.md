@@ -49,8 +49,9 @@ CLI tool for generating HTML/PNG/PDF using SSS-rs themes and layouts.
 Allows you to host generated pages with hot reload for themes and layouts.
 
 ## Dependencies
-- chromium/chrome (headless_chrome mode)
-  - to generate PNG/PDF files
+- PNG/PDF
+  - chromium/chrome (headless_chrome mode)
+    - If you don't have it, these features won't work, but everything else will.
 
 ## Usage
 
@@ -97,6 +98,7 @@ Options:
   - Png card: /png
   - Pdf card: /pdf
   - Json settings of instance: /json
+  - Base64 toml config : /share
   - Health check : /health
 
 #### gen - Generate HTML

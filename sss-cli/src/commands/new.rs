@@ -6,13 +6,17 @@ use crate::{
     tools::gen_example_config,
 };
 
-#[instrument(skip(args, config_type))]
+#[instrument(skip(args, config_type, base64))]
 pub async fn command_new(
     config_type: &ConfigType,
+    base64: Option<&String>,
     args: &Args,
 ) -> anyhow::Result<()> {
     info!("Start generating new config");
-    let settings = gen_example_config();
+    let settings = match base64 {
+        Some(e) => toml::from_str(&base64_light::base64_decode_str(e))?,
+        None => gen_example_config(),
+    };
     let mut path_to_settings = args.config_path.split(".").take(1).collect::<String>();
     info!("Convert to choosd type");
     let config = match config_type {

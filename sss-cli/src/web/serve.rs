@@ -6,8 +6,9 @@ use axum::{
     Json, Router,
 };
 use serde::Serialize;
+use serde_json::json;
 use tokio::sync::broadcast::Receiver;
-use tracing::{info, instrument};
+use tracing::{error, info, instrument};
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::{Scalar, Servable};
 
@@ -20,10 +21,13 @@ use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
         get_png,
         get_pdf,
         get_json,
-        healthcheck
+        healthcheck,
+        gen_base64
     ),
     components(
-        schemas(SSSCliSettings)
+        schemas(SSSCliSettings),
+        schemas(HealthResponse),
+        schemas(Base64Out)
     ),
     tags(
         (name = "card-generator", description = "Endpoints for generating and retrieving card html/png/pdf documents"),
@@ -63,6 +67,7 @@ pub async fn serve(
         .route("/pdf", get(get_pdf))
         .route("/json", get(get_json))
         .route("/health", get(healthcheck))
+        .route("/share", get(gen_base64))
         .merge(Scalar::with_url("/api", ApiDoc::openapi()));
 
     info!("try to bind {} address", &address);
@@ -204,4 +209,43 @@ async fn healthcheck() -> Json<HealthResponse> {
         status: "healthy",
         version: env!("CARGO_PKG_VERSION"),
     })
+}
+#[derive(Clone, ToSchema, Serialize)]
+struct Base64Out {
+    pub base64: String,
+}
+
+#[utoipa::path(
+    get,
+    path = "/share",
+    tag = "raw-data",
+    responses(
+        (status = 200, description = "encoded toml config", body = Base64Out)
+    ),
+    summary = "Convert settings to base64",
+    description = "Return converted settings to toml to base64"
+)]
+#[instrument]
+async fn gen_base64() -> impl IntoResponse {
+    let toml = toml::to_string(&*SETTINGS.read().await);
+    match toml {
+        Ok(e) => {
+            let base64 = base64_light::base64_encode(&e);
+            (
+                StatusCode::OK,
+                [(header::CONTENT_TYPE, "text/json")],
+                Bytes::from(json!(Base64Out { base64 }).to_string()),
+            )
+                .into_response()
+        }
+        Err(e) => {
+            error!("Toml error: {}", e);
+            (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                [(header::CONTENT_TYPE, "text/plain")],
+                Bytes::from("toml converter got error"),
+            )
+                .into_response()
+        }
+    }
 }

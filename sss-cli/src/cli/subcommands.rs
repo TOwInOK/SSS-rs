@@ -2,8 +2,12 @@
 pub enum Commands {
     /// Generate new config
     New {
+        /// Type of config
         #[arg(short = 't', long = "type", default_value_t)]
         config_type: ConfigType,
+        /// Base64 converted config (only toml)
+        #[arg(short = 'b', long = "base64")]
+        base64: Option<String>,
     },
     /// Run web server or/and linter
     Run {

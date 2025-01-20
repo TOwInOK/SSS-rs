@@ -57,7 +57,8 @@ async fn main() -> anyhow::Result<()> {
     match &args.command {
         Commands::New {
             config_type,
-        } => command_new(config_type, &args).await,
+            base64,
+        } => command_new(config_type, base64.as_ref(), &args).await,
         Commands::Run {
             watch,
             serve,

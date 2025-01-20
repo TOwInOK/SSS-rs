@@ -34,3 +34,5 @@ notify = "8.0.0"
 axum = "0.8.1"
 utoipa = {workspace = true}
 utoipa-scalar = { version = "0.3.0", features = ["axum"] }
+## base64
+base64_light.workspace = true
