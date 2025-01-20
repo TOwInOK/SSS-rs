@@ -89,6 +89,16 @@ Options:
   -a, --address <ADDRESS>   Web server address [default: 0.0.0.0:8081]
 ```
 
+### Avaiable routes
+- Api doc
+  - Scalar API Page: /scalar
+- Routes
+  - Main card (html) page: /
+  - Png card: /image
+  - Pdf card: /pdf
+  - Json settings of instance: /json
+  - Health check : /health
+
 #### gen - Generate HTML
 ```bash
 sss_cli gen [OPTIONS]

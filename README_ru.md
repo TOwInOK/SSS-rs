@@ -91,6 +91,16 @@ sss_cli run [OPTIONS]
   -a, --address <ADDRESS>   Адрес веб-сервера [по умолчанию: 0.0.0.0:8081]
 ```
 
+### Доступные пути
+- Api документация
+  - Scalar API Page: /scalar
+- Пути
+  - Основная карточка (html) page: /
+  - Png карточка: /image
+  - Pdf карточка: /pdf
+  - Json настройки экземпляра: /json
+  - Проверка здоровья сервера : /health
+
 #### gen - Генерация HTML
 ```bash
 sss_cli gen [OPTIONS]
