@@ -9,7 +9,7 @@ pub mod tools;
 /// Web utility for serve
 pub mod web;
 
-use std::sync::{Arc, LazyLock};
+use std::sync::LazyLock;
 
 use clap::Parser;
 use cli::{
@@ -35,17 +35,17 @@ fn init_logger(level: Level) {
     .expect("Fail to set global default subscriber");
 }
 
-type Llar<T> = LazyLock<Arc<RwLock<T>>>;
+type Llar<T> = LazyLock<RwLock<T>>;
 
 /// Settings pool
 pub static SETTINGS: Llar<SSSCliSettings> =
-    LazyLock::new(|| Arc::new(RwLock::new(SSSCliSettings::default())));
+    LazyLock::new(|| RwLock::new(SSSCliSettings::default()));
 /// Html pool
-pub static HTML: Llar<String> = LazyLock::new(|| Arc::new(RwLock::new(String::new())));
+pub static HTML: Llar<String> = LazyLock::new(|| RwLock::new(String::new()));
 /// HTML
-pub static PDF: Llar<Vec<u8>> = LazyLock::new(|| Arc::new(RwLock::new(Vec::new())));
+pub static PDF: Llar<Vec<u8>> = LazyLock::new(|| RwLock::new(Vec::new()));
 /// Html pool
-pub static PNG: Llar<Vec<u8>> = LazyLock::new(|| Arc::new(RwLock::new(Vec::new())));
+pub static PNG: Llar<Vec<u8>> = LazyLock::new(|| RwLock::new(Vec::new()));
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

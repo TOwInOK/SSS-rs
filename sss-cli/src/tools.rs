@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use render::layout::Finalise;
 use sss_core::{
     types::{
@@ -45,7 +47,7 @@ pub async fn refresh_settings(
     if let Some(layouts) = layouts {
         settings.layouts = layouts.to_owned()
     }
-    *SETTINGS.write().await = settings;
+    *SETTINGS.deref().write().await = settings;
     info!("Settings is actual now!");
     Ok(SettingsUpdateType::NotActual)
 }
@@ -109,7 +111,7 @@ pub async fn refresh_png() -> Result {
     info!("Render PNG");
     let html = HTML.read().await;
     let image = html_to_image(&html, None, 12).await?;
-    *PNG.write().await = image;
+    *PNG.deref().write().await = image;
     info!("Done PNG");
     Ok(())
 }
@@ -121,7 +123,7 @@ pub async fn refresh_pdf() -> Result {
     info!("Render PDF");
     let html = HTML.read().await;
     let image = html_to_pdf(&html, None).await?;
-    *PDF.write().await = image;
+    *PDF.deref().write().await = image;
     info!("Done PDF");
     Ok(())
 }
