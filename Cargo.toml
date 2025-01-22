@@ -36,13 +36,25 @@ base64_light = "0.1.5"
 [profile.dev]
 opt-level = 0
 debug = true
+strip = "none"
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = 'unwind'
+incremental = true
+codegen-units = 256
+rpath = false
 
 [profile.release]
-opt-level = 3
+opt-level = 'z'
 debug = false
 lto = true
-codegen-units = 1
-panic = 'abort'
+codegen-units = 24
+panic = 'unwind'
+strip = true
+incremental = true
+debug-assertions = false
+overflow-checks = false
 
 [profile.test]
 opt-level = 0

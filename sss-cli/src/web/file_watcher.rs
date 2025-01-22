@@ -1,53 +1,69 @@
-use std::{path::Path, time::Duration};
-
 use notify::{recommended_watcher, Event, RecursiveMode, Watcher};
 use sss_std::{prelude::Layouts, themes::Themes};
+use std::path::Path;
 use tokio::sync::mpsc;
-use tracing::{error, info, trace};
+use tracing::{debug, error, info, trace};
+use xxhash_rust::xxh3::xxh3_64;
 
 use crate::tools::refresh;
 
+// Function to watch a file and refresh settings upon modification
 pub async fn check_file_loop(
     path: String,
     themes: Option<&Themes>,
     layouts: Option<&Layouts>,
     mut shutdown_rx: tokio::sync::broadcast::Receiver<()>,
 ) -> anyhow::Result<()> {
-    let (tx, mut rx) = mpsc::channel(1);
+    // Create a channel to receive file events
+    let (tx, mut rx) = mpsc::channel(100);
 
-    let p = move |res: Result<Event, notify::Error>| {
+    // Define a watcher callback
+    let watcher = move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
             let _ = tx.try_send(event);
         }
     };
 
-    let mut watcher = recommended_watcher(p)?;
+    // Initialize the file watcher
+    let mut watcher = recommended_watcher(watcher)?;
     watcher.watch(Path::new(&path), RecursiveMode::NonRecursive)?;
+
+    // Read the file content and calculate the initial hash
+    let file_content = tokio::fs::read(&path).await?;
+    let mut prevision_processed_hash = calculate_xxhash(&file_content);
+    drop(file_content);
 
     info!("Start watching changes for file: {}", &path);
 
-    let mut last_event_time = tokio::time::Instant::now() - Duration::from_millis(1);
-
     loop {
         tokio::select! {
+            // Receive file events
             Some(event) = rx.recv() => {
-                let now = tokio::time::Instant::now();
-                if now.duration_since(last_event_time) >= Duration::from_millis(300) {
-                    last_event_time = now;
-
                     match event {
                         Event { kind, .. } if kind.is_modify() => {
-                            trace!("Received modify event");
-                            if let Err(e) = refresh(&path, themes, layouts).await {
-                                error!("Load failed: {}", e);
+                            trace!("Received modify event for {}", path);
+                            // Read the file content
+                            let file_content = tokio::fs::read(&path).await?;
+                            // Calculate the current hash
+                            let current_hash = calculate_xxhash(&file_content);
+                            // Check if the hash has changed
+                            if current_hash != prevision_processed_hash {
+                                debug!("Hash is different:\nprevision: {}\ncurrent: {}", prevision_processed_hash, current_hash);
+                                // Update the hash to the current one
+                                prevision_processed_hash = current_hash;
+                                    // Refresh settings
+                                    if let Err(e) = refresh(&path, themes, layouts).await {
+                                        error!("Failed to refresh settings: {}", e);
+                                    }
+                            } else {
+                                info!("Nothing to change");
+                                trace!("Skipped identical update for {}", path);
                             }
                         }
                         _ => (),
                     }
-                } else {
-                    trace!("Ignored event due to cooldown");
-                }
             }
+            // Handle shutdown signal
             _ = shutdown_rx.recv() => {
                 info!("Shutting down file watcher");
                 break;
@@ -56,4 +72,9 @@ pub async fn check_file_loop(
     }
 
     Ok(())
+}
+
+// Function to calculate the xxHash of data
+fn calculate_xxhash(data: &[u8]) -> u64 {
+    xxh3_64(data)
 }
