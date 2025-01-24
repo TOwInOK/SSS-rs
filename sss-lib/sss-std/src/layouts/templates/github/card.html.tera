@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[{{ secondary }}] flex justify-center items-center p-4">
+<div class="h-full w-full bg-[{{ secondary }}] flex justify-center items-center p-4">
   <div class="max-w-2xl w-full bg-black/10 rounded-lg border border-[{{ thirdly }}] p-6">
 
     {# Header section #}

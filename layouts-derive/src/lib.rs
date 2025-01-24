@@ -24,6 +24,7 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
     let mut template_consts = Vec::new(); // Template constants
     let mut to_layout_matches = Vec::new(); // Match arms for to_layout method
     let mut display_matches = Vec::new(); // Match arms for Display implementation
+    let mut from_str_matches = Vec::new(); // Match arms for FromStr implementation
 
     let templates_path = Path::new(&layouts_dir);
 
@@ -42,14 +43,20 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
                         // Create identifier for enum variant
                         let variant_name = syn::Ident::new(
                             &name_str.to_uppercase(),
+                            proc_macro2::Span::mixed_site(),
+                        );
+
+                        // Create identifier for FromStr variant
+                        let lower_variant_name = syn::LitStr::new(
+                            &name_str.to_lowercase(),
                             proc_macro2::Span::call_site(),
                         );
+
                         // Create identifier for template constant
                         let template_const_name = syn::Ident::new(
                             &format!("{}_TERA_CARD_TEMPLATE", name_str.to_uppercase()),
                             proc_macro2::Span::call_site(),
                         );
-
                         variants.push(variant_name.clone());
 
                         // Generate template constant with included template file
@@ -71,6 +78,10 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
                         // Generate match arm for Display implementation
                         display_matches.push(quote! {
                             Layouts::#variant_name => write!(f, #name_str)
+                        });
+
+                        from_str_matches.push(quote! {
+                            #lower_variant_name => Ok(Self::#variant_name),
                         });
                     }
                 }
@@ -125,6 +136,17 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self {
                     #(#display_matches),*
+                }
+            }
+        }
+
+        impl std::str::FromStr for Layouts {
+            type Err = String;
+
+            fn from_str(s: &str) -> Result<Self, Self::Err> {
+                match s.to_lowercase().as_str() {
+                    #(#from_str_matches)*
+                    _ => Err(format!("'{}' is not a valid Layout", s))
                 }
             }
         }

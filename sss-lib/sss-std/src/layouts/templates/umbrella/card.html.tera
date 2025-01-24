@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-[{{ secondary }}] flex justify-center items-center p-4 overflow-clip">
+<div class="h-full w-full bg-[{{ secondary }}] flex justify-center items-center p-4 overflow-clip">
   <div class="max-w-md w-full bg-black/20 rounded-2xl border border-black p-1 overflow-scroll-x">
     <div class="p-4 rounded-lg border-t-2 border-b-2 border-[{{ thirdly }}] flex flex-col gap-4">
 

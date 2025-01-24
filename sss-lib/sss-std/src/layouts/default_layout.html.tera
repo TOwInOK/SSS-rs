@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full w-full">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
 {{ style | safe }}
 </style>
 </head>
-<body>
+<body class="h-full w-full">
 {{ card | safe }}
 </body>
 </html>

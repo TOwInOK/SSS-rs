@@ -14,6 +14,17 @@ pub enum Themes {
 }
 
 impl Themes {
+    pub fn font(&self) -> (&'static str, &'static str) {
+        let theme: &Theme = self.into();
+        theme.font
+    }
+    pub fn colors(&self) -> &Colors {
+        let theme: &Theme = self.into();
+        &theme.colors
+    }
+}
+
+impl Themes {
     // Methot to return all avaiable [Themes]
     pub fn all_themes() -> Vec<Self> {
         vec![
