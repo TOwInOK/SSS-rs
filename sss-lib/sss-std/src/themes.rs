@@ -1,6 +1,6 @@
 use render::prelude::{Colors, Theme};
 use serde::{Deserialize, Serialize};
-use std::fmt::Display;
+use std::{fmt::Display, str::FromStr};
 
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Default, Deserialize, Serialize, Clone, clap::ValueEnum, PartialEq)]
@@ -11,6 +11,18 @@ pub enum Themes {
     ROSE_PINE,
     GROOVEBOX,
     DRACULA,
+}
+
+impl Themes {
+    // Methot to return all avaiable [Themes]
+    pub fn all_themes() -> Vec<Self> {
+        vec![
+            Self::UMBRELLA,
+            Self::ROSE_PINE,
+            Self::DRACULA,
+            Self::GROOVEBOX,
+        ]
+    }
 }
 
 impl Display for Themes {
@@ -45,6 +57,22 @@ impl From<&Themes> for &'static Theme {
             Themes::ROSE_PINE => &ROSE_PINE,
             Themes::GROOVEBOX => &GROOVEBOX,
             Themes::DRACULA => &DRACULA,
+        }
+    }
+}
+
+impl FromStr for Themes {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let s = s.to_lowercase();
+        let s = s.as_str();
+        match s {
+            "umbrella" => Ok(Self::UMBRELLA),
+            "rose_pine" => Ok(Self::ROSE_PINE),
+            "groovebox" => Ok(Self::GROOVEBOX),
+            "dracula" => Ok(Self::DRACULA),
+            _ => Err(format!("Uncorrect theme: {}", s)),
         }
     }
 }

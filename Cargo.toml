@@ -5,8 +5,7 @@ members = [
     "sss-lib/sss-core",
     "sss-lib/sss-std",
     "sss-cli",
-    "layouts-derive"
-    ]
+    "layouts-derive"]
 resolver = "2"
 
 [workspace.package]

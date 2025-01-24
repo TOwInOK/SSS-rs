@@ -112,6 +112,12 @@ fn impl_generate_layouts(layouts_dir: String) -> proc_macro2::TokenStream {
                     #(#to_layout_matches),*
                 }
             }
+            // Method to create vector with all [Layouts]
+            pub fn all_layouts() -> Vec<Layouts> {
+                vec![
+                    #(Layouts::#variants),*
+                ]
+            }
         }
 
         // Display implementation for Layouts enum
