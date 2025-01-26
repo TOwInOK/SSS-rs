@@ -36,7 +36,6 @@ jobs:
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: "sss-web-app -> target"
           env-vars: "CARGO RUST"
           cache-on-failure: true
 
