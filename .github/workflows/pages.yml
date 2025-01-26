@@ -26,54 +26,45 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4 # repo checkout
+      - uses: actions/checkout@v4
 
       - name: Install nightly Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
 
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "sss-web-app -> target"
+          env-vars: "CARGO RUST"
+          cache-on-failure: true
+
       - name: Add WASM target
         run: rustup target add wasm32-unknown-unknown
 
       - name: lint
-        run: cargo clippy & cargo fmt
+        run: cargo clippy && cargo fmt
 
-      # If using tailwind...
-      # - name: Download and install tailwindcss binary
-      #   run: npm install -D tailwindcss && npx tailwindcss -i <INPUT/PATH.css> -o <OUTPUT/PATH.css>  # run tailwind
-
-      - name: Download and install Trunk binary
-        run: cd sss-web-app && wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.21.7/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
+      - name: Download and install Trunk
+        run: |
+          cd sss-web-app
+          wget -qO- https://github.com/trunk-rs/trunk/releases/download/v0.21.7/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
+          chmod +x trunk
 
       - name: Build with Trunk
-        # "${GITHUB_REPOSITORY#*/}" evaluates into the name of the repository
-        # using --public-url something will allow trunk to modify all the href paths like from favicon.ico to repo_name/favicon.ico .
-        # this is necessary for github pages where the site is deployed to username.github.io/repo_name and all files must be requested
-        # relatively as favicon.ico. if we skip public-url option, the href paths will instead request username.github.io/favicon.ico which
-        # will obviously return error 404 not found.
-        run: ./trunk build --release --features csr -M --public-url "${GITHUB_REPOSITORY#*/}"
-
-      # Deploy to gh-pages branch
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist
-
-      # Deploy with Github Static Pages
+        run: |
+          cd sss-web-app
+          ./trunk build --release --features csr -M --public-url "${GITHUB_REPOSITORY#*/}"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          enablement: true
-          # token:
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          # Upload dist dir
-          path: "./dist"
+          path: "sss-web-app/dist/"
 
-      - name: Deploy to GitHub Pages 🚀
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
