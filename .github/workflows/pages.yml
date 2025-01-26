@@ -54,7 +54,7 @@ jobs:
       - name: Build with Trunk
         run: |
           cd sss-web-app
-          ./trunk build --release --features csr -M --public-url "${GITHUB_REPOSITORY#*/}"
+          ./trunk build --release --features csr -M
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
