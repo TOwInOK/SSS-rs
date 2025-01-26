@@ -1,4 +1,4 @@
-<div class="h-full w-full bg-[{{ secondary }}] flex justify-center items-center p-4">
+<div class="h-full w-full bg-[{{ secondary }}] inline-flex justify-center items-center p-4 overflow-clip">
   <div class="max-w-2xl w-full bg-black/10 rounded-lg border border-[{{ thirdly }}] p-6">
 
     {# Header section #}
@@ -27,7 +27,7 @@
         </div>
         {% endfor %}
       </div>
-      <div class="text-[{{ thirdly }}] text-sm border-l border-[{{ thirdly }}]/20 pl-4">
+      <div class="text-[{{ thirdly }}] text-sm border-l border-[{{ thirdly }}] pl-4">
         {{ about }}
       </div>
     </div>
@@ -38,7 +38,7 @@
       <div class="grid grid-cols-2 gap-4">
         {% for repo in repos %}
         <a href="{{ repo.link.link }}"
-           class="group flex items-center gap-3 p-3 rounded-lg border border-[{{ thirdly }}]/20 hover:bg-black/5 transition-all">
+           class="group flex items-center gap-3 p-3 rounded-lg border border-[{{ thirdly }}] hover:bg-black/5 transition-all">
           <div class="text-[{{ thirdly }}]">
             {{ get_svg(provider=repo.link.provider) | safe }}
           </div>
@@ -57,7 +57,7 @@
       <div class="flex flex-wrap gap-4">
         {% for social in socials %}
         <a href="{{ social.link }}"
-           class="group flex items-center gap-2 p-2 rounded-lg border border-[{{ thirdly }}]/20 hover:bg-black/5 transition-all">
+           class="group flex items-center gap-2 p-2 rounded-lg border border-[{{ thirdly }}] hover:bg-black/5 transition-all">
           <div class="text-[{{ thirdly }}]">
             {{ get_svg(provider=social.provider) | safe }}
           </div>
@@ -73,7 +73,7 @@
       <div class="grid grid-cols-3 gap-4">
         {% for skill in skills %}
         <a href="{{ skill.repo_link.link }}"
-           class="group p-3 rounded-lg border border-[{{ thirdly }}]/20 hover:bg-black/5 transition-all
+           class="group p-3 rounded-lg border border-[{{ thirdly }}] hover:bg-black/5 transition-all
                   {% if skill.main %}opacity-100{% else %}opacity-80{% endif %}">
           <div class="text-[{{ primary }}] font-medium text-center">{{ skill.skill }}</div>
           <div class="text-[{{ thirdly }}] text-sm text-center">
@@ -86,6 +86,5 @@
         {% endfor %}
       </div>
     </div>
-
   </div>
 </div>

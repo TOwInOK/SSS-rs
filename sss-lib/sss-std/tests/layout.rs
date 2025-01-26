@@ -27,7 +27,7 @@ fn test_umbrella_layout() {
 #[tokio::test]
 async fn create_image() {
     let settings = def_set();
-    let ub = Layouts::CASTLE.to_layout(&settings, &ROSE_PINE);
+    let ub = Layouts::CASTLE.to_layout(&settings, &UMBRELLA);
     let html = ub.as_ref().finalize().unwrap();
     let imgage = html_to_image(&html, None, 12).await.unwrap();
     fs::write(Path::new("./test.png"), imgage).unwrap();

@@ -208,12 +208,7 @@ fn get_svg(args: &std::collections::HashMap<String, tera::Value>) -> tera::Resul
     let provider = provider.trim_matches('"').trim();
 
     // Преобразуем строку в Provider enum
-    let provider = match provider {
-        "Github" => Provider::Github,
-        "LinkedIn" => Provider::LinkedIn,
-        "Telegram" => Provider::Telegram,
-        _ => return Err(tera::Error::msg(format!("Invalid provider: {}", provider))),
-    };
+    let provider: Provider = provider.parse()?;
 
     // Вызываем as_ref() и возвращаем SVG как строку
     Ok(tera::Value::String(provider.as_ref().to_string()))

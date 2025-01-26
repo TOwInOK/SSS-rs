@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 
@@ -16,7 +16,27 @@ pub enum Provider {
     Telegram,
 }
 
+impl Provider {
+    pub fn all_providers() -> Vec<Provider> {
+        vec![Self::Github, Self::LinkedIn, Self::Telegram]
+    }
+}
+
+impl FromStr for Provider {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "github" | "gh" => Ok(Self::Github),
+            "linkedin" | "l.in" => Ok(Self::LinkedIn),
+            "telegram" | "tg" => Ok(Self::Telegram),
+            _ => Err(format!("undefined {}", s)),
+        }
+    }
+}
+
 impl AsRef<str> for Provider {
+    /// Return svg file
     fn as_ref(&self) -> &str {
         match self {
             Provider::Github => GITHUB_OTLINED,
@@ -30,11 +50,10 @@ impl Display for Provider {
         &self,
         f: &mut std::fmt::Formatter<'_>,
     ) -> std::fmt::Result {
-        let icon = self.as_ref();
         match self {
-            Provider::Github => write!(f, "{}", icon),
-            Provider::LinkedIn => write!(f, "{}", icon),
-            Provider::Telegram => write!(f, "{}", icon),
+            Provider::Github => write!(f, "Github"),
+            Provider::LinkedIn => write!(f, "LinkedIn"),
+            Provider::Telegram => write!(f, "Telegram"),
         }
     }
 }
