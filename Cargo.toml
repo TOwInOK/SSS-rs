@@ -5,7 +5,9 @@ members = [
     "sss-lib/sss-core",
     "sss-lib/sss-std",
     "sss-cli",
-    "layouts-derive"]
+    "layouts-derive",
+    "sss-web-app"
+]
 resolver = "2"
 
 [workspace.package]
@@ -49,7 +51,7 @@ opt-level = 'z'
 debug = false
 lto = true
 codegen-units = 24
-panic = 'unwind'
+panic = 'abort'
 strip = true
 incremental = true
 debug-assertions = false
@@ -62,3 +64,9 @@ debug = true
 [profile.bench]
 opt-level = 3
 debug = false
+
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1

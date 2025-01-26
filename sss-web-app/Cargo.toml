@@ -1,0 +1,100 @@
+[package]
+name = "sss-web-app"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+
+[dependencies]
+leptos = {git="https://github.com/sjud/leptos" }
+leptos_meta = {git="https://github.com/sjud/leptos" }
+leptos_router = { git="https://github.com/sjud/leptos" }
+leptos_axum = {  git="https://github.com/sjud/leptos", default-features = false, optional = true }
+console_log = "1"
+log = "0.4"
+base64_light.workspace = true
+sss_core = { path = "../sss-lib/sss-core" }
+sss_std = { path = "../sss-lib/sss-std" }
+render = { path = "../sss-lib/render" }
+toml.workspace = true
+wasm-bindgen-futures = { version = "0.4" }
+serde = { workspace = true, features = ["derive"] }
+getrandom = { version = "0.2", features = ["js"] }
+# ssr
+console_error_panic_hook = { version = "0.1"}
+axum = { version = "0.7", default-features = false, optional = true }
+tokio = { workspace = true, features = ["rt-multi-thread"], optional = true }
+wasm-bindgen = { version = "0.2" }
+web-sys = { version = "0.3", features = [
+"Document", "Window", "Navigator", "Clipboard", "Request", "Response","RequestInit",
+] }
+axum-js-fetch = {git = "https://github.com/seanaye/axum-js-fetch", optional = true}
+tower =  {version = "0.5", optional = true}
+http = { version = "1.0", optional = true }
+
+[features]
+csr = [
+    "leptos/csr",
+]
+
+hydrate = [
+    "leptos/hydrate",
+]
+ssr = [
+    "dep:axum",
+    "dep:tokio",
+    "dep:http",
+    "dep:axum-js-fetch",
+    "dep:tower",
+    "leptos/ssr",
+    "leptos_axum/wasm",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+]
+
+
+[dev-dependencies]
+sss-web-app = {path = ".", features = [ "hydrate", "ssr" ] }
+leptos_axum = {  git="https://github.com/sjud/leptos", features = ["wasm"], default-features = false }
+
+[package.metadata.trunk]
+target = "index.html"
+release = false
+dist = "dist"
+public_url = "/"
+filehash = true
+inject_scripts = true
+
+[package.metadata.trunk.serve]
+addresses = ["127.0.0.1"]
+port = 3000
+open = false
+[package.metadata.trunk.tools]
+tailwindcss = "4.0.0"
+
+[package.metadata.leptos]
+output-name = "sss-web-app"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+style-file = "style/main.scss"
+assets-dir = "public"
+site-addr = "127.0.0.1:3000"
+reload-port = 3001
+browserquery = "defaults"
+# DEV || PROD
+env = "DEV"
+bin-features = ["ssr"]
+bin-default-features = false
+lib-features = ["hydrate"]
+lib-default-features = false
+lib-profile-release = "wasm-release"
+
+
+[package.metadata.cargo-all-features]
+skip_feature_sets = [["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"]]
+denylist = ["axum", "tower", "http", "leptos_axum", "hyper"]
