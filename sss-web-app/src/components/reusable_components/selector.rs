@@ -94,7 +94,10 @@ pub fn LayoutSelector() -> impl IntoView {
 
 /// Селектор для выбора иконки.
 #[component]
-pub fn IconSelector<A, P>(action: A, prop: P) -> impl IntoView
+pub fn IconSelector<A, P>(
+    action: A,
+    prop: P,
+) -> impl IntoView
 where
     A: Fn(leptos::web_sys::Event) + 'static,
     P: Fn() -> String + 'static + Send,

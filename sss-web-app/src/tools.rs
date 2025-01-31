@@ -125,7 +125,11 @@ pub struct SSSsetings {
 }
 
 impl SSSsetings {
-    pub fn new(s: Settings, t: Themes, l: Layouts) -> Self {
+    pub fn new(
+        s: Settings,
+        t: Themes,
+        l: Layouts,
+    ) -> Self {
         Self { s, t, l }
     }
     pub fn to_base64(&self) -> Result<String, Box<dyn std::error::Error>> {
@@ -140,13 +144,22 @@ impl SSSsetings {
     fn from_toml(value: &str) -> Result<Self, Box<dyn std::error::Error>> {
         Ok(toml::from_str(value)?)
     }
-    pub fn update_context(&self, s: W<Settings>, t: W<Themes>, l: W<Layouts>) {
+    pub fn update_context(
+        &self,
+        s: W<Settings>,
+        t: W<Themes>,
+        l: W<Layouts>,
+    ) {
         s.set(self.s.clone());
         t.set(self.t.clone());
         l.set(self.l.clone());
     }
 
-    pub fn from_context(s: R<Settings>, t: R<Themes>, l: R<Layouts>) -> Self {
+    pub fn from_context(
+        s: R<Settings>,
+        t: R<Themes>,
+        l: R<Layouts>,
+    ) -> Self {
         Self {
             s: s.get(),
             t: t.get(),

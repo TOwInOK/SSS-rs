@@ -96,7 +96,11 @@ pub fn HomePage() -> impl IntoView {
 }
 
 #[component]
-fn FeatureCard(icon: impl IntoView, title: impl IntoView, text: impl IntoView) -> impl IntoView {
+fn FeatureCard(
+    icon: impl IntoView,
+    title: impl IntoView,
+    text: impl IntoView,
+) -> impl IntoView {
     view! {
         <div class="p-4 rounded-lg border bg-opacity-10 flex gap-3 items-start">
             <span class="text-2xl">
@@ -111,7 +115,10 @@ fn FeatureCard(icon: impl IntoView, title: impl IntoView, text: impl IntoView) -
 }
 
 #[component]
-fn IconLink(href: &'static str, text: impl IntoView) -> impl IntoView {
+fn IconLink(
+    href: &'static str,
+    text: impl IntoView,
+) -> impl IntoView {
     view! {
         <a href={href} class="flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-opacity-10 transition-colors">
             <span>{text}</span>

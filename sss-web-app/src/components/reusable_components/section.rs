@@ -3,10 +3,13 @@ use leptos::prelude::*;
 use sss_std::themes::Themes;
 #[component]
 /// Section with items
-pub fn Section(title: &'static str, children: Children) -> impl IntoView {
+pub fn Section(
+    title: &'static str,
+    children: Children,
+) -> impl IntoView {
     let themes = use_context::<RW<Themes>>().unwrap().0;
     view! {
-        <div class="grid gap-4 p-1.5 border  overflow-clip z-20"
+        <div class="grid gap-4 p-1.5 border"
             style=move || format!(
                 "background-color: {};",
                 themes.get().colors().secondary

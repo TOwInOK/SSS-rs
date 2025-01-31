@@ -19,7 +19,10 @@ use crate::tools::SSSsetings;
 
 /// Кнопка с заданным `label` и действием `action`.
 #[component]
-pub fn Button<A: Fn() + 'static>(label: impl IntoView + Clone, action: A) -> impl IntoView {
+pub fn Button<A: Fn() + 'static>(
+    label: impl IntoView + Clone,
+    action: A,
+) -> impl IntoView {
     let themes = use_context::<RW<Themes>>().unwrap().0;
     let mut css = "border font-bold".to_string();
     if label.clone().to_html() == *"+" {

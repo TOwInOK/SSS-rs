@@ -41,9 +41,14 @@ impl Default for ToastStore {
 }
 impl ToastStore {
     pub fn new() -> Self {
-        Self { contexts: vec![] }
+        Self {
+            contexts: vec![],
+        }
     }
-    pub fn push(&mut self, context: ToastContext) {
+    pub fn push(
+        &mut self,
+        context: ToastContext,
+    ) {
         self.contexts.push(context);
     }
 
