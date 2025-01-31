@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install nightly Rust
+      - name: Install stable Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
@@ -54,7 +54,7 @@ jobs:
       - name: Build with Trunk
         run: |
           cd sss-web-app
-          ./trunk build --release --features csr -M
+          ./trunk build --release
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
