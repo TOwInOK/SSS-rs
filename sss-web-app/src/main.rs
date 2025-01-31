@@ -1,4 +1,3 @@
-#[cfg(feature = "csr")]
 pub fn trunk_launch() {
     use leptos::mount::mount_to_body;
     use sss_web_app::App;
@@ -10,6 +9,5 @@ pub fn trunk_launch() {
 }
 
 fn main() {
-    #[cfg(feature = "csr")]
     trunk_launch()
 }

@@ -6,13 +6,13 @@ use sss_std::themes::Themes;
 pub fn Section(title: &'static str, children: Children) -> impl IntoView {
     let themes = use_context::<RW<Themes>>().unwrap().0;
     view! {
-        <div class="flex flex-col p-1.5 border gap-4 w-full overflow-clip z-20"
+        <div class="grid gap-4 p-1.5 border  overflow-clip z-20"
             style=move || format!(
                 "background-color: {};",
                 themes.get().colors().secondary
             )
         >
-            <p class="w-full pl-2 font-bold"
+            <p class="pl-2 font-bold"
                 style=move || format!(
                     "background-color: {}; color: {}",
                     themes.get().colors().primary,

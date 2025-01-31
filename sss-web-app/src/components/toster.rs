@@ -4,6 +4,7 @@ use leptos::prelude::*;
 use sss_std::themes::Themes;
 
 use crate::{components::reusable_components::section::Section, RW};
+/// Отображает информационное сообщение с заданным контекстом.
 #[inline]
 pub fn toast_info(context: impl ToString) {
     let store = use_context::<RW<ToastStore>>()
@@ -11,6 +12,7 @@ pub fn toast_info(context: impl ToString) {
         .1;
     store.update(|x| x.push(ToastContext::Info(context.to_string())));
 }
+/// Отображает сообщение об ошибке с заданным контекстом.
 #[inline]
 pub fn toast_error(context: impl ToString) {
     let store = use_context::<RW<ToastStore>>()
@@ -18,6 +20,7 @@ pub fn toast_error(context: impl ToString) {
         .1;
     store.update(|x| x.push(ToastContext::Error(context.to_string())));
 }
+/// Отображает предупреждающее сообщение с заданным контекстом.
 #[inline]
 pub fn toast_warn(context: impl ToString) {
     let store = use_context::<RW<ToastStore>>()
@@ -49,6 +52,7 @@ impl ToastStore {
     }
 }
 
+/// Компонент для отображения всех уведомлений.
 #[component]
 pub fn ToastStore() -> impl IntoView {
     let store = use_context::<RW<ToastStore>>()
@@ -56,7 +60,7 @@ pub fn ToastStore() -> impl IntoView {
         .0;
 
     view! {
-        <div class="w-full flex" style={move ||
+        <div class="grid" style={move ||
             if !store.read().contexts.is_empty() {
                 "opacity: 100;"
             } else {
@@ -76,6 +80,7 @@ pub fn ToastStore() -> impl IntoView {
     }
 }
 
+/// Компонент для отображения одного уведомления.
 #[component]
 fn Toast(context: ToastContext) -> impl IntoView {
     let (bg, fg) = context.colors();
@@ -90,10 +95,10 @@ fn Toast(context: ToastContext) -> impl IntoView {
         Duration::from_secs(5),
     );
     view! {
-        <div class="flex flex-col p-1.5 border gap-4 w-full overflow-clip z-20"
+        <div class="grid gap-4 p-1.5 border overflow-clip z-20"
             style=format!("background-color: {};", bg)
         >
-            <p class="w-full pl-2 font-bold"
+            <p class="pl-2 font-bold"
                 style=format!("background-color: {}; color: {}", fg, bg)
             >
                 {context.title()}
@@ -102,14 +107,19 @@ fn Toast(context: ToastContext) -> impl IntoView {
         </div>
     }
 }
+/// Тип сообщения уведомления.
 #[derive(Debug, Clone, PartialEq)]
 pub enum ToastContext {
+    /// Информационное сообщение.
     Info(String),
+    /// Сообщение об ошибке.
     Error(String),
+    /// Предупреждающее сообщение.
     Warn(String),
 }
 
 impl ToastContext {
+    /// Возвращает заголовок сообщения.
     pub fn title(&self) -> &'static str {
         match self {
             ToastContext::Info(_) => "Info",
@@ -117,6 +127,7 @@ impl ToastContext {
             ToastContext::Warn(_) => "Warn",
         }
     }
+    /// Возвращает содержимое сообщения.
     pub fn inner(&self) -> String {
         match self {
             ToastContext::Info(e) => e.clone(),
@@ -124,7 +135,7 @@ impl ToastContext {
             ToastContext::Warn(e) => e.clone(),
         }
     }
-
+    /// Возвращает цвета фона и текста в зависимости от типа сообщения.
     pub fn colors(&self) -> (&'static str, &'static str) {
         let colors = use_context::<RW<Themes>>().unwrap().0.read();
         let colors = colors.colors();

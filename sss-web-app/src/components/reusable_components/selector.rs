@@ -3,6 +3,7 @@ use sss_std::{prelude::Layouts, themes::Themes};
 
 use crate::RW;
 
+/// Селектор для выбора темы оформления.
 #[component]
 pub fn ThemeSelector() -> impl IntoView {
     let (get, set) = use_context::<RW<Themes>>().unwrap();
@@ -17,7 +18,7 @@ pub fn ThemeSelector() -> impl IntoView {
         )
         .collect::<Vec<_>>();
     view! {
-        <div class="flex gap-2 items-center self-center border p-1.5 justify-center">
+        <div class="grid grid-flow-col gap-2 items-center self-center border p-1.5 justify-center">
             <div>Themes</div>
             <select
 
@@ -47,6 +48,7 @@ pub fn ThemeSelector() -> impl IntoView {
     }
 }
 
+/// Селектор для выбора макета карточки.
 #[component]
 pub fn LayoutSelector() -> impl IntoView {
     let (get, set) = use_context::<RW<Layouts>>().unwrap();
@@ -61,7 +63,7 @@ pub fn LayoutSelector() -> impl IntoView {
         )
         .collect::<Vec<_>>();
     view! {
-        <div class=" flex gap-2 items-center self-center appearance-auto border p-1.5 justify-center">
+        <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-center">
             <div>Layouts</div>
             <select
                 style=move || format!(
@@ -90,6 +92,7 @@ pub fn LayoutSelector() -> impl IntoView {
     }
 }
 
+/// Селектор для выбора иконки.
 #[component]
 pub fn IconSelector<A, P>(action: A, prop: P) -> impl IntoView
 where
@@ -99,7 +102,7 @@ where
     let theme = use_context::<RW<Themes>>().unwrap().0;
     let providers = sss_core::types::provider::Provider::all_providers();
     view! {
-        <div class=" flex gap-2 items-center self-center appearance-auto border p-1.5 justify-between">
+        <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-between">
             <div>Icon :</div>
             <select
             class="border"

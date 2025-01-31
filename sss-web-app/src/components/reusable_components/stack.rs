@@ -3,7 +3,7 @@ use leptos::prelude::*;
 /// Inner section in [Section]
 pub fn Stack(title: &'static str, children: Children) -> impl IntoView {
     view! {
-        <div class="flex flex-col w-full gap-2 p-1.5 border">
+        <div class="grid gap-2 p-1.5 border">
             <p class="pl-2 font-bold">{title}</p>
             {children()}
         </div>

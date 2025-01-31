@@ -12,10 +12,11 @@ use sss_std::themes::Themes;
 
 use crate::RW;
 
+/// Главный компонент настроек, отображает все секции настроек.
 #[component]
 pub fn SettingsBuilder() -> impl IntoView {
     view! {
-        <div class="flex flex-col w-full h-full max-h-dvh gap-4 overflow-y-scroll will-change-scroll">
+        <div class="grid grid-cols-1 gap-4 h-full max-h-dvh overflow-y-scroll will-change-scroll">
             <UserSection/>
             <AboutSection/>
             <RepositoriesSection/>
@@ -25,6 +26,7 @@ pub fn SettingsBuilder() -> impl IntoView {
     }
 }
 
+/// Компонент для настройки пользовательских данных.
 #[component]
 pub fn UserSection() -> impl IntoView {
     let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
@@ -94,6 +96,7 @@ pub fn UserSection() -> impl IntoView {
     }
 }
 
+/// Компонент для настройки секции "О себе".
 #[component]
 pub fn AboutSection() -> impl IntoView {
     let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
@@ -140,6 +143,7 @@ pub fn AboutSection() -> impl IntoView {
     }
 }
 
+/// Компонент для настройки секции "Проекты".
 #[component]
 pub fn RepositoriesSection() -> impl IntoView {
     let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
@@ -192,6 +196,7 @@ pub fn RepositoriesSection() -> impl IntoView {
     }
 }
 
+/// Компонент для настройки секции "Социальные сети".
 #[component]
 pub fn SocialsSection() -> impl IntoView {
     let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
@@ -238,6 +243,7 @@ pub fn SocialsSection() -> impl IntoView {
     }
 }
 
+/// Компонент для настройки секции "Навыки".
 #[component]
 pub fn SkillsSection() -> impl IntoView {
     let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
@@ -257,7 +263,7 @@ pub fn SkillsSection() -> impl IntoView {
                                     prop=move || settings.read().skills[n].skill.clone()
                                 />
 
-                                <div class="flex gap-2">
+                                <div class="grid grid-cols-2 gap-2">
                                     <Input
                                         action=move |ev| {
                                             set_settings.update(|s| s.skills[n].since.start = ev.target().value().parse().unwrap_or_default());

@@ -5,6 +5,7 @@ use sss_std::{prelude::Layouts, themes::Themes, tools::gen_css};
 
 use crate::RW;
 
+/// Компонент для отображения сгенерированной карточки на основе настроек.
 #[component]
 pub fn CardViewer() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
@@ -36,7 +37,7 @@ pub fn CardViewer() -> impl IntoView {
     });
 
     view! {
-        <div class="relative h-full w-full p-4 content-center justify-center items-center flex">
+        <div class="relative h-full w-full p-4 content-center justify-center items-center grid place-items-center">
             // Background grid
             <div style=move || {
                 let color = themes.get().colors().primary;

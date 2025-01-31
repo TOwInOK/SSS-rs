@@ -1,9 +1,9 @@
 use leptos::prelude::*;
+/// Контейнер с возможностью прокрутки, элементы которого выравниваются по сетке.
 #[component]
-/// Box that will be scrolled
 pub fn ScrollableBox(children: Children) -> impl IntoView {
     view! {
-        <div class="grid gap-2 snap-start">
+        <div class="grid gap-2 snap-center">
         {
             children()
         }

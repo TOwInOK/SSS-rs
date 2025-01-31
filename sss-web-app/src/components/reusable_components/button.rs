@@ -17,6 +17,7 @@ use web_sys::{js_sys, Blob, Url};
 
 use crate::tools::SSSsetings;
 
+/// Кнопка с заданным `label` и действием `action`.
 #[component]
 pub fn Button<A: Fn() + 'static>(label: impl IntoView + Clone, action: A) -> impl IntoView {
     let themes = use_context::<RW<Themes>>().unwrap().0;
@@ -39,6 +40,7 @@ pub fn Button<A: Fn() + 'static>(label: impl IntoView + Clone, action: A) -> imp
     }
 }
 
+/// Кнопка для сброса настроек.
 #[component]
 pub fn DropButton() -> impl IntoView {
     let set_settings = use_context::<RW<Settings>>().unwrap().1;
@@ -56,6 +58,7 @@ pub fn DropButton() -> impl IntoView {
     }
 }
 
+/// Кнопка для сохранения настроек в буфер обмена.
 #[component]
 pub fn SaveButton() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
@@ -94,6 +97,7 @@ pub fn SaveButton() -> impl IntoView {
     }
 }
 
+/// Кнопка для загрузки настроек из буфера обмена.
 #[component]
 pub fn LoadButton() -> impl IntoView {
     let set_settings = use_context::<RW<Settings>>().unwrap().1;
@@ -138,6 +142,7 @@ pub fn LoadButton() -> impl IntoView {
     }
 }
 
+/// Кнопка для скачивания настроек в виде HTML файла.
 #[component]
 pub fn DownloadButton() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
