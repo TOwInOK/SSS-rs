@@ -153,6 +153,17 @@ xattr -rd com.apple.quarantine name_of_file
 ./name_of_file
 ```
 
+# SSS-rs Web App
+
+## How to start locally?
+[you need to install trunk](https://trunkrs.dev/guide/getting-started/installation.html), then run
+```sh
+cd sss-web-app
+trunk serve --open
+```
+This command will start the server on port 3000 and open your default browser.
+
+
 ## How to build your own layout
 
 [**Guide**](How_to_construct_layout.md)
