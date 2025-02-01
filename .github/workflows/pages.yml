@@ -34,7 +34,7 @@ jobs:
           components: clippy, rustfmt
 
       - name: Cache Rust dependencies
-        uses: Swatinem/rust-cache@v2
+        uses: Swatinem/rust-cache@v2.7.7
         with:
           env-vars: "CARGO RUST"
           cache-on-failure: true
@@ -57,13 +57,13 @@ jobs:
           ./trunk build --release
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5.0.0
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: "sss-web-app/dist/"
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4.0.5
