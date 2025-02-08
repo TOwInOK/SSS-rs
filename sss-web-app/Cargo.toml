@@ -33,14 +33,13 @@ web-sys = { version = "0.3", features = [
 
 [package.metadata.trunk]
 target = "index.html"
-release = false
 dist = "dist"
 public_url = "/"
 filehash = true
 inject_scripts = true
 
 [package.metadata.trunk.serve]
-addresses = ["127.0.0.1"]
+addresses = ["0.0.0.0"]
 port = 3000
 open = false
 [package.metadata.trunk.tools]
