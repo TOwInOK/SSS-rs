@@ -45,58 +45,58 @@ pub fn UserSection() -> impl IntoView {
 
             <Stack title="current name">
                 <ScrollableBox>
-                <Input
-                    alt=|| "Current nickname".to_string()
-                    placeholder=|| "Enter nickname (e.g. TOwInOK)".to_string()
-                    action=move |ev| {
-                        set_settings.update(|x| x.user.current_nickname.word = ev.target().value());
-                    }
-                    prop=move || settings.get().user.current_nickname.word
-                />
-                <Input
-                    alt=|| "Nickname pronunciation".to_string()
-                    placeholder=|| "Enter pronunciation".to_string()
-                    action=move |ev| {
-                        set_settings.update(|x| x.user.current_nickname.pronounce = ev.target().value());
-                    }
-                    prop=move || settings.get().user.current_nickname.pronounce
-                />
+                    <Input
+                        alt=|| "Current nickname".to_string()
+                        placeholder=|| "Enter nickname (e.g. TOwInOK)".to_string()
+                        action=move |ev| {
+                            set_settings.update(|x| x.user.current_nickname.word = ev.target().value());
+                        }
+                        prop=move || settings.get().user.current_nickname.word
+                    />
+                    <Input
+                        alt=|| "Nickname pronunciation".to_string()
+                        placeholder=|| "Enter pronunciation".to_string()
+                        action=move |ev| {
+                            set_settings.update(|x| x.user.current_nickname.pronounce = ev.target().value());
+                        }
+                        prop=move || settings.get().user.current_nickname.pronounce
+                    />
                 </ScrollableBox>
             </Stack>
 
             <Stack title="prevision names">
                 <ScrollXBar>
-                <For
-                    each=move || (0..settings.read().user.prevision_nicknames.len())
-                    key=|index| *index
-                    let:index
-                >
-                    <ScrollableBox>
-                    <Input
-                        alt=|| "Previous nickname".to_string()
-                        placeholder=|| "Enter previous nickname (e.g. nqcq)".to_string()
-                        action=move |ev| {
-                            set_settings.update(|s| s.user.prevision_nicknames[index].word = ev.target().value());
-                        }
-                        prop=move || settings.read().user.prevision_nicknames[index].word.clone()
-                    />
-                    <Input
-                        alt=|| "Previous nickname pronunciation".to_string()
-                        placeholder=|| "Enter pronunciation".to_string()
-                        action=move |ev| {
-                            set_settings.update(|s| s.user.prevision_nicknames[index].pronounce = ev.target().value());
-                        }
-                        prop=move || settings.read().user.prevision_nicknames[index].pronounce.clone()
-                    />
-                    <Button
-                        alt=|| "Remove previous nickname".to_string()
-                        label="x"
-                        action=move || {
-                            set_settings.update(|s| {s.user.prevision_nicknames.remove(index);});
-                        }
-                    />
-                    </ScrollableBox>
-                </For>
+                    <For
+                        each=move || (0..settings.read().user.prevision_nicknames.len())
+                        key=|index| format!("prevision-names-stack-{}", index)
+                        let:index
+                    >
+                        <ScrollableBox>
+                            <Input
+                                alt=|| "Previous nickname".to_string()
+                                placeholder=|| "Enter previous nickname (e.g. nqcq)".to_string()
+                                action=move |ev| {
+                                    set_settings.update(|s| s.user.prevision_nicknames[index].word = ev.target().value());
+                                }
+                                prop=move || settings.read().user.prevision_nicknames[index].word.clone()
+                            />
+                            <Input
+                                alt=|| "Previous nickname pronunciation".to_string()
+                                placeholder=|| "Enter pronunciation".to_string()
+                                action=move |ev| {
+                                    set_settings.update(|s| s.user.prevision_nicknames[index].pronounce = ev.target().value());
+                                }
+                                prop=move || settings.read().user.prevision_nicknames[index].pronounce.clone()
+                            />
+                            <Button
+                                alt=|| "Remove previous nickname".to_string()
+                                label="x"
+                                action=move || {
+                                    set_settings.update(|s| {s.user.prevision_nicknames.remove(index);});
+                                }
+                            />
+                        </ScrollableBox>
+                    </For>
                     <Button
                         alt=|| "Add new previous nickname".to_string()
                         label="+"
@@ -131,25 +131,25 @@ pub fn AboutSection() -> impl IntoView {
                 <ScrollXBar>
                     <For
                         each=move || (0..settings.read().specifications.len())
-                        key=|index| *index
+                        key=|index| format!("specifications-stack-{}", index)
                         let:index
                     >
-                        <div class="grid gap-2 snap-start ">
-                        <Input
-                            alt=|| "Specification".to_string()
-                            placeholder=|| "Enter specification (e.g. Full-Stack developer)".to_string()
-                            action=move |ev| {
-                                set_settings.update(|x| x.specifications[index] = ev.target().value());
-                            }
-                            prop=move || settings.read().specifications[index].clone()
-                        />
-                        <Button
-                            alt=|| "Remove specification".to_string()
-                            label="x"
-                            action=move || {
-                                set_settings.update(|x| {x.specifications.remove(index);});
-                            }
-                        />
+                        <div class="grid gap-2 snap-start">
+                            <Input
+                                alt=|| "Specification".to_string()
+                                placeholder=|| "Enter specification (e.g. Full-Stack developer)".to_string()
+                                action=move |ev| {
+                                    set_settings.update(|x| x.specifications[index] = ev.target().value());
+                                }
+                                prop=move || settings.read().specifications[index].clone()
+                            />
+                            <Button
+                                alt=|| "Remove specification".to_string()
+                                label="x"
+                                action=move || {
+                                    set_settings.update(|x| {x.specifications.remove(index);});
+                                }
+                            />
                         </div>
                     </For>
                     <Button
@@ -176,41 +176,41 @@ pub fn RepositoriesSection() -> impl IntoView {
                 <ScrollXBar>
                     <For
                         each=move || (0..settings.read().repos.len())
-                        key=|index| *index
+                        key=|index| format!("projects-stack-{}", index)
                         let:index
                     >
                         <ScrollableBox>
-                        <Input
-                            alt=|| "Repository name".to_string()
-                            placeholder=|| "Enter repository name (e.g. SSS-rs)".to_string()
-                            action=move |ev| {
-                                set_settings.update(|s| s.repos[index].name = ev.target().value());
-                            }
-                            prop=move || settings.read().repos[index].name.clone()
-                        />
-                        <Input
-                            alt=|| "Repository link".to_string()
-                            placeholder=|| "Enter repository URL".to_string()
-                            action=move |ev| {
-                                set_settings.update(|s| s.repos[index].link.link = ev.target().value());
-                            }
-                            prop=move || settings.read().repos[index].link.link.clone()
-                        />
-                        <IconSelector
-                            action=move |ev| {
-                                if let Ok(value) = event_target_value(&ev).parse() {
-                                    set_settings.update(|s| s.repos[index].link.provider = value);
+                            <Input
+                                alt=|| "Repository name".to_string()
+                                placeholder=|| "Enter repository name (e.g. SSS-rs)".to_string()
+                                action=move |ev| {
+                                    set_settings.update(|s| s.repos[index].name = ev.target().value());
                                 }
-                            }
-                            prop=move || settings.read().repos[index].link.provider.to_string()
-                        />
-                        <Button
-                            alt=|| "Remove repository".to_string()
-                            label="x"
-                            action=move || {
-                                set_settings.update(|s| { s.repos.remove(index); });
-                            }
-                        />
+                                prop=move || settings.read().repos[index].name.clone()
+                            />
+                            <Input
+                                alt=|| "Repository link".to_string()
+                                placeholder=|| "Enter repository URL".to_string()
+                                action=move |ev| {
+                                    set_settings.update(|s| s.repos[index].link.link = ev.target().value());
+                                }
+                                prop=move || settings.read().repos[index].link.link.clone()
+                            />
+                            <IconSelector
+                                action=move |ev| {
+                                    if let Ok(value) = event_target_value(&ev).parse() {
+                                        set_settings.update(|s| s.repos[index].link.provider = value);
+                                    }
+                                }
+                                prop=move || settings.read().repos[index].link.provider.to_string()
+                            />
+                            <Button
+                                alt=|| "Remove repository".to_string()
+                                label="x"
+                                action=move || {
+                                    set_settings.update(|s| { s.repos.remove(index); });
+                                }
+                            />
                         </ScrollableBox>
                     </For>
                     <Button
@@ -237,33 +237,33 @@ pub fn SocialsSection() -> impl IntoView {
                 <ScrollXBar>
                 <For
                     each=move || (0..settings.read().socials.len())
-                    key=|index| *index
+                        key=|index| format!("social-section-stack-{}", index)
                     let:index
                 >
                     <ScrollableBox>
-                    <Input
-                        alt=|| "Social link".to_string()
-                        placeholder=|| "Enter social media URL".to_string()
-                        action=move |ev| {
-                            set_settings.update(|s| s.socials[index].link = ev.target().value());
-                        }
-                        prop=move || settings.read().socials[index].link.clone()
-                    />
-                    <IconSelector
-                        action=move |ev| {
-                            if let Ok(value) = event_target_value(&ev).parse() {
-                                set_settings.update(|s| s.socials[index].provider = value);
+                        <Input
+                            alt=|| "Social link".to_string()
+                            placeholder=|| "Enter social media URL".to_string()
+                            action=move |ev| {
+                                set_settings.update(|s| s.socials[index].link = ev.target().value());
                             }
-                        }
-                        prop=move || settings.read().socials[index].provider.to_string()
-                    />
-                    <Button
-                        alt=|| "Remove social link".to_string()
-                        label="x"
-                        action=move || {
-                            set_settings.update(|s| { s.socials.remove(index); });
-                        }
-                    />
+                            prop=move || settings.read().socials[index].link.clone()
+                        />
+                        <IconSelector
+                            action=move |ev| {
+                                if let Ok(value) = event_target_value(&ev).parse() {
+                                    set_settings.update(|s| s.socials[index].provider = value);
+                                }
+                            }
+                            prop=move || settings.read().socials[index].provider.to_string()
+                        />
+                        <Button
+                            alt=|| "Remove social link".to_string()
+                            label="x"
+                            action=move || {
+                                set_settings.update(|s| { s.socials.remove(index); });
+                            }
+                        />
                     </ScrollableBox>
                 </For>
                     <Button
@@ -291,140 +291,140 @@ pub fn SkillsSection() -> impl IntoView {
                 <ScrollXBar>
                     <For
                         each=move || (0..settings.read().skills.len())
-                        key=|index| *index
+                            key=|index| format!("skills-section-stack-{}", index)
                         let:index
                     >
                         <ScrollableBox>
-                        <Input
-                            alt=|| "Skill name".to_string()
-                            placeholder=|| "Enter skill name (e.g. Rust)".to_string()
-                            action=move |ev| {
-                                set_settings.update(|s| s.skills[index].skill = ev.target().value());
-                            }
-                            prop=move || settings.read().skills[index].skill.clone()
-                        />
-
-                        <div class="grid grid-cols-2 gap-2">
                             <Input
-                                alt=|| "Start year".to_string()
-                                placeholder=|| "Enter start year".to_string()
+                                alt=|| "Skill name".to_string()
+                                placeholder=|| "Enter skill name (e.g. Rust)".to_string()
                                 action=move |ev| {
-                                    set_settings.update(|s| s.skills[index].since.start = ev.target().value().parse().unwrap_or_default());
+                                    set_settings.update(|s| s.skills[index].skill = ev.target().value());
                                 }
-                                prop=move || settings.read().skills[index].since.start.to_string()
+                                prop=move || settings.read().skills[index].skill.clone()
                             />
-                            <Input
-                                alt=|| "End year".to_string()
-                                placeholder=|| "Enter end year".to_string()
-                                action=move |ev| {
-                                    set_settings.update(|s| s.skills[index].since.end = ev.target().value().parse().unwrap_or_default());
-                                }
-                                prop=move || settings.read().skills[index].since.end.to_string()
-                            />
-                        </div>
 
-                        <ScrollableBox>
-                            <Input
-                                alt=|| "Repository link".to_string()
-                                placeholder=|| "Enter repository URL".to_string()
-                                action=move |ev| {
-                                    set_settings.update(|s| s.skills[index].repo_link.link = ev.target().value());
-                                }
-                                prop=move || settings.read().skills[index].repo_link.link.clone()
-                            />
-                            <IconSelector
-                                action=move |ev| {
-                                    if let Ok(value) = event_target_value(&ev).parse() {
-                                        set_settings.update(|s| s.skills[index].repo_link.provider = value);
-                                    }
-                                }
-                                prop=move || settings.read().skills[index].repo_link.provider.to_string()
-                            />
-                        </ScrollableBox>
-
-                        <Stack title="projects">
-                            <For
-                                each=move || (0..settings.read().skills[index].projects.len())
-                                key=|project_index| *project_index
-                                let:project_index
-                            >
-                                <ScrollableBox>
+                            <div class="grid grid-cols-2 gap-2">
                                 <Input
-                                    alt=|| "Project name".to_string()
-                                    placeholder=|| "Enter project name".to_string()
+                                    alt=|| "Start year".to_string()
+                                    placeholder=|| "Enter start year".to_string()
                                     action=move |ev| {
-                                        set_settings.update(|s| s.skills[index].projects[project_index].name = ev.target().value());
+                                        set_settings.update(|s| s.skills[index].since.start = ev.target().value().parse().unwrap_or_default());
                                     }
-                                    prop=move || settings.read().skills[index].projects[project_index].name.clone()
+                                    prop=move || settings.read().skills[index].since.start.to_string()
                                 />
                                 <Input
-                                    alt=|| "Project link".to_string()
-                                    placeholder=|| "Enter project URL".to_string()
+                                    alt=|| "End year".to_string()
+                                    placeholder=|| "Enter end year".to_string()
                                     action=move |ev| {
-                                        set_settings.update(|s| s.skills[index].projects[project_index].link.link = ev.target().value());
+                                        set_settings.update(|s| s.skills[index].since.end = ev.target().value().parse().unwrap_or_default());
                                     }
-                                    prop=move || settings.read().skills[index].projects[project_index].link.link.clone()
+                                    prop=move || settings.read().skills[index].since.end.to_string()
+                                />
+                            </div>
+
+                            <ScrollableBox>
+                                <Input
+                                    alt=|| "Repository link".to_string()
+                                    placeholder=|| "Enter repository URL".to_string()
+                                    action=move |ev| {
+                                        set_settings.update(|s| s.skills[index].repo_link.link = ev.target().value());
+                                    }
+                                    prop=move || settings.read().skills[index].repo_link.link.clone()
                                 />
                                 <IconSelector
                                     action=move |ev| {
                                         if let Ok(value) = event_target_value(&ev).parse() {
-                                            set_settings.update(|s| s.skills[index].projects[project_index].link.provider = value);
+                                            set_settings.update(|s| s.skills[index].repo_link.provider = value);
                                         }
                                     }
-                                    prop=move || settings.read().skills[index].projects[project_index].link.provider.to_string()
+                                    prop=move || settings.read().skills[index].repo_link.provider.to_string()
                                 />
+                            </ScrollableBox>
+
+                            <Stack title="projects">
+                                <For
+                                    each=move || (0..settings.read().skills[index].projects.len())
+                                    key=|project_index| format!("skills-section-stack-project-section-stack-{}", project_index)
+                                    let:project_index
+                                >
+                                    <ScrollableBox>
+                                        <Input
+                                            alt=|| "Project name".to_string()
+                                            placeholder=|| "Enter project name".to_string()
+                                            action=move |ev| {
+                                                set_settings.update(|s| s.skills[index].projects[project_index].name = ev.target().value());
+                                            }
+                                            prop=move || settings.read().skills[index].projects[project_index].name.clone()
+                                        />
+                                        <Input
+                                            alt=|| "Project link".to_string()
+                                            placeholder=|| "Enter project URL".to_string()
+                                            action=move |ev| {
+                                                set_settings.update(|s| s.skills[index].projects[project_index].link.link = ev.target().value());
+                                            }
+                                            prop=move || settings.read().skills[index].projects[project_index].link.link.clone()
+                                        />
+                                        <IconSelector
+                                            action=move |ev| {
+                                                if let Ok(value) = event_target_value(&ev).parse() {
+                                                    set_settings.update(|s| s.skills[index].projects[project_index].link.provider = value);
+                                                }
+                                            }
+                                            prop=move || settings.read().skills[index].projects[project_index].link.provider.to_string()
+                                        />
+                                        <Button
+                                            alt=|| "Remove project".to_string()
+                                            label="x"
+                                            action=move || {
+                                                set_settings.update(|s| { s.skills[index].projects.remove(project_index); });
+                                            }
+                                        />
+                                    </ScrollableBox>
+                                </For>
                                 <Button
-                                    alt=|| "Remove project".to_string()
-                                    label="x"
+                                    alt=|| "Add new project".to_string()
+                                    label="+"
                                     action=move || {
-                                        set_settings.update(|s| { s.skills[index].projects.remove(project_index); });
+                                        set_settings.update(|s| s.skills[index].projects.push(Project::default()));
                                     }
                                 />
-                                </ScrollableBox>
-                            </For>
+                            </Stack>
+
+                            <button
+                                title="Change main state"
+                                on:click=move |_| {
+                                    set_settings.update(|s| s.skills[index].main = !s.skills[index].main);
+                                }
+                                class="border"
+                                style=move || {
+                                    if !settings.read().skills[index].main {
+                                        format!(
+                                            "background-color: {}; color: {}; border-color: {};",
+                                            themes.get().colors().secondary,
+                                            themes.get().colors().primary,
+                                            themes.get().colors().primary
+                                        )
+                                    } else {
+                                        format!(
+                                            "background-color: {}; color: {}; border-color: {};",
+                                            themes.get().colors().primary,
+                                            themes.get().colors().secondary,
+                                            themes.get().colors().secondary
+                                        )
+                                    }
+                                }
+                            >
+                                main
+                            </button>
+
                             <Button
-                                alt=|| "Add new project".to_string()
-                                label="+"
+                                alt=|| "Remove skill".to_string()
+                                label="x"
                                 action=move || {
-                                    set_settings.update(|s| s.skills[index].projects.push(Project::default()));
+                                    set_settings.update(|s| { s.skills.remove(index); });
                                 }
                             />
-                        </Stack>
-
-                        <button
-                            title="Change main state"
-                            on:click=move |_| {
-                                set_settings.update(|s| s.skills[index].main = !s.skills[index].main);
-                            }
-                            class="border"
-                            style=move || {
-                                if !settings.read().skills[index].main {
-                                    format!(
-                                        "background-color: {}; color: {}; border-color: {};",
-                                        themes.get().colors().secondary,
-                                        themes.get().colors().primary,
-                                        themes.get().colors().primary
-                                    )
-                                } else {
-                                    format!(
-                                        "background-color: {}; color: {}; border-color: {};",
-                                        themes.get().colors().primary,
-                                        themes.get().colors().secondary,
-                                        themes.get().colors().secondary
-                                    )
-                                }
-                            }
-                        >
-                            main
-                        </button>
-
-                        <Button
-                            alt=|| "Remove skill".to_string()
-                            label="x"
-                            action=move || {
-                                set_settings.update(|s| { s.skills.remove(index); });
-                            }
-                        />
                         </ScrollableBox>
                     </For>
                     <Button
