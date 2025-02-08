@@ -127,24 +127,28 @@ fn Toast(
     context: ToastContext,
     id: usize,
 ) -> impl IntoView {
-    let (bg, fg) = context.colors();
     let store = use_context::<RW<ToastStore>>().unwrap().1;
+    let context = signal(context).0;
 
     view! {
         <div
             id={id}
             class="grid gap-4 p-1.5 border z-50"
-            style=format!("background-color: {};", bg)
+            style=move || format!("background-color: {};", context.get().bg())
         >
             <div class="grid grid-cols-[5fr_1fr] gap-4">
                 <p class="pl-2 font-bold w-full"
-                    style=format!("background-color: {}; color: {}", fg, bg)
+                    style=move || format!("background-color: {}; color: {}", context.get().fg(), context.get().bg())
                 >
-                    {context.title()}
+                    {context.get().title()}
                 </p>
-                <Button label="X" action=move || {store.update(|s| s.remove(id));}/>
+                <Button
+                    alt=|| "Close toast".to_string()
+                    label="X"
+                    action=move || {store.update(|s| s.remove(id));}
+                />
             </div>
-            {context.inner()}
+            {context.get().inner()}
         </div>
     }
 }
@@ -175,15 +179,25 @@ impl ToastContext {
             ToastContext::Warn(e) => e.clone(),
         }
     }
-    // TODO: use normal colors
+
     /// return colors of toast
-    pub fn colors(&self) -> (&'static str, &'static str) {
+    pub fn bg(&self) -> &'static str {
         let colors = use_context::<RW<Themes>>().unwrap().0.read();
         let colors = colors.colors();
         match self {
-            ToastContext::Info(_) => (colors.secondary, colors.primary),
-            ToastContext::Error(_) => (colors.secondary, colors.primary),
-            ToastContext::Warn(_) => (colors.secondary, colors.primary),
+            ToastContext::Info(_) => colors.secondary,
+            ToastContext::Error(_) => colors.secondary,
+            ToastContext::Warn(_) => colors.secondary,
+        }
+    }
+    /// return colors of toast
+    pub fn fg(&self) -> &'static str {
+        let colors = use_context::<RW<Themes>>().unwrap().0.read();
+        let colors = colors.colors();
+        match self {
+            ToastContext::Info(_) => colors.primary,
+            ToastContext::Error(_) => colors.thirdly,
+            ToastContext::Warn(_) => colors.thirdly,
         }
     }
 }
