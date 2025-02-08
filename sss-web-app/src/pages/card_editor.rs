@@ -26,9 +26,7 @@ pub fn CardEditor() -> impl IntoView {
                     <LayoutSelector />
                 </div>
                 <CardViewer />
-                <div class="absolute w-full h-full justify-end items-end content-end self-end flex bg-dark z-[999999] pointer-events-none">
-                    <ToastStore/>
-                </div>
+                <ToastStore/>
             </div>
 
         </div>

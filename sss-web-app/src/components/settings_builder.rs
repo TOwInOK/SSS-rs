@@ -16,7 +16,7 @@ use crate::RW;
 #[component]
 pub fn SettingsBuilder() -> impl IntoView {
     view! {
-        <div class="grid grid-cols-1 gap-4 h-full max-h-dvh overflow-y-scroll will-change-scroll">
+        <div class="grid grid-cols-1 gap-4 h-full md:max-h-dvh md:overflow-y-scroll md:will-change-scroll">
             <UserSection/>
             <AboutSection/>
             <RepositoriesSection/>

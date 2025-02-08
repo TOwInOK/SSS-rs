@@ -86,7 +86,7 @@ pub fn SaveButton() -> impl IntoView {
                                web_sys::console::error_1(&e);
                            }
                        });
-                       store.update(|x| x.push(ToastContext::Info("Save your configuration into clipboard! Paste it in sss-cli :)".to_string())));
+                       store.update(|x| x.push(ToastContext::Info("Your configuration has saved into clipboard!\nPaste it in sss-cli :)".to_string())));
 
                    },
                    Err(e) => {

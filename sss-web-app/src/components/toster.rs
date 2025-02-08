@@ -2,8 +2,12 @@ use std::time::Duration;
 
 use leptos::prelude::*;
 use sss_std::themes::Themes;
+use web_sys::js_sys::Date;
 
-use crate::{components::reusable_components::section::Section, RW};
+use crate::{
+    components::reusable_components::{button::Button, section::Section},
+    RW,
+};
 /// Отображает информационное сообщение с заданным контекстом.
 #[inline]
 pub fn toast_info(context: impl ToString) {
@@ -29,9 +33,17 @@ pub fn toast_warn(context: impl ToString) {
     store.update(|x| x.push(ToastContext::Warn(context.to_string())));
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct ToastItem {
+    context: ToastContext,
+    id: usize,
+    created_at: f64,
+}
+
 #[derive(Debug, Clone)]
 pub struct ToastStore {
-    pub contexts: Vec<ToastContext>,
+    pub items: Vec<ToastItem>,
+    next_id: usize,
 }
 
 impl Default for ToastStore {
@@ -42,43 +54,67 @@ impl Default for ToastStore {
 impl ToastStore {
     pub fn new() -> Self {
         Self {
-            contexts: vec![],
+            items: vec![],
+            next_id: 0,
         }
     }
     pub fn push(
         &mut self,
         context: ToastContext,
     ) {
-        self.contexts.push(context);
+        let toast_item = ToastItem {
+            context,
+            id: self.next_id,
+            created_at: Date::now(),
+        };
+        self.items.push(toast_item);
+        self.next_id += 1;
     }
 
-    pub fn pop(&mut self) -> Option<ToastContext> {
-        self.contexts.pop()
+    pub fn remove(
+        &mut self,
+        id: usize,
+    ) {
+        self.items.retain(|item| item.id != id);
     }
 }
 
 /// Компонент для отображения всех уведомлений.
 #[component]
 pub fn ToastStore() -> impl IntoView {
-    let store = use_context::<RW<ToastStore>>()
-        .expect("ToastStore should be provided")
-        .0;
+    let store = use_context::<RW<ToastStore>>().expect("ToastStore should be provided");
+
+    Effect::new(move |_| {
+        let store_signal = store.1;
+        set_interval(
+            move || {
+                store_signal.update(|store| {
+                    let now = Date::now();
+                    store.items.retain(|item| (now - item.created_at) < 5000.0);
+                });
+            },
+            Duration::from_millis(100),
+        );
+    });
 
     view! {
-        <div class="grid" style={move ||
-            if !store.read().contexts.is_empty() {
-                "opacity: 100;"
+        <div class="fixed bottom-0 right-0 grid gap-2 z-50 transition-discrete transition-all will-change-transform will-change-opacity will-change-contents ease-in-out duration-300" style={move ||
+            if !store.0.read().items.is_empty() {
+                "opacity: 100; transform: translateY(0);"
             } else {
-                "opacity: 0;"
+                "opacity: 0; transform: translateY(100%);"
             }
         }>
             <Section title="Notifications">
                 <For
-                    each= move || store.read().contexts.clone().into_iter().enumerate()
-                    key=|(a,b)| format!("Toast-{}-{}",a, b.title())
-                    let:context
+                    each=move || store.0.read().items.clone()
+                    key=|item| item.id
+                    let:item
                 >
-                    <Toast context=context.1.clone()/>
+                    <Toast
+                        context=item.context.clone()
+                        id=item.id
+                    />
                 </For>
             </Section>
         </div>
@@ -87,27 +123,27 @@ pub fn ToastStore() -> impl IntoView {
 
 /// Компонент для отображения одного уведомления.
 #[component]
-fn Toast(context: ToastContext) -> impl IntoView {
+fn Toast(
+    context: ToastContext,
+    id: usize,
+) -> impl IntoView {
     let (bg, fg) = context.colors();
     let store = use_context::<RW<ToastStore>>().unwrap().1;
-    let context_clone = context.clone();
-    set_timeout(
-        move || {
-            store.update(|s| {
-                s.contexts.retain(|x| x != &context_clone);
-            });
-        },
-        Duration::from_secs(5),
-    );
+
     view! {
-        <div class="grid gap-4 p-1.5 border overflow-clip z-20"
+        <div
+            id={id}
+            class="grid gap-4 p-1.5 border z-50"
             style=format!("background-color: {};", bg)
         >
-            <p class="pl-2 font-bold"
-                style=format!("background-color: {}; color: {}", fg, bg)
-            >
-                {context.title()}
-            </p>
+            <div class="grid grid-cols-[5fr_1fr] gap-4">
+                <p class="pl-2 font-bold w-full"
+                    style=format!("background-color: {}; color: {}", fg, bg)
+                >
+                    {context.title()}
+                </p>
+                <Button label="X" action=move || {store.update(|s| s.remove(id));}/>
+            </div>
             {context.inner()}
         </div>
     }
@@ -124,7 +160,6 @@ pub enum ToastContext {
 }
 
 impl ToastContext {
-    /// Возвращает заголовок сообщения.
     pub fn title(&self) -> &'static str {
         match self {
             ToastContext::Info(_) => "Info",
@@ -132,7 +167,7 @@ impl ToastContext {
             ToastContext::Warn(_) => "Warn",
         }
     }
-    /// Возвращает содержимое сообщения.
+    /// Return text of toast
     pub fn inner(&self) -> String {
         match self {
             ToastContext::Info(e) => e.clone(),
@@ -140,7 +175,8 @@ impl ToastContext {
             ToastContext::Warn(e) => e.clone(),
         }
     }
-    /// Возвращает цвета фона и текста в зависимости от типа сообщения.
+    // TODO: use normal colors
+    /// return colors of toast
     pub fn colors(&self) -> (&'static str, &'static str) {
         let colors = use_context::<RW<Themes>>().unwrap().0.read();
         let colors = colors.colors();
