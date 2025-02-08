@@ -44,3 +44,6 @@ port = 3000
 open = false
 [package.metadata.trunk.tools]
 tailwindcss = "4.0.0"
+
+[package.metadata.trunk.build]
+minify = "on_release"
