@@ -1,18 +1,26 @@
-//! Proc macro for generating icon enums with built-in SVG content
+//! Proc macro to create icon enums with embedded SVG content
 //!
-//! This macro downloads SVG icons during compilation and embeds them into the binary.
+//! This macro downloads SVG icons during compilation and embeds them in the binary.
 //! Currently supports Tabler icons from unpkg.com.
+//!
+//! To find the name of the icon use [tabler](https://tabler.io/icons)
+//!
+//! all cached in target/icon_cache for 30 days
 //!
 //! # Examples
 //!
 //! Basic usage:
-//! ```ignore
+//! ```rust
 //! use icon_derive::tabler_icon;
 //!
 //! tabler_icon!(
-//!     github[outline, filled],
+//!     brand_github[outline, filled],
 //!     user[outline]
 //! );
+//! // Generate
+//! // - Tabler::OUTLINE_BRAND_GITHUB
+//! // - Tabler::FILLED_BRAND_GITHUB
+//! // - Tabler::OUTLINE_USER
 //! ```
 //!
 //! With custom name and attributes:
@@ -21,16 +29,20 @@
 //!
 //! tabler_icon!(
 //!     #[derive(serde::Serialize)]
-//!     #[name = "custom_github"]
-//!     github[outline, filled],
+//!     #[name = "github"]
+//!     brand_github[outline, filled],
 //!     user[outline]
 //! );
+//! // Generate
+//! // - Tabler::OUTLINE_GITHUB
+//! // - Tabler::FILLED_GITHUB
+//! // - Tabler::OUTLINE_USER
 //! ```
 //!
 //! Using generated enum:
-//! ```ignore
+//! ```rust
 //! # use icon_derive::tabler_icon;
-//! # tabler_icon!(github[outline]);
+//! # tabler_icon!(#[name = "github"] brand_github[outline, filled]);
 //! let icon = Tabler::OUTLINE_GITHUB;
 //! let svg = icon.as_str(); // Get SVG content
 //! let name = icon.as_str_merget(); // Get icon name without style prefix
@@ -129,12 +141,14 @@ impl Parse for TablerEnter {
     }
 }
 
-/// Generates an enum containing icon variants with embedded SVG content
+/// Proc macro to create icon enums with embedded SVG content
 ///
-/// # Arguments
+/// This macro downloads SVG icons during compilation and embeds them in the binary.
+/// Currently supports Tabler icons from unpkg.com.
 ///
-/// * Attributes (optional) - Derive macros and other attributes for the generated enum
-/// * Icon definitions - List of icons with their styles
+/// To find the name of the icon use [tabler](https://tabler.io/icons)
+///
+/// All cached in target/icon_cache for 30 days
 ///
 /// # Examples
 ///
@@ -143,27 +157,45 @@ impl Parse for TablerEnter {
 /// use icon_derive::tabler_icon;
 ///
 /// tabler_icon!(
-///     github[outline, filled],
+///     brand_github[outline, filled],
 ///     user[outline]
 /// );
+/// // Generates:
+/// // - Tabler::OUTLINE_BRAND_GITHUB
+/// // - Tabler::FILLED_BRAND_GITHUB
+/// // - Tabler::OUTLINE_USER
 /// ```
 ///
 /// With custom name:
 /// ```ignore
-/// # use icon_derive::tabler_icon;
+/// use icon_derive::tabler_icon;
+///
 /// tabler_icon!(
-///     #[name = "custom_github"]
-///     github[outline, filled]
+///     #[name = "github"]
+///     brand_github[outline, filled]
 /// );
+/// // Generates:
+/// // - Tabler::OUTLINE_GITHUB
+/// // - Tabler::FILLED_GITHUB
 /// ```
 ///
 /// With additional derives:
 /// ```ignore
-/// # use icon_derive::tabler_icon;
+/// use icon_derive::tabler_icon;
+///
 /// tabler_icon!(
 ///     #[derive(serde::Serialize)]
-///     github[outline]
+///     #[name = "github"]
+///     brand_github[outline, filled],
+///     user[outline]
 /// );
+/// ```
+/// Using generated enum:
+/// ```ignore
+/// let icon = Tabler::OUTLINE_GITHUB;
+/// let svg = icon.as_str(); // Get SVG content
+/// let name = icon.as_str_merget(); // Get icon name without style prefix
+/// let full_name = icon.to_string(); // Get icon name with style prefix
 /// ```
 #[proc_macro]
 pub fn tabler_icon(input: TokenStream) -> TokenStream {

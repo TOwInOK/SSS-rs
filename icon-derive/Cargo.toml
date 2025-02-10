@@ -1,11 +1,11 @@
 [package]
-name = "icon-derive"
+name = "tabler-icon-definer"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
-license.workspace = true
-description = "Macros for fast incremental using tabler icons"
+license = "MIT"
+description = "Macros for fast incremental loading tabler icons"
 
 [dependencies]
 proc-macro2 = "1"

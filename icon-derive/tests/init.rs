@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use icon_derive::tabler_icon;
+    use tabler_icon_definer::tabler_icon;
 
     #[test]
     fn init() {
