@@ -1,6 +1,6 @@
 [package]
 name = "tabler-icon-definer"
-version = "2.0.1"
+version = "2.0.2"
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
