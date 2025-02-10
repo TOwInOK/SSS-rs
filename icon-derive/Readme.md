@@ -25,7 +25,7 @@ tabler-icon-definer = "2"
 ### Basic Usage
 
 ```rust
-use icon_derive::tabler_icon;
+use tabler_icon_definer::tabler_icon;
 
 tabler_icon!(
     brand_github[outline, filled],

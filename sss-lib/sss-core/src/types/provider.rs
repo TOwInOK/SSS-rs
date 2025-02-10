@@ -1,5 +1,5 @@
-use icon_derive::tabler_icon;
 use serde::{Deserialize, Serialize};
+use tabler_icon_definer::tabler_icon;
 
 tabler_icon! {
     #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
