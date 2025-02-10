@@ -40,7 +40,7 @@
             <span class="group-hover:scale-92 transition-transform duration-300">[</span>
             <div class="h-[48px] flex-col justify-evenly items-center flex text-[{{ thirdly }}]">
                 <div class="group-hover:scale-108 transition-transform duration-300">
-                    {{ get_svg(provider=repo.link.provider) | safe }}
+                    {{ get_svg(icon=repo.link.icon) | safe }}
                 </div>
                 <div class="flex text-[{{ primary }}] text-xs md:text-sm">
                   {{ repo.name }}
@@ -58,10 +58,10 @@
           <span class="group-hover:scale-92 transition-transform duration-300">[</span>
           <div class="h-[48px] flex-col justify-evenly items-center flex text-[{{ thirdly }}]">
               <div class="group-hover:scale-108 transition-transform duration-300">
-                  {{ get_svg(provider=social.provider) | safe }}
+                  {{ get_svg(icon=social.icon) | safe }}
               </div>
               <div class="flex text-[{{ primary }}] text-xs md:text-sm">
-                {{ social.provider }}
+                {{ get_icon_name(icon=social.icon) }}
               </div>
           </div>
           <span class="group-hover:scale-92 transition-transform duration-300">]</span>
@@ -85,7 +85,7 @@
               {{ skill.since.start }} -> {% if skill.since.end != 0 %}{{ skill.since.end }}{% else %}today{% endif %}
             </div>
             <div class="group-hover:scale-105 group-hover:text-[{{ primary }}] transition-all duration-300 flex justify-center text-xs md:text-sm text-[{{ border }}] hover:scale-105 transition duration-300 ease-in-out">
-              {{ skill.repo_link.provider }}
+               {{ get_icon_name(icon=skill.repo_link.icon ) }}
             </div>
           </a>
           {% endfor %}

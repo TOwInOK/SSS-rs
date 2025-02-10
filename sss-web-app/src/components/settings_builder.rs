@@ -199,10 +199,10 @@ pub fn RepositoriesSection() -> impl IntoView {
                             <IconSelector
                                 action=move |ev| {
                                     if let Ok(value) = event_target_value(&ev).parse() {
-                                        set_settings.update(|s| s.repos[index].link.provider = value);
+                                        set_settings.update(|s| s.repos[index].link.icon = value);
                                     }
                                 }
-                                prop=move || settings.read().repos[index].link.provider.to_string()
+                                prop=move || settings.read().repos[index].link.icon.to_string()
                             />
                             <Button
                                 alt=|| "Remove repository".to_string()
@@ -252,10 +252,10 @@ pub fn SocialsSection() -> impl IntoView {
                         <IconSelector
                             action=move |ev| {
                                 if let Ok(value) = event_target_value(&ev).parse() {
-                                    set_settings.update(|s| s.socials[index].provider = value);
+                                    set_settings.update(|s| s.socials[index].icon = value);
                                 }
                             }
-                            prop=move || settings.read().socials[index].provider.to_string()
+                            prop=move || settings.read().socials[index].icon.to_string()
                         />
                         <Button
                             alt=|| "Remove social link".to_string()
@@ -335,10 +335,10 @@ pub fn SkillsSection() -> impl IntoView {
                                 <IconSelector
                                     action=move |ev| {
                                         if let Ok(value) = event_target_value(&ev).parse() {
-                                            set_settings.update(|s| s.skills[index].repo_link.provider = value);
+                                            set_settings.update(|s| s.skills[index].repo_link.icon = value);
                                         }
                                     }
-                                    prop=move || settings.read().skills[index].repo_link.provider.to_string()
+                                    prop=move || settings.read().skills[index].repo_link.icon.to_string()
                                 />
                             </ScrollableBox>
 
@@ -368,10 +368,10 @@ pub fn SkillsSection() -> impl IntoView {
                                         <IconSelector
                                             action=move |ev| {
                                                 if let Ok(value) = event_target_value(&ev).parse() {
-                                                    set_settings.update(|s| s.skills[index].projects[project_index].link.provider = value);
+                                                    set_settings.update(|s| s.skills[index].projects[project_index].link.icon = value);
                                                 }
                                             }
-                                            prop=move || settings.read().skills[index].projects[project_index].link.provider.to_string()
+                                            prop=move || settings.read().skills[index].projects[project_index].link.icon.to_string()
                                         />
                                         <Button
                                             alt=|| "Remove project".to_string()

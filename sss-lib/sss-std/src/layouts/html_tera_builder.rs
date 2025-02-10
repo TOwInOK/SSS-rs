@@ -1,7 +1,7 @@
 use std::error::Error;
 
 use render::{layout::AdditionTeraData, prelude::*};
-use sss_core::{types::provider::Provider, Settings};
+use sss_core::{types::provider::Tabler, Settings};
 use tera::{Context, Tera};
 
 use crate::tools::gen_css;
@@ -47,6 +47,8 @@ impl Layout for HtmlTeraRender<'_> {
         // Register svg return fn
         // it need to use because tera don't use Display/ToString as expected for type
         tera.register_function("get_svg", get_svg);
+        // icon to string convertation
+        tera.register_function("get_icon_name", get_icon_name);
 
         // Init context
         let mut context = Context::new();
@@ -199,17 +201,44 @@ impl AdditionTeraData for HtmlTeraRender<'_> {
 
 fn get_svg(args: &std::collections::HashMap<String, tera::Value>) -> tera::Result<tera::Value> {
     // Получаем значение provider из аргументов
-    let provider = match args.get("provider") {
+    let provider = match args.get("icon") {
         Some(val) => val.to_string(),
-        None => return Err(tera::Error::msg("Provider argument is required")),
+        None => {
+            return Err(tera::Error::msg(
+                "Icon argument is required. Check your function invocation in template",
+            ))
+        }
     };
 
     // Убираем кавычки и пробелы
     let provider = provider.trim_matches('"').trim();
 
     // Преобразуем строку в Provider enum
-    let provider: Provider = provider.parse()?;
+    let provider: Tabler = provider.parse()?;
 
     // Вызываем as_ref() и возвращаем SVG как строку
-    Ok(tera::Value::String(provider.as_ref().to_string()))
+    Ok(tera::Value::String(provider.as_str().to_string()))
+}
+
+fn get_icon_name(
+    args: &std::collections::HashMap<String, tera::Value>
+) -> tera::Result<tera::Value> {
+    // Получаем значение provider из аргументов
+    let provider = match args.get("icon") {
+        Some(val) => val.to_string(),
+        None => {
+            return Err(tera::Error::msg(
+                "Icon argument is required. Check your function invocation in template",
+            ))
+        }
+    };
+
+    // Убираем кавычки и пробелы
+    let provider = provider.trim_matches('"').trim();
+
+    // Преобразуем строку в Provider enum
+    let provider: Tabler = provider.parse()?;
+
+    // Вызываем as_ref() и возвращаем SVG как строку
+    Ok(tera::Value::String(provider.as_str_merget().to_string()))
 }

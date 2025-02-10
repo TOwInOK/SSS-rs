@@ -5,7 +5,7 @@ use sss_core::{
     types::{
         link::Link,
         nickname::Nickname,
-        provider::Provider,
+        provider::Tabler,
         since::Since,
         skill::{Project, Skill},
         user::User,
@@ -65,32 +65,32 @@ fn def_set() -> Settings {
             Project {
                 name: "Some".to_string(),
                 link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/your_nickname".to_string(),
                 },
             },
             Project {
                 name: "Cool".to_string(),
                 link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/your_nickname".to_string(),
                 },
             },
             Project {
                 name: "Project".to_string(),
                 link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/your_nickname".to_string(),
                 },
             },
         ],
         socials: vec![
             Link {
-                provider: Provider::Github,
+                icon: Tabler::OUTLINE_GITHUB,
                 link: "https://github.com/TOwInOK".to_string(),
             },
             Link {
-                provider: Provider::Telegram,
+                icon: Tabler::OUTLINE_TELEGRAM,
                 link: "https://t.me/TOwInOK".to_string(),
             },
         ],
@@ -100,7 +100,7 @@ fn def_set() -> Settings {
                 projects: vec![Project {
                     name: "Cool Project".to_string(),
                     link: Link {
-                        provider: Provider::Github,
+                        icon: Tabler::OUTLINE_GITHUB,
                         link: "https://github.com/your_nickname".to_string(),
                     },
                 }],
@@ -110,7 +110,7 @@ fn def_set() -> Settings {
                 },
                 main: true,
                 repo_link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://crates.io/users/TOwInOK".to_string(),
                 },
             },
@@ -123,7 +123,7 @@ fn def_set() -> Settings {
                 },
                 main: false,
                 repo_link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "#".to_string(),
                 },
             },

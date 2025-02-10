@@ -7,7 +7,7 @@ members = [
     "sss-cli",
     "layouts-derive",
     "sss-web-app"
-]
+, "icon-derive"]
 resolver = "2"
 
 [workspace.package]

@@ -103,7 +103,7 @@ where
     P: Fn() -> String + 'static + Send,
 {
     let theme = use_context::<RW<Themes>>().unwrap().0;
-    let providers = sss_core::types::provider::Provider::all_providers();
+    let providers = sss_core::types::provider::Tabler::all_icons();
     view! {
         <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-between">
             <div>Icon :</div>

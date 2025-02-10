@@ -8,6 +8,7 @@ license.workspace = true
 [dependencies]
 serde = { workspace = true, features = ["derive"] }
 utoipa = {workspace = true, optional = true}
+icon-derive = { path = "../../icon-derive" }
 
 [dev-dependencies]
 # sss_core = { path = ".", features = ["full"] }

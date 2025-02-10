@@ -10,7 +10,7 @@ pub fn gen_example_config() -> Settings {
         types::{
             link::Link,
             nickname::Nickname,
-            provider::Provider,
+            provider::Tabler,
             since::Since,
             skill::{Project, Skill},
             user::User,
@@ -39,25 +39,25 @@ pub fn gen_example_config() -> Settings {
             Project {
                 name: "SSS-rs".to_string(),
                 link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/TOwInOK/SSS-rs".to_string(),
                 },
             },
             Project {
                 name: "zen-rs".to_string(),
                 link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/TOwInOK/zen-rs".to_string(),
                 },
             },
         ],
         socials: vec![
             Link {
-                provider: Provider::Github,
+                icon: Tabler::OUTLINE_GITHUB,
                 link: "https://github.com/TOwInOK".to_string(),
             },
             Link {
-                provider: Provider::Telegram,
+                icon: Tabler::OUTLINE_TELEGRAM,
                 link: "https://t.me/towinok".to_string(),
             },
         ],
@@ -67,7 +67,7 @@ pub fn gen_example_config() -> Settings {
                 projects: vec![Project {
                     name: "SSS-rs".to_string(),
                     link: Link {
-                        provider: Provider::Github,
+                        icon: Tabler::OUTLINE_GITHUB,
                         link: "https://github.com/TOwInOK/SSS-rs".to_string(),
                     },
                 }],
@@ -77,7 +77,7 @@ pub fn gen_example_config() -> Settings {
                 },
                 main: true,
                 repo_link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/TOwInOK".to_string(),
                 },
             },
@@ -86,7 +86,7 @@ pub fn gen_example_config() -> Settings {
                 projects: vec![Project {
                     name: "GSM-example".to_string(),
                     link: Link {
-                        provider: Provider::Github,
+                        icon: Tabler::OUTLINE_GITHUB,
                         link: "https://github.com/TOwInOK/Game-Sample-Market".to_string(),
                     },
                 }],
@@ -96,7 +96,7 @@ pub fn gen_example_config() -> Settings {
                 },
                 main: false,
                 repo_link: Link {
-                    provider: Provider::Github,
+                    icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/TOwInOK".to_string(),
                 },
             },
