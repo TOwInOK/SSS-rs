@@ -1,9 +1,10 @@
 [package]
 name = "tabler-icon-definer"
-version = "2.0.0"
+version = "2.0.1"
 edition.workspace = true
 authors.workspace = true
 repository.workspace = true
+documentation = "https://docs.rs/tabler-icon-definer"
 license = "MIT"
 description = "Macros for fast incremental loading tabler icons"
 
