@@ -11,7 +11,7 @@
 //!
 //! Basic usage:
 //! ```rust
-//! use icon_derive::tabler_icon;
+//! use tabler_icon_definer::tabler_icon;
 //!
 //! tabler_icon!(
 //!     brand_github[outline, filled],
@@ -25,7 +25,7 @@
 //!
 //! With custom name and attributes:
 //! ```rust
-//! use icon_derive::tabler_icon;
+//! use tabler_icon_definer::tabler_icon;
 //!
 //! tabler_icon!(
 //!     #[derive(serde::Serialize)]
@@ -41,7 +41,7 @@
 //!
 //! Using generated enum:
 //! ```rust
-//! # use icon_derive::tabler_icon;
+//! # use tabler_icon_definer::tabler_icon;
 //! # tabler_icon!(#[name = "github"] brand_github[outline, filled]);
 //! let icon = Tabler::OUTLINE_GITHUB;
 //! let svg = icon.as_str(); // Get SVG content
@@ -154,7 +154,7 @@ impl Parse for TablerEnter {
 ///
 /// Basic usage:
 /// ```ignore
-/// use icon_derive::tabler_icon;
+/// use tabler_icon_definer::tabler_icon;
 ///
 /// tabler_icon!(
 ///     brand_github[outline, filled],
@@ -168,7 +168,7 @@ impl Parse for TablerEnter {
 ///
 /// With custom name:
 /// ```ignore
-/// use icon_derive::tabler_icon;
+/// use tabler_icon_definer::tabler_icon;
 ///
 /// tabler_icon!(
 ///     #[name = "github"]
@@ -181,7 +181,7 @@ impl Parse for TablerEnter {
 ///
 /// With additional derives:
 /// ```ignore
-/// use icon_derive::tabler_icon;
+/// use tabler_icon_definer::tabler_icon;
 ///
 /// tabler_icon!(
 ///     #[derive(serde::Serialize)]

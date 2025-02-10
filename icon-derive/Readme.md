@@ -1,4 +1,4 @@
-# icon-derive
+# tabler-icon-definer
 
 A Rust procedural macro crate for embedding Tabler SVG icons into your binary at compile time.
 
@@ -17,7 +17,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-icon-derive = "2"
+tabler-icon-definer = "2"
 ```
 
 ## Usage
