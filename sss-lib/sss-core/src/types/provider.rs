@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 tabler_icon! {
     #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
     #[derive(Serialize, Deserialize)]
-    settings[outline],
     #[name="github"]
     brand_github[outline, filled],
     #[name="telegram"]
@@ -15,6 +14,8 @@ tabler_icon! {
     brand_linkedin[outline, filled],
     #[name="discord"]
     brand_discord[outline, filled],
+    #[name="reddit"]
+    brand_reddit[outline],
 }
 #[cfg(test)]
 mod tests {

@@ -5,13 +5,14 @@ mod tests {
     #[test]
     fn init() {
         tabler_icon! {
-
-            // --
-            user[outline, filled],
-            #[name = "telegram"]
-            brand_telegram[outline],
-            #[name="Crates"]
-            box_[outline],
+            // -- global scoup
+            // ----------------------
+            #[name = "super_user"] // -- outer
+            user[outline, filled],  // --
+            #[name = "super_telegram"] // -- outer
+            brand_telegram[outline], // --
+            #[name="Crates"] // -- outer
+            box_[outline], // --
         }
 
         // impl std::str::FromStr for Tabler {

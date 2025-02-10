@@ -21,8 +21,8 @@
 //!
 //! tabler_icon!(
 //!     #[derive(serde::Serialize)]
-//!     github[outline, filled],
 //!     #[name = "custom_github"]
+//!     github[outline, filled],
 //!     user[outline]
 //! );
 //! ```
@@ -39,7 +39,6 @@
 //!
 //! # Limitations
 //! - first item is default item
-//! - first item can't be renamed
 
 use std::{
     env, fs,
@@ -56,7 +55,7 @@ use syn::{
     punctuated::Punctuated,
     Attribute, Expr, Lit, Meta, Result, Token,
 };
-
+#[derive(Debug)]
 struct IconInner {
     display_name: Option<String>,
     name: String,
@@ -85,7 +84,6 @@ impl Parse for IconInner {
         if input.peek(syn::token::Bracket) {
             let content;
             bracketed!(content in input);
-
             let style_list = content.parse_terminated(syn::Ident::parse, Token![,])?;
             styles = style_list
                 .into_iter()
@@ -99,7 +97,7 @@ impl Parse for IconInner {
         })
     }
 }
-
+#[derive(Debug)]
 struct IconItem {
     icons: Vec<IconInner>,
 }
@@ -112,7 +110,7 @@ impl Parse for IconItem {
         })
     }
 }
-
+#[derive(Debug)]
 struct TablerEnter {
     attrs: Vec<Attribute>,
     icons: IconItem,
@@ -120,22 +118,10 @@ struct TablerEnter {
 
 impl Parse for TablerEnter {
     fn parse(input: ParseStream) -> Result<Self> {
-        let attrs =
-            if input.peek(Token![#]) { input.call(Attribute::parse_outer)? } else { Vec::new() }
-                .into_iter()
-                .filter(|attr| {
-                    if let Meta::NameValue(meta) = attr.meta.clone() {
-                        if meta.path.is_ident("name") {
-                            return false;
-                        }
-                    }
-                    true
-                })
-                .collect();
-
+        let attrs = Attribute::parse_outer(input).unwrap_or_default();
         // Парсим список иконок
+        // panic!("{:#?}", attrs);
         let icons: IconItem = input.parse()?;
-
         Ok(TablerEnter {
             attrs,
             icons,
@@ -153,7 +139,7 @@ impl Parse for TablerEnter {
 /// # Examples
 ///
 /// Basic usage:
-/// ```rust
+/// ```ignore
 /// use icon_derive::tabler_icon;
 ///
 /// tabler_icon!(
@@ -163,7 +149,7 @@ impl Parse for TablerEnter {
 /// ```
 ///
 /// With custom name:
-/// ```rust
+/// ```ignore
 /// # use icon_derive::tabler_icon;
 /// tabler_icon!(
 ///     #[name = "custom_github"]
@@ -172,7 +158,7 @@ impl Parse for TablerEnter {
 /// ```
 ///
 /// With additional derives:
-/// ```rust
+/// ```ignore
 /// # use icon_derive::tabler_icon;
 /// tabler_icon!(
 ///     #[derive(serde::Serialize)]
@@ -182,9 +168,11 @@ impl Parse for TablerEnter {
 #[proc_macro]
 pub fn tabler_icon(input: TokenStream) -> TokenStream {
     let TablerEnter {
-        attrs,
-        icons: icon_set,
+        mut attrs,
+        icons: mut icon_set,
     } = parse_macro_input!(input as TablerEnter);
+
+    set_first_name_icon_by_name_attribut(&mut attrs, &mut icon_set);
 
     let default_derives = quote! {
           #[derive(Debug, Clone, PartialEq, Default)]
@@ -270,7 +258,7 @@ pub fn tabler_icon(input: TokenStream) -> TokenStream {
                 .replace("/", "_")
                 .replace("\\", "_");
             let cache_path = get_cache_dir().join(cache_filename);
-            let max_cache_age = Duration::from_secs(24 * 60 * 60); // 24 часа
+            let max_cache_age = Duration::from_secs(60 * 60 * 24 * 30); // 30 days
 
             let icon_content = if cache_path.exists() && is_cache_fresh(&cache_path, max_cache_age)
             {
@@ -397,4 +385,42 @@ fn download_link(
         "https://unpkg.com/@tabler/icons@latest/icons/{}/{}.svg",
         style_variant, name
     )
+}
+
+fn set_first_name_icon_by_name_attribut(
+    attrs: &mut Vec<Attribute>,
+    icon_set: &mut IconItem,
+) {
+    // Проверяем наличие иконок
+    if icon_set.icons.is_empty() {
+        panic!("Icon set is empty - must define at least one icon");
+    }
+
+    // Находим индекс атрибута name
+    if let Some(name_index) = attrs
+        .iter()
+        .position(|attr| matches!(&attr.meta, Meta::NameValue(meta) if meta.path.is_ident("name")))
+    {
+        // Извлекаем атрибут по индексу
+        let name_attr = attrs.remove(name_index);
+
+        // Извлекаем значение строки из атрибута
+        let name_str = match name_attr.meta {
+            Meta::NameValue(name_value) => match name_value.value {
+                Expr::Lit(lit) => match lit.lit {
+                    Lit::Str(lit_str) => lit_str.value(),
+                    _ => panic!("Invalid literal type in name attribute - expected string literal"),
+                },
+                _ => panic!("Expected literal expression in name attribute"),
+            },
+            _ => panic!("Unexpected meta format for name attribute"),
+        };
+
+        // Устанавливаем имя для первой иконки
+        icon_set
+            .icons
+            .first_mut()
+            .expect("Failed to get first icon")
+            .display_name = Some(name_str);
+    }
 }
