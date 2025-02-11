@@ -14,5 +14,15 @@ quote = "1"
 syn = { version = "2", features = ["full"] }
 reqwest = { version = "0.11", features = ["blocking"] }
 
+[dev-dependencies]
+tabler-icon-definer = {path = ".", features = ["full"]}
+
+
+
 [lib]
 proc-macro = true
+
+[features]
+default = []
+full = ["leptos"]
+leptos = []

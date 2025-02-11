@@ -7,7 +7,8 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true, features = ["derive"] }
-utoipa = {workspace = true, optional = true}
+utoipa = {workspace = true, optional = true }
+leptos = { version= "0.7.5", optional = true }
 tabler-icon-definer = { path = "../../icon-derive" }
 
 [dev-dependencies]
@@ -15,7 +16,11 @@ tabler-icon-definer = { path = "../../icon-derive" }
 
 [features]
 default = []
-full = ["utoipa"]
+full = ["utoipa", "leptos"]
 utoipa = [
     "dep:utoipa"
+]
+leptos = [
+    "tabler-icon-definer/leptos",
+    "dep:leptos"
 ]

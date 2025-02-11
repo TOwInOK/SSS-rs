@@ -1,4 +1,4 @@
-use crate::components::reusable_components::prelude::*;
+use crate::components::reusable_components::{button::AddButton, prelude::*};
 use leptos::prelude::*;
 use sss_core::{
     types::{
@@ -97,7 +97,7 @@ pub fn UserSection() -> impl IntoView {
                             />
                         </ScrollableBox>
                     </For>
-                    <Button
+                    <AddButton
                         alt=|| "Add new previous nickname".to_string()
                         label="+"
                         action=move || {
@@ -152,7 +152,7 @@ pub fn AboutSection() -> impl IntoView {
                             />
                         </div>
                     </For>
-                    <Button
+                    <AddButton
                         alt=|| "Add new specification".to_string()
                         label="+"
                         action=move || {
@@ -213,7 +213,7 @@ pub fn RepositoriesSection() -> impl IntoView {
                             />
                         </ScrollableBox>
                     </For>
-                    <Button
+                    <AddButton
                         alt=|| "Add new repository".to_string()
                         label="+"
                         action=move || {
@@ -266,7 +266,7 @@ pub fn SocialsSection() -> impl IntoView {
                         />
                     </ScrollableBox>
                 </For>
-                    <Button
+                    <AddButton
                         alt=|| "Add new social link".to_string()
                         label="+"
                         action=move || {
@@ -382,7 +382,7 @@ pub fn SkillsSection() -> impl IntoView {
                                         />
                                     </ScrollableBox>
                                 </For>
-                                <Button
+                                <AddButton
                                     alt=|| "Add new project".to_string()
                                     label="+"
                                     action=move || {
@@ -427,7 +427,7 @@ pub fn SkillsSection() -> impl IntoView {
                             />
                         </ScrollableBox>
                     </For>
-                    <Button
+                    <AddButton
                         alt=|| "Add new skill".to_string()
                         label="+"
                         action=move || {

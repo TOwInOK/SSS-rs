@@ -1,11 +1,14 @@
+use codee::string::JsonSerdeCodec;
 use components::toster::ToastStore;
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{components::*, path};
+use leptos_use::storage::use_local_storage;
 use pages::home::HomePage;
 use sss_core::Settings;
 use sss_std::{prelude::Layouts, themes::Themes};
 use tools::gen_example_config;
+
 // Modules
 pub mod components;
 mod pages;
@@ -21,9 +24,23 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    let themes = signal(Themes::ROSE_PINE);
-    let settings = signal(Settings::default());
-    let layouts = signal(Layouts::default());
+    let (settings_store, settings_set_store, _) =
+        use_local_storage::<Settings, JsonSerdeCodec>("settings");
+    let (themes_store, themes_set_store, _) = use_local_storage::<Themes, JsonSerdeCodec>("themes");
+    let (layouts_store, layouts_set_store, _) =
+        use_local_storage::<Layouts, JsonSerdeCodec>("layouts");
+
+    let settings = signal({
+        if is_local_storage_settings_exist() {
+            settings_store
+                .try_get_untracked()
+                .map_or_else(gen_example_config, |x| x)
+        } else {
+            gen_example_config()
+        }
+    });
+    let themes = signal(themes_store.get_untracked());
+    let layouts = signal(layouts_store.get_untracked());
     let toster_store = signal(ToastStore::default());
 
     provide_context(themes);
@@ -31,7 +48,22 @@ pub fn App() -> impl IntoView {
     provide_context(layouts);
     provide_context(toster_store);
 
-    settings.1.update(|x| *x = gen_example_config());
+    Effect::watch(
+        move || settings.0.get(),
+        move |current, _, _| settings_set_store.set(current.clone()),
+        true,
+    );
+    Effect::watch(
+        move || themes.0.get(),
+        move |current, _, _| themes_set_store.set(current.clone()),
+        true,
+    );
+    Effect::watch(
+        move || layouts.0.get(),
+        move |current, _, _| layouts_set_store.set(current.clone()),
+        true,
+    );
+
     view! {
         <Html attr:lang="en" attr:dir="ltr" />
 
@@ -57,4 +89,14 @@ pub fn App() -> impl IntoView {
                 </div>
             </Router>
     }
+}
+
+fn is_local_storage_settings_exist() -> bool {
+    window()
+        .local_storage()
+        .ok()
+        .flatten()
+        .and_then(|storage| storage.get_item("settings").ok())
+        .flatten()
+        .is_some()
 }

@@ -21,7 +21,7 @@ license = "Apache-2.0"
 rs-doc-path = "docs"
 
 [workspace.dependencies]
-serde = { version = "1", features = ["derive"] }
+serde = { version = "1.0.217", features = ["derive"] }
 serde_json = { version = "1" }
 tokio = { version = "1", features = ["full"] }
 thiserror = "2.0"

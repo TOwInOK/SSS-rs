@@ -32,7 +32,7 @@ pub fn ThemeSelector() -> impl IntoView {
                         set.update(|x| *x = value);
                     }
                 }
-                prop:value=get.read().to_string()
+                prop:value=move || get.read().to_string()
             >
             {
                 items.into_iter().map(|category| {
@@ -76,7 +76,7 @@ pub fn LayoutSelector() -> impl IntoView {
                         set.update(|x| *x = value);
                     }
                 }
-                prop:value=get.read().to_string()
+                prop:value=move || get.read().to_string()
             >
             {
                 items.into_iter().map(|category| {

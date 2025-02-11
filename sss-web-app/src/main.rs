@@ -11,6 +11,7 @@ pub fn trunk_launch() {
     // Mount body
     mount_to_body(App);
 
+    // If body mounted remove load screen
     wasm_bindgen_futures::spawn_local(async {
         let window = window().expect("not found window");
         let promise = JsFuture::from(js_sys::Promise::new(&mut |resolve, _| {

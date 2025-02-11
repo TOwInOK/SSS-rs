@@ -16,6 +16,13 @@ tabler_icon! {
     brand_discord[outline, filled],
     #[name="reddit"]
     brand_reddit[outline],
+    trash[outline],
+    #[name="html"]
+    file_type_html[outline],
+    copy[outline],
+    #[name="clipboard"]
+    clipboard_text[outline],
+    restore[outline]
 }
 #[cfg(test)]
 mod tests {

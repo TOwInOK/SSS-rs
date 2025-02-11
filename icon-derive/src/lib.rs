@@ -352,6 +352,18 @@ pub fn tabler_icon(input: TokenStream) -> TokenStream {
             pub fn all_icons() -> Vec<Self> {
                 vec![#(Self::#formated_ident),*]
             }
+
+            #[cfg(feature = "leptos")]
+            pub fn to_leptos(&self) -> leptos::prelude::AnyView {
+                use leptos::html::div;
+                use leptos::prelude::*;
+                match self {
+                    #(Self::#formated_ident => {
+                        let svg = Self::#formated_ident.as_str();
+                        leptos::prelude::view! {<div inner_html=svg />}.into_any()
+                    })*
+                }
+            }
         }
 
         impl std::str::FromStr for Tabler {
@@ -373,6 +385,8 @@ pub fn tabler_icon(input: TokenStream) -> TokenStream {
                 }
             }
         }
+
+
     };
 
     expanded.into()
