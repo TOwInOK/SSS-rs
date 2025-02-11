@@ -101,7 +101,7 @@ Options:
   - Base64 toml config : /share
   - Health check : /health
 
-#### gen - Generate HTML
+#### gen - Generate HTML, PNG, PDF
 ```bash
 sss_cli gen [OPTIONS]
 
