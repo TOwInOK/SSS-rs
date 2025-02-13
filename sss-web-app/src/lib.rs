@@ -39,7 +39,13 @@ pub fn App() -> impl IntoView {
             gen_example_config()
         }
     });
-    let themes = signal(themes_store.get_untracked());
+    let themes = signal(if is_local_storage_themes_exist() {
+        themes_store
+            .try_get_untracked()
+            .map_or_else(|| Themes::ROSE_PINE, |x| x)
+    } else {
+        Themes::ROSE_PINE
+    });
     let layouts = signal(layouts_store.get_untracked());
     let toster_store = signal(ToastStore::default());
 
@@ -97,6 +103,16 @@ fn is_local_storage_settings_exist() -> bool {
         .ok()
         .flatten()
         .and_then(|storage| storage.get_item("settings").ok())
+        .flatten()
+        .is_some()
+}
+
+fn is_local_storage_themes_exist() -> bool {
+    window()
+        .local_storage()
+        .ok()
+        .flatten()
+        .and_then(|storage| storage.get_item("themes").ok())
         .flatten()
         .is_some()
 }

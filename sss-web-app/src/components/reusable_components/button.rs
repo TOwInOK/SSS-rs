@@ -168,11 +168,15 @@ pub fn LoadButton() -> impl IntoView {
         } action= move || {
            {
                spawn_local(async move {
-                   let navigator = web_sys::window().unwrap().navigator();
+                   let navigator = web_sys::window().expect("is it browser?").navigator();
                    let clipboard = navigator.clipboard();
                    match JsFuture::from(clipboard.read_text()).await {
                         Ok(value) => {
                             if let Some(value) = value.as_string() {
+                                if value.is_empty() {
+                                    store.update(|x| x.push(ToastContext::Warn("Your clipboard is empty".to_string())));
+                                    return ;
+                                }
                                 let settings = SSSsetings::from_base64(&value);
                                 match settings {
                                     Ok(e) => {
@@ -198,7 +202,6 @@ pub fn LoadButton() -> impl IntoView {
     }
 }
 
-/// Кнопка для скачивания настроек в виде HTML файла.
 #[component]
 pub fn DownloadButton() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
@@ -214,17 +217,11 @@ pub fn DownloadButton() -> impl IntoView {
             Ok(html_content) => {
                 let window = web_sys::window().expect("no global window exists");
 
-                // 1. Создаем правильный Blob
                 let arr = js_sys::Array::new();
                 arr.push(&JsValue::from_str(&html_content));
 
                 let blob = Blob::new_with_str_sequence(&arr).expect("should create blob");
 
-                // // 2. Добавляем MIME-тип
-                // let mut options = BlobPropertyBag::new();
-                // options.type_("text/html");
-
-                // 3. Создаем URL с правильными параметрами
                 let url = Url::create_object_url_with_blob(&blob).expect("should create URL");
                 use leptos::wasm_bindgen::JsCast;
                 // 4. Используем временный <a> элемент для скачивания
@@ -241,7 +238,6 @@ pub fn DownloadButton() -> impl IntoView {
                     ))
                 });
 
-                // 5. Очистка
                 spawn_local(async move {
                     Url::revoke_object_url(&url).unwrap();
                 });
