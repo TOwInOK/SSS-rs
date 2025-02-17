@@ -56,13 +56,13 @@
       <h2 class="text-[{{ primary }}] text-lg font-semibold mb-3">Social</h2>
       <div class="flex flex-wrap gap-4">
         {% for social in socials %}
-        <a href="{{ social.link }}"
-           class="group flex items-center gap-2 p-2 rounded-lg border border-[{{ thirdly }}] hover:bg-black/5 transition-all">
-          <div class="text-[{{ thirdly }}]">
-            {{ get_svg(icon=social.icon) | safe }}
-          </div>
-          <span class="text-[{{ primary }}] text-sm">{{ get_icon_name(icon=repo.link.icon) }}</span>
-        </a>
+          <a href="{{ social.link }}"
+            class="group flex items-center gap-2 p-2 rounded-lg border border-[{{ thirdly }}] hover:bg-black/5 transition-all">
+            <div class="text-[{{ thirdly }}]">
+              {{ get_svg(icon=social.icon) | safe }}
+            </div>
+            <span class="text-[{{ primary }}] text-sm">{{ get_icon_name(icon=social.icon) }}</span>
+          </a>
         {% endfor %}
       </div>
     </div>

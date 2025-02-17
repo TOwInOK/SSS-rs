@@ -19,7 +19,7 @@ use sss_std::prelude::*;
 #[test]
 fn test_umbrella_layout() {
     let settings = def_set();
-    let ub = Layouts::UMBRELLA.to_layout(&settings, &ROSE_PINE);
+    let ub = Layouts::GITHUB.to_layout(&settings, &ROSE_PINE);
     let html = ub.as_ref().finalize().unwrap();
     fs::write(Path::new("./card2.html"), html).unwrap();
 }
