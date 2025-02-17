@@ -191,5 +191,7 @@ This command will start the server on port 3000 and open your default browser.
 ## Contributing
 If you want to add a new theme or layout, create an [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue)!
 
-# Example
-![Card Example](.content/umbrella.umbrella.jpeg)
+# Card example
+![Card Example](.content/card_example.png)
+# SSS-rs editor
+![Editor Example](.content/editor_example.png)

@@ -192,5 +192,7 @@ trunk serve --open
 ## Как внести свой вклад
 Если вы хотите добавить новую тему или макет, создайте [Issue](https://github.com/TOwInOK/SSS-rs/issues/new?template=Blank+issue)!
 
-# Пример
-![Пример карточки](.content/umbrella.umbrella.jpeg)
+# Пример карточки
+![Card Example](.content/card_example.png)
+# SSS-rs редактор
+![Editor Example](.content/editor_example.png)
