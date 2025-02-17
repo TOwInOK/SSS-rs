@@ -43,7 +43,7 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
 
       - name: lint
-        run: cargo clippy && cargo fmt
+        run: cargo clippy --target wasm32-unknown-unknown -p sss-web-app && cargo fmt
 
       - name: Download and install Trunk
         run: |
