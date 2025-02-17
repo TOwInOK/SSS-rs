@@ -59,16 +59,36 @@ struct ApiDoc;
 
 pub async fn serve(
     address: String,
+
     mut shutdown_rx: Receiver<()>,
 ) -> anyhow::Result<()> {
-    let app = Router::new()
-        .route("/", get(root))
-        .route("/png", get(get_png))
-        .route("/pdf", get(get_pdf))
-        .route("/json", get(get_json))
-        .route("/health", get(healthcheck))
-        .route("/share", get(gen_base64))
-        .merge(Scalar::with_url("/api", ApiDoc::openapi()));
+    let services = &SETTINGS.read().await.services;
+
+    let mut app = Router::new().route("/", get(root)); // Базовый маршрут всегда доступен
+
+    if services.png {
+        app = app.route("/png", get(get_png));
+    }
+
+    if services.pdf {
+        app = app.route("/pdf", get(get_pdf));
+    }
+
+    if services.json {
+        app = app.route("/json", get(get_json));
+    }
+
+    if services.health {
+        app = app.route("/health", get(healthcheck));
+    }
+
+    if services.share {
+        app = app.route("/share", get(gen_base64));
+    }
+
+    if services.api {
+        app = app.merge(Scalar::with_url("/api", ApiDoc::openapi()));
+    }
 
     info!("try to bind {} address", &address);
     let addr = address.parse::<std::net::SocketAddr>()?;

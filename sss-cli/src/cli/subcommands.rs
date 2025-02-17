@@ -22,6 +22,27 @@ pub enum Commands {
         /// address for web server
         #[arg(short, long, default_value_t = default_address())]
         address: String,
+        /// launch html service
+        #[arg(long)]
+        html: bool,
+        /// launch png generator service
+        #[arg(long)]
+        png: bool,
+        /// launch pdf generator service
+        #[arg(long)]
+        pdf: bool,
+        /// launch json converter for settings service
+        #[arg(long)]
+        json: bool,
+        /// launch healf checker service
+        #[arg(long)]
+        health: bool,
+        /// launch base64 service
+        #[arg(long)]
+        share: bool,
+        /// launch rapidoc api service
+        #[arg(long)]
+        api: bool,
     },
     /// Generate file
     Gen {

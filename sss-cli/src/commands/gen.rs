@@ -4,11 +4,12 @@ use tracing::{info, instrument};
 
 use crate::{
     cli::{args::Args, subcommands::GenType},
+    settings::services::Services,
     tools::{refresh_html, refresh_pdf, refresh_png, refresh_settings},
     HTML, PDF, PNG,
 };
 
-#[instrument(skip(args, output_type, output_name))]
+#[instrument(skip_all)]
 pub async fn command_gen(
     output_type: &GenType,
     output_name: &str,
@@ -16,9 +17,37 @@ pub async fn command_gen(
 ) -> anyhow::Result<()> {
     info!("Start generating {}", &output_type);
     info!("Start loading config & theme");
-    refresh_settings(&args.config_path, args.theme.as_ref(), args.layout.as_ref())
-        .await
-        .map_err(|e| anyhow::anyhow!("Load failed with error: {}", e))?;
+    let services = match &args.command {
+        crate::cli::subcommands::Commands::Run {
+            watch: _,
+            serve: _,
+            address: _,
+            html,
+            png,
+            pdf,
+            json,
+            health,
+            share,
+            api,
+        } => Some(Services {
+            html: *html,
+            png: *png,
+            pdf: *pdf,
+            json: *json,
+            health: *health,
+            share: *share,
+            api: *api,
+        }),
+        _ => None,
+    };
+    refresh_settings(
+        &args.config_path,
+        args.theme.as_ref(),
+        args.layout.as_ref(),
+        services.as_ref(),
+    )
+    .await
+    .map_err(|e| anyhow::anyhow!("Load failed with error: {}", e))?;
     refresh_html()
         .await
         .map_err(|e| anyhow::anyhow!("Html refresh failed with error: {}", e))?;

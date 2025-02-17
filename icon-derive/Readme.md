@@ -77,6 +77,15 @@ let full_name = icon.to_string();
 
 // Get all available icons
 let all_icons = Tabler::all_icons();
+
+```
+
+### Leptos
+- use `leptos` feature
+```ignore
+
+// Get leptos AnyView component
+let component = Tabler::OUTLINE_GITHUB.to_leptos();
 ```
 
 ## Icon Naming

@@ -44,7 +44,7 @@
           </div>
           <div class="flex-1">
             <div class="text-[{{ primary }}] font-medium">{{ repo.name }}</div>
-            <div class="text-[{{ thirdly }}] text-sm">{{ repo.link.icon }}</div>
+            <div class="text-[{{ thirdly }}] text-sm"> {{ get_icon_name(icon=repo.link.icon) }}</div>
           </div>
         </a>
         {% endfor %}
@@ -61,7 +61,7 @@
           <div class="text-[{{ thirdly }}]">
             {{ get_svg(icon=social.icon) | safe }}
           </div>
-          <span class="text-[{{ primary }}] text-sm">{{ social.icon }}</span>
+          <span class="text-[{{ primary }}] text-sm">{{ get_icon_name(icon=repo.link.icon) }}</span>
         </a>
         {% endfor %}
       </div>
@@ -80,7 +80,7 @@
             {{ skill.since.start }} -> {% if skill.since.end != 0 %}{{ skill.since.end }}{% else %}today{% endif %}
           </div>
           <div class="text-[{{ border }}] text-sm text-center group-hover:text-[{{ primary }}] transition-colors">
-            {{ skill.repo_link.icon }}
+            {{ get_icon_name(icon=skill.repo_link.icon ) }}
           </div>
         </a>
         {% endfor %}

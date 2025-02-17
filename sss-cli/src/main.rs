@@ -63,6 +63,13 @@ async fn main() -> anyhow::Result<()> {
             watch,
             serve,
             address,
+            html,
+            png,
+            pdf,
+            json,
+            health,
+            share,
+            api,
         } => {
             command_run(
                 *watch,
@@ -71,6 +78,13 @@ async fn main() -> anyhow::Result<()> {
                 &args.layout,
                 address,
                 &args.theme,
+                *html,
+                *png,
+                *pdf,
+                *json,
+                *health,
+                *share,
+                *api,
             )
             .await
         }

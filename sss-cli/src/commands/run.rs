@@ -2,14 +2,17 @@ use sss_std::{prelude::Layouts, themes::Themes};
 use tokio::signal;
 #[cfg(not(windows))]
 use tokio::signal::unix::SignalKind;
-use tracing::{error, info, instrument, warn};
+use tracing::{error, info, instrument, trace, warn};
 
 use crate::{
+    settings::services::Services,
     tools::refresh,
     web::{file_watcher::check_file_loop, serve::serve},
+    SETTINGS,
 };
 
-#[instrument(skip(is_web, is_watch, path, layouts, address, themes))]
+#[instrument(skip_all)]
+#[allow(clippy::too_many_arguments)]
 pub async fn command_run(
     is_watch: bool,
     is_web: bool,
@@ -17,6 +20,13 @@ pub async fn command_run(
     layouts: &Option<Layouts>,
     address: &str,
     themes: &Option<Themes>,
+    html: bool,
+    png: bool,
+    pdf: bool,
+    json: bool,
+    health: bool,
+    share: bool,
+    api: bool,
 ) -> anyhow::Result<()> {
     info!("Start run command");
     if !is_web && !is_watch {
@@ -24,24 +34,67 @@ pub async fn command_run(
         return Ok(());
     }
 
-    refresh(path, themes.as_ref(), layouts.as_ref())
+    let services = if html || png || pdf || json || health || share || api {
+        Some(Services {
+            html,
+            png,
+            pdf,
+            json,
+            health,
+            share,
+            api,
+        })
+    } else {
+        None
+    };
+
+    refresh(path, themes.as_ref(), layouts.as_ref(), services.as_ref())
         .await
         .map_err(|e| anyhow::anyhow!("Load failed: {}", e))?;
 
+    let settings_services = &SETTINGS.read().await.services;
     let (shutdown_tx, _) = tokio::sync::broadcast::channel(1);
+    trace!("{:#?}", &settings_services);
     if is_watch {
-        let path_clone = path.to_string();
-        let themes = themes.clone();
-        let layouts = layouts.clone();
-        let shutdown_rx = shutdown_tx.subscribe();
+        if settings_services.html
+            || settings_services.png
+            || settings_services.pdf
+            || settings_services.json
+            || settings_services.health
+            || settings_services.share
+            || settings_services.api
+        {
+            let path_clone = path.to_string();
+            let themes = themes.clone();
+            let layouts = layouts.clone();
+            let services = services.clone();
+            let shutdown_rx = shutdown_tx.subscribe();
 
-        tokio::spawn(async move {
-            if let Err(e) =
-                check_file_loop(path_clone, themes.as_ref(), layouts.as_ref(), shutdown_rx).await
-            {
-                error!("File watching error: {}", e);
-            }
-        });
+            tokio::spawn(async move {
+                if let Err(e) = check_file_loop(
+                    path_clone,
+                    themes.as_ref(),
+                    layouts.as_ref(),
+                    services.as_ref(),
+                    shutdown_rx,
+                )
+                .await
+                {
+                    error!("File watching error: {}", e);
+                }
+            });
+        } else {
+            warn!(
+                "any flag too launch must be set! Awaiable flags:\n
+            html,
+            png,
+            pdf,
+            json,
+            health,
+            share,
+            api,"
+            );
+        }
     }
 
     if is_web {

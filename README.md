@@ -88,6 +88,13 @@ Options:
   -w, --watch               Watch for config changes
   -s, --serve               Start web server
   -a, --address <ADDRESS>   Web server address [default: 0.0.0.0:8081]
+  --html                    launch html service [default]
+  --png                     launch png generator service
+  --pdf                     launch pdf generator service
+  --json                    launch json converter for settings service
+  --health                  launch healf checker service
+  --share                   launch base64 service
+  --api                     launch rapidoc api service
 ```
 
 ### Avaiable routes
@@ -121,8 +128,10 @@ sss_cli new --config-type json
 
 # Start development server with auto-reload
 sss_cli run --watch --serve
-# or
+# or (html by default)
 sss_cli run -w -s
+# run with html, png, json and api routes
+sss_cli run -w -s --html --png --json --api
 
 # Additional options
 

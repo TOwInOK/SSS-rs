@@ -19,18 +19,22 @@ use sss_std::{
 };
 use tracing::{debug, error, info, instrument};
 
-use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
+use crate::{
+    settings::{services::Services, SSSCliSettings},
+    HTML, PDF, PNG, SETTINGS,
+};
 
 pub type Result<T = ()> =
     std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
 
-#[instrument(skip(path, themes, layouts))]
+#[instrument(skip_all)]
 #[inline]
 /// Update setting
 pub async fn refresh_settings(
     path: &str,
     themes: Option<&Themes>,
     layouts: Option<&Layouts>,
+    services: Option<&Services>,
 ) -> Result<()> {
     info!("Settings is't actual!");
 
@@ -41,6 +45,10 @@ pub async fn refresh_settings(
     if let Some(layouts) = layouts {
         settings.layouts = layouts.to_owned()
     }
+    if let Some(services) = services {
+        settings.services = services.to_owned()
+    }
+
     {
         *SETTINGS.deref().write().await = settings;
     }
@@ -55,7 +63,7 @@ pub enum SettingsUpdateType {
     NotActual,
 }
 
-#[instrument(skip(path, themes, layouts))]
+#[instrument(skip_all)]
 #[inline]
 /// Once load data
 /// if cli has themes or || and layouts, replace it permanently
@@ -63,21 +71,31 @@ pub async fn refresh(
     path: &str,
     themes: Option<&Themes>,
     layouts: Option<&Layouts>,
+    services: Option<&Services>,
 ) -> Result {
     debug!("Themes in cli: {:#?}", &themes);
     debug!("Layouts in cli: {:#?}", &layouts);
-    refresh_settings(path, themes, layouts).await?;
-    refresh_html().await?;
-    tokio::spawn(async move {
-        if let Err(e) = refresh_png().await {
-            error!("Got refresh error: {}", e);
-        }
-    });
-    tokio::spawn(async move {
-        if let Err(e) = refresh_pdf().await {
-            error!("Got refresh error: {}", e);
-        }
-    });
+    refresh_settings(path, themes, layouts, services).await?;
+
+    let services = &SETTINGS.read().await.services;
+
+    if services.html {
+        refresh_html().await?;
+    }
+    if services.png {
+        tokio::spawn(async move {
+            if let Err(e) = refresh_png().await {
+                error!("Got refresh error: {}", e);
+            }
+        });
+    }
+    if services.pdf {
+        tokio::spawn(async move {
+            if let Err(e) = refresh_pdf().await {
+                error!("Got refresh error: {}", e);
+            }
+        });
+    }
     Ok(())
 }
 
@@ -211,5 +229,6 @@ pub fn gen_example_config() -> SSSCliSettings {
         },
         themes: Themes::default(),
         layouts: Layouts::default(),
+        services: Services::default(),
     }
 }

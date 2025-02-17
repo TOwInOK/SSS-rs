@@ -6,7 +6,7 @@ use crate::{
     tools::gen_example_config,
 };
 
-#[instrument(skip(args, config_type, base64))]
+#[instrument(skip_all)]
 pub async fn command_new(
     config_type: &ConfigType,
     base64: Option<&String>,

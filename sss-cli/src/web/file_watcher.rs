@@ -5,13 +5,14 @@ use tokio::sync::mpsc;
 use tracing::{debug, error, info, trace};
 use xxhash_rust::xxh3::xxh3_64;
 
-use crate::tools::refresh;
+use crate::{settings::services::Services, tools::refresh};
 
 // Function to watch a file and refresh settings upon modification
 pub async fn check_file_loop(
     path: String,
     themes: Option<&Themes>,
     layouts: Option<&Layouts>,
+    services: Option<&Services>,
     mut shutdown_rx: tokio::sync::broadcast::Receiver<()>,
 ) -> anyhow::Result<()> {
     // Create a channel to receive file events
@@ -52,7 +53,7 @@ pub async fn check_file_loop(
                                 // Update the hash to the current one
                                 prevision_processed_hash = current_hash;
                                     // Refresh settings
-                                    if let Err(e) = refresh(&path, themes, layouts).await {
+                                    if let Err(e) = refresh(&path, themes, layouts, services).await {
                                         error!("Failed to refresh settings: {}", e);
                                     }
                             } else {

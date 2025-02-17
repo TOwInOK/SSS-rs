@@ -90,6 +90,13 @@ sss_cli run [OPTIONS]
   -w, --watch               Отслеживание изменений конфигурации
   -s, --serve               Запуск веб-сервера
   -a, --address <ADDRESS>   Адрес веб-сервера [по умолчанию: 0.0.0.0:8081]
+  --html                    Запустить html-сервис [по умолчанию]
+  --png                     Запуск сервиса генератора png
+  --pdf                     Запуск сервиса генератора PDF
+  --json                    Запустить JSON конвертер для службы настроек
+  --Health                  Запустить heafcheck сервис
+  --share                   Запуск base64 сервис
+  --api                     Запустить rapidoc api сервис
 ```
 
 ### Доступные пути
@@ -123,8 +130,10 @@ sss_cli new --config-type json
 
 # Запуск сервера разработки с автообновлением
 sss_cli run --watch --serve
-# или
+# или (html по умолчанию)
 sss_cli run -w -s
+# Запуск с htmk, pnn, json и api роутами
+sss_cli run -w -s --html --png --json --api
 
 # Дополнительные опции
 

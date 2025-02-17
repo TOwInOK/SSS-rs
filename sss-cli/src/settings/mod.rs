@@ -1,8 +1,11 @@
 use crate::tools::Result;
 use anyhow::anyhow;
 use serde::{Deserialize, Serialize};
+use services::Services;
 use sss_core::Settings;
 use sss_std::{prelude::Layouts, themes::Themes};
+
+pub mod services;
 
 /// [Settings] wrapper for collecting theme and layout into config for reload on save
 #[derive(Debug, Default, Serialize, Deserialize, Clone, utoipa::ToSchema, PartialEq)]
@@ -22,6 +25,9 @@ pub struct SSSCliSettings {
     #[serde(rename = "layout")]
     #[serde(default)]
     pub layouts: Layouts,
+    #[serde(rename = "services")]
+    #[serde(default)]
+    pub services: Services,
 }
 
 impl SSSCliSettings {
