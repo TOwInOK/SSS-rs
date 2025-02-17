@@ -19,7 +19,7 @@ clap = { workspace = true, features = ["derive"] }
 image = { version = "0.25.5", default-features = false, optional = true, features = [
     "png",
 ] }
-headless_chrome = { version = "1.0.15", optional = true }
+headless_chrome = { version = "=1.0.14", optional = true }
 base64_light.workspace = true
 
 utoipa = { workspace = true, optional = true }
