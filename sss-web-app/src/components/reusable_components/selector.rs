@@ -17,11 +17,12 @@ pub fn ThemeSelector() -> impl IntoView {
                 .cloned(),
         )
         .collect::<Vec<_>>();
+
     view! {
-        <div class="grid grid-flow-col gap-2 items-center self-center border p-1.5 justify-center">
+        <div class="grid grid-flow-col gap-2 items-center border p-1.5 justify-center">
             <div>Themes</div>
             <select
-
+            class="truncate max-w-48 items-center w-full"
                 style=move || format!(
                     "background-color: {}; color: {}",
                     get.read().colors().text,
@@ -66,6 +67,7 @@ pub fn LayoutSelector() -> impl IntoView {
         <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-center">
             <div>Layouts</div>
             <select
+                class="truncate max-w-48 items-center w-full"
                 style=move || format!(
                     "background-color: {}; color: {}",
                     theme.get().colors().text,

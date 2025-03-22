@@ -1,0 +1,24 @@
+[package]
+name = "theme-generator"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+repository.workspace = true
+license.workspace = true
+readme = "Readme.md"
+
+[dependencies]
+proc-macro2 = "1.0.93"
+quote = "1.0.38"
+syn = { version = "2.0.96", features = ["full"] }
+
+[dev-dependencies]
+theme = { path = "../sss-lib/theme" }
+serde = { workspace = true, features = ["derive"] }
+clap = { workspace = true, features = ["derive"] }
+
+[lib]
+proc-macro = true
+
+[features]
+utoipa = []

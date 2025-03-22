@@ -15,7 +15,7 @@ pub fn CardEditor() -> impl IntoView {
             <SettingsBuilder/>
             // card view and selectors
             <div class="flex-col inline-flex gap-4 order-first md:order-last relative">
-                <div class="grid lg:grid-cols-3 gap-4 p-1.5 -pl-1.5 border">
+                <div class="grid 2xl:grid-cols-3 gap-4 p-1.5 -pl-1.5 border">
                     <ThemeSelector />
                     <div class="flex border p-1.5 justify-evenly md:gap-0">
                         <DropButton/>

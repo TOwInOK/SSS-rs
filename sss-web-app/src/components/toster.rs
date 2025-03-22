@@ -5,8 +5,8 @@ use sss_std::themes::Themes;
 use web_sys::js_sys::Date;
 
 use crate::{
-    components::reusable_components::{button::Button, section::Section},
     RW,
+    components::reusable_components::{button::Button, section::Section},
 };
 /// Отображает информационное сообщение с заданным контекстом.
 #[inline]
@@ -140,7 +140,7 @@ fn Toast(
                 <p class="pl-2 font-bold w-full"
                     style=move || format!("background-color: {}; color: {}", context.get().fg(), context.get().bg())
                 >
-                    {context.get().title()}
+                    {move || context.get().title()}
                 </p>
                 <Button
                     alt=|| "Close toast".to_string()
@@ -148,7 +148,7 @@ fn Toast(
                     action=move || {store.update(|s| s.remove(id));}
                 />
             </div>
-            {context.get().inner()}
+            {move || context.get().inner()}
         </div>
     }
 }
