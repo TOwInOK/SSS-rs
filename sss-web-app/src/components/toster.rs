@@ -185,9 +185,9 @@ impl ToastContext {
         let colors = use_context::<RW<Themes>>().unwrap().0.read();
         let colors = colors.colors();
         match self {
-            ToastContext::Info(_) => colors.secondary,
-            ToastContext::Error(_) => colors.secondary,
-            ToastContext::Warn(_) => colors.secondary,
+            ToastContext::Info(_) => colors.background,
+            ToastContext::Error(_) => colors.background,
+            ToastContext::Warn(_) => colors.background,
         }
     }
     /// return colors of toast
@@ -195,9 +195,9 @@ impl ToastContext {
         let colors = use_context::<RW<Themes>>().unwrap().0.read();
         let colors = colors.colors();
         match self {
-            ToastContext::Info(_) => colors.primary,
-            ToastContext::Error(_) => colors.thirdly,
-            ToastContext::Warn(_) => colors.thirdly,
+            ToastContext::Info(_) => colors.text,
+            ToastContext::Error(_) => colors.accent,
+            ToastContext::Warn(_) => colors.accent,
         }
     }
 }

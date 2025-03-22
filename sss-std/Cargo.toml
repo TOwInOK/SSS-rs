@@ -7,9 +7,10 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-render = { path = "../render" }
-sss_core = { path = "../sss-core" }
-layouts-derive = { path = "../../layouts-derive" }
+render = { path = "../sss-lib/render" }
+theme = { path = "../sss-lib/theme" }
+sss_core = { path = "../sss-lib/sss-core" }
+layouts-derive = { path = "../layouts-derive" }
 
 tera = "1.20.0"
 encre-css.workspace = true

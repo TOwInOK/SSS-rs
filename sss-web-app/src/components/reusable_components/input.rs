@@ -14,7 +14,7 @@ pub fn Input<
 ) -> impl IntoView {
     view! {
         <input
-            class="border"
+            class="border indent-2"
             on:input:target=action
             prop:value=prop
             title=alt

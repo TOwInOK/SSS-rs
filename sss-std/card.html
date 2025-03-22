@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full w-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+<style>
+*, ::before, ::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+}
+
+::before, ::after {
+  --en-content: '';
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: Fira Code;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+abbr:where([title]) {
+  text-decoration: underline dotted;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+b, strong {
+  font-weight: bolder;
+}
+
+code, kbd, samp, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 1em;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+button, select {
+  text-transform: none;
+}
+
+button, [type='button'], [type='reset'], [type='submit'] {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
+:-moz-focusring {
+  outline: auto;
+}
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+progress {
+  vertical-align: baseline;
+}
+
+::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+  height: auto;
+}
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+summary {
+  display: list-item;
+}
+
+blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol, ul, menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input::placeholder, textarea::placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+button, [role="button"] {
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: default;
+}
+
+img, svg, video, canvas, audio, iframe, embed, object {
+  display: block;
+  vertical-align: middle;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+*, ::before, ::after {
+  --en-border-spacing-x: 0;
+  --en-border-spacing-y: 0;
+  --en-translate-x: 0;
+  --en-translate-y: 0;
+  --en-rotate: 0;
+  --en-skew-x: 0;
+  --en-skew-y: 0;
+  --en-scale-x: 1;
+  --en-scale-y: 1;
+  --en-pan-x: ;
+  --en-pan-y: ;
+  --en-pinch-zoom: ;
+  --en-scroll-snap-strictness: proximity;
+  --en-ordinal: ;
+  --en-slashed-zero: ;
+  --en-numeric-figure: ;
+  --en-numeric-spacing: ;
+  --en-numeric-fraction: ;
+  --en-ring-inset: ;
+  --en-ring-offset-width: 0px;
+  --en-ring-offset-color: #fff;
+  --en-ring-color: rgb(59 130 246 / 0.5);
+  --en-ring-offset-shadow: 0 0 #0000;
+  --en-ring-shadow: 0 0 #0000;
+  --en-shadow: 0 0 #0000;
+  --en-shadow-colored: 0 0 #0000;
+  --en-blur: ;
+  --en-brightness: ;
+  --en-contrast: ;
+  --en-grayscale: ;
+  --en-hue-rotate: ;
+  --en-invert: ;
+  --en-saturate: ;
+  --en-sepia: ;
+  --en-drop-shadow: ;
+  --en-backdrop-blur: ;
+  --en-backdrop-brightness: ;
+  --en-backdrop-contrast: ;
+  --en-backdrop-grayscale: ;
+  --en-backdrop-hue-rotate: ;
+  --en-backdrop-invert: ;
+  --en-backdrop-opacity: ;
+  --en-backdrop-saturate: ;
+  --en-backdrop-sepia: ;
+}
+
+::-webkit-backdrop {
+  --en-border-spacing-x: 0;
+  --en-border-spacing-y: 0;
+  --en-translate-x: 0;
+  --en-translate-y: 0;
+  --en-rotate: 0;
+  --en-skew-x: 0;
+  --en-skew-y: 0;
+  --en-scale-x: 1;
+  --en-scale-y: 1;
+  --en-pan-x: ;
+  --en-pan-y: ;
+  --en-pinch-zoom: ;
+  --en-scroll-snap-strictness: proximity;
+  --en-ordinal: ;
+  --en-slashed-zero: ;
+  --en-numeric-figure: ;
+  --en-numeric-spacing: ;
+  --en-numeric-fraction: ;
+  --en-ring-inset: ;
+  --en-ring-offset-width: 0px;
+  --en-ring-offset-color: #fff;
+  --en-ring-color: rgb(59 130 246 / 0.5);
+  --en-ring-offset-shadow: 0 0 #0000;
+  --en-ring-shadow: 0 0 #0000;
+  --en-shadow: 0 0 #0000;
+  --en-shadow-colored: 0 0 #0000;
+  --en-blur: ;
+  --en-brightness: ;
+  --en-contrast: ;
+  --en-grayscale: ;
+  --en-hue-rotate: ;
+  --en-invert: ;
+  --en-saturate: ;
+  --en-sepia: ;
+  --en-drop-shadow: ;
+  --en-backdrop-blur: ;
+  --en-backdrop-brightness: ;
+  --en-backdrop-contrast: ;
+  --en-backdrop-grayscale: ;
+  --en-backdrop-hue-rotate: ;
+  --en-backdrop-invert: ;
+  --en-backdrop-opacity: ;
+  --en-backdrop-saturate: ;
+  --en-backdrop-sepia: ;
+}
+
+::backdrop {
+  --en-border-spacing-x: 0;
+  --en-border-spacing-y: 0;
+  --en-translate-x: 0;
+  --en-translate-y: 0;
+  --en-rotate: 0;
+  --en-skew-x: 0;
+  --en-skew-y: 0;
+  --en-scale-x: 1;
+  --en-scale-y: 1;
+  --en-pan-x: ;
+  --en-pan-y: ;
+  --en-pinch-zoom: ;
+  --en-scroll-snap-strictness: proximity;
+  --en-ordinal: ;
+  --en-slashed-zero: ;
+  --en-numeric-figure: ;
+  --en-numeric-spacing: ;
+  --en-numeric-fraction: ;
+  --en-ring-inset: ;
+  --en-ring-offset-width: 0px;
+  --en-ring-offset-color: #fff;
+  --en-ring-color: rgb(59 130 246 / 0.5);
+  --en-ring-offset-shadow: 0 0 #0000;
+  --en-ring-shadow: 0 0 #0000;
+  --en-shadow: 0 0 #0000;
+  --en-shadow-colored: 0 0 #0000;
+  --en-blur: ;
+  --en-brightness: ;
+  --en-contrast: ;
+  --en-grayscale: ;
+  --en-hue-rotate: ;
+  --en-invert: ;
+  --en-saturate: ;
+  --en-sepia: ;
+  --en-drop-shadow: ;
+  --en-backdrop-blur: ;
+  --en-backdrop-brightness: ;
+  --en-backdrop-contrast: ;
+  --en-backdrop-grayscale: ;
+  --en-backdrop-hue-rotate: ;
+  --en-backdrop-invert: ;
+  --en-backdrop-opacity: ;
+  --en-backdrop-saturate: ;
+  --en-backdrop-sepia: ;
+}
+
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.max-h-\[200px\] {
+  max-height: 200px;
+}
+
+.w-\[15px\] {
+  width: 15px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.max-w-md {
+  max-width: 28rem;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-t-2 {
+  border-top-width: 2px;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.border-\[\#c6a0f6\] {
+  border-color: #c6a0f6;
+}
+
+.border-black {
+  --en-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--en-border-opacity));
+}
+
+.bg-\[\#24273a\] {
+  background-color: #24273a;
+}
+
+.bg-black\/20 {
+  background-color: rgb(0 0 0 / 0.2);
+}
+
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-\[\#494d64\] {
+  color: #494d64;
+}
+
+.text-\[\#c6a0f6\] {
+  color: #c6a0f6;
+}
+
+.text-\[\#cad3f5\] {
+  color: #cad3f5;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover\:scale-105:hover {
+  --en-scale-x: 1.05;
+  --en-scale-y: 1.05;
+  transform: translate(var(--en-translate-x), var(--en-translate-y)) rotate(var(--en-rotate)) skewX(var(--en-skew-x)) skewY(var(--en-skew-y)) scaleX(var(--en-scale-x)) scaleY(var(--en-scale-y));
+}
+
+@media (min-width: 768px) {
+  .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:gap-4 {
+    gap: 1rem;
+  }
+}
+
+.group:hover .group-hover\:text-\[\#cad3f5\] {
+  color: #cad3f5;
+}
+
+.group:hover .group-hover\:scale-92 {
+  --en-scale-x: 0.92;
+  --en-scale-y: 0.92;
+  transform: translate(var(--en-translate-x), var(--en-translate-y)) rotate(var(--en-rotate)) skewX(var(--en-skew-x)) skewY(var(--en-skew-y)) scaleX(var(--en-scale-x)) scaleY(var(--en-scale-y));
+}
+
+.group:hover .group-hover\:scale-108 {
+  --en-scale-x: 1.08;
+  --en-scale-y: 1.08;
+  transform: translate(var(--en-translate-x), var(--en-translate-y)) rotate(var(--en-rotate)) skewX(var(--en-skew-x)) skewY(var(--en-skew-y)) scaleX(var(--en-scale-x)) scaleY(var(--en-scale-y));
+}
+
+.group:hover .group-hover\:scale-105 {
+  --en-scale-x: 1.05;
+  --en-scale-y: 1.05;
+  transform: translate(var(--en-translate-x), var(--en-translate-y)) rotate(var(--en-rotate)) skewX(var(--en-skew-x)) skewY(var(--en-skew-y)) scaleX(var(--en-scale-x)) scaleY(var(--en-scale-y));
+}
+
+.group:hover .group-hover\:scale-102 {
+  --en-scale-x: 1.02;
+  --en-scale-y: 1.02;
+  transform: translate(var(--en-translate-x), var(--en-translate-y)) rotate(var(--en-rotate)) skewX(var(--en-skew-x)) skewY(var(--en-skew-y)) scaleX(var(--en-scale-x)) scaleY(var(--en-scale-y));
+}
+</style>
+</head>
+<body class="h-full w-full">
+<div class="h-full w-full bg-[#24273a] flex justify-center items-center p-4 overflow-clip">
+  <div class="max-w-md w-full bg-black/20 rounded-2xl border border-black p-1 overflow-scroll-x">
+    <div class="p-4 rounded-lg border-t-2 border-b-2 border-[#c6a0f6] flex flex-col gap-4">
+
+      
+      <div class="items-center text-[#cad3f5] grid grid-cols-2">
+        <div class="text-lg md:text-xl font-bold flex justify-evenly">
+          Some(Дмитрий)
+        </div>
+        <div class="flex items-center justify-evenly w-full text-2xl md:text-3xl">
+          <span>[</span>
+          <div class="flex flex-col items-center text-sm md:text-md truncate">
+              <span>TOwInOK</span>
+              <span class="text-[#c6a0f6]/80">ту́винок</span>
+          </div>
+          <span>]</span>
+        </div>
+      </div>
+
+      
+      <div class="grid grid-cols-2 gap-2 md:gap-4">
+        <div class="grid gap-2">
+          
+          <div class="text-[#cad3f5] flex items-center justify-between text-xl md:text-2xl gap-4">
+              <span class="w-[15px]">[</span>
+              <span class="text-xs md:text-sm text-center flex-1">Backend Development</span>
+              <span class="w-[15px]">]</span>
+          </div>
+          
+          <div class="text-[#cad3f5] flex items-center justify-between text-xl md:text-2xl gap-4">
+              <span class="w-[15px]">[</span>
+              <span class="text-xs md:text-sm text-center flex-1">Full-Stack Development</span>
+              <span class="w-[15px]">]</span>
+          </div>
+          
+          <div class="text-[#cad3f5] flex items-center justify-between text-xl md:text-2xl gap-4">
+              <span class="w-[15px]">[</span>
+              <span class="text-xs md:text-sm text-center flex-1">Systems Programming</span>
+              <span class="w-[15px]">]</span>
+          </div>
+          
+        </div>
+        <div class="text-[#c6a0f6] text-right text-sm md:text-base text-balance max-h-[200px] truncate">
+          Учу находить пиво в холодильнике
+        </div>
+      </div>
+
+
+      
+      <div class="flex justify-evenly w-full text-[#cad3f5]">
+        
+        <a href="https:&#x2F;&#x2F;github.com&#x2F;your_nickname" class="flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out group">
+            <span class="group-hover:scale-92 transition-transform duration-300">[</span>
+            <div class="h-[48px] flex-col justify-evenly items-center flex text-[#c6a0f6]">
+                <div class="group-hover:scale-108 transition-transform duration-300">
+                    <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+                </div>
+                <div class="flex text-[#cad3f5] text-xs md:text-sm">
+                  Some
+                </div>
+            </div>
+            <span class="group-hover:scale-92 transition-transform duration-300">]</span>
+          </a>
+        
+        <a href="https:&#x2F;&#x2F;github.com&#x2F;your_nickname" class="flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out group">
+            <span class="group-hover:scale-92 transition-transform duration-300">[</span>
+            <div class="h-[48px] flex-col justify-evenly items-center flex text-[#c6a0f6]">
+                <div class="group-hover:scale-108 transition-transform duration-300">
+                    <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+                </div>
+                <div class="flex text-[#cad3f5] text-xs md:text-sm">
+                  Cool
+                </div>
+            </div>
+            <span class="group-hover:scale-92 transition-transform duration-300">]</span>
+          </a>
+        
+        <a href="https:&#x2F;&#x2F;github.com&#x2F;your_nickname" class="flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out group">
+            <span class="group-hover:scale-92 transition-transform duration-300">[</span>
+            <div class="h-[48px] flex-col justify-evenly items-center flex text-[#c6a0f6]">
+                <div class="group-hover:scale-108 transition-transform duration-300">
+                    <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+                </div>
+                <div class="flex text-[#cad3f5] text-xs md:text-sm">
+                  Project
+                </div>
+            </div>
+            <span class="group-hover:scale-92 transition-transform duration-300">]</span>
+          </a>
+        
+      </div>
+      
+      
+      <div class="flex justify-evenly w-full text-[#cad3f5] gap-4">
+        
+        <a href="https:&#x2F;&#x2F;github.com&#x2F;TOwInOK" class="group flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out">
+          <span class="group-hover:scale-92 transition-transform duration-300">[</span>
+          <div class="h-[48px] flex-col justify-evenly items-center flex text-[#c6a0f6]">
+              <div class="group-hover:scale-108 transition-transform duration-300">
+                  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+              </div>
+              <div class="flex text-[#cad3f5] text-xs md:text-sm">
+                github
+              </div>
+          </div>
+          <span class="group-hover:scale-92 transition-transform duration-300">]</span>
+        </a>
+        
+        <a href="https:&#x2F;&#x2F;t.me&#x2F;TOwInOK" class="group flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out">
+          <span class="group-hover:scale-92 transition-transform duration-300">[</span>
+          <div class="h-[48px] flex-col justify-evenly items-center flex text-[#c6a0f6]">
+              <div class="group-hover:scale-108 transition-transform duration-300">
+                  <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram"
+>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" />
+</svg>
+              </div>
+              <div class="flex text-[#cad3f5] text-xs md:text-sm">
+                telegram
+              </div>
+          </div>
+          <span class="group-hover:scale-92 transition-transform duration-300">]</span>
+        </a>
+        
+      </div>
+
+      
+      <div class="flex justify-evenly gap-4">
+          
+            
+              
+            
+          <a href="https:&#x2F;&#x2F;crates.io&#x2F;users&#x2F;TOwInOK" class="text-center opacity-100 transition duration-300 ease-in-out group">
+            <div class="text-xl md:text-2xl text-[#cad3f5] group-hover:scale-102 transition-transform duration-300">
+              Rust
+            </div>
+            <div class="flex justify-center text-xs md:text-sm text-[#c6a0f6]">
+              2018 -> today
+            </div>
+            <div class="group-hover:scale-105 group-hover:text-[#cad3f5] transition-all duration-300 flex justify-center text-xs md:text-sm text-[#494d64] hover:scale-105 transition duration-300 ease-in-out">
+               github
+            </div>
+          </a>
+          
+            
+              
+            
+          <a href="#" class="text-center opacity-80 transition duration-300 ease-in-out group">
+            <div class="text-xl md:text-2xl text-[#cad3f5] group-hover:scale-102 transition-transform duration-300">
+              JS&#x2F;TS
+            </div>
+            <div class="flex justify-center text-xs md:text-sm text-[#c6a0f6]">
+              2019 -> today
+            </div>
+            <div class="group-hover:scale-105 group-hover:text-[#cad3f5] transition-all duration-300 flex justify-center text-xs md:text-sm text-[#494d64] hover:scale-105 transition duration-300 ease-in-out">
+               github
+            </div>
+          </a>
+          
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

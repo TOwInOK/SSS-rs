@@ -29,7 +29,6 @@ pub fn CardEditor() -> impl IntoView {
                 <CardViewer />
                 <ToastStore/>
             </div>
-
         </div>
 
     }

@@ -401,16 +401,16 @@ pub fn SkillsSection() -> impl IntoView {
                                     if !settings.read().skills[index].main {
                                         format!(
                                             "background-color: {}; color: {}; border-color: {};",
-                                            themes.get().colors().secondary,
-                                            themes.get().colors().primary,
-                                            themes.get().colors().primary
+                                            themes.get().colors().background,
+                                            themes.get().colors().text,
+                                            themes.get().colors().text
                                         )
                                     } else {
                                         format!(
                                             "background-color: {}; color: {}; border-color: {};",
-                                            themes.get().colors().primary,
-                                            themes.get().colors().secondary,
-                                            themes.get().colors().secondary
+                                            themes.get().colors().text,
+                                            themes.get().colors().background,
+                                            themes.get().colors().background
                                         )
                                     }
                                 }

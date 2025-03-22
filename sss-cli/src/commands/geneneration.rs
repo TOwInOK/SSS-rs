@@ -3,14 +3,14 @@ use std::path::Path;
 use tracing::{info, instrument};
 
 use crate::{
+    HTML, PDF, PNG,
     cli::{args::Args, subcommands::GenType},
     settings::services::Services,
     tools::{refresh_html, refresh_pdf, refresh_png, refresh_settings},
-    HTML, PDF, PNG,
 };
 
 #[instrument(skip_all)]
-pub async fn command_gen(
+pub async fn command_generation(
     output_type: &GenType,
     output_name: &str,
     args: &Args,

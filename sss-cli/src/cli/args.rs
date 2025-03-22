@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use clap::{command, Parser};
+use clap::{Parser, command};
 use sss_std::{prelude::Layouts, themes::Themes};
 use tracing::Level;
 

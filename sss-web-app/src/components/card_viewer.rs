@@ -1,7 +1,8 @@
 use leptos::{html::Div, prelude::*};
-use render::{layout::Layout, theme::Shade};
+use render::layout::Layout;
 use sss_core::Settings;
-use sss_std::{prelude::Layouts, themes::Themes, tools::gen_css};
+use sss_std::{prelude::*, tools::gen_css};
+use theme::Shade;
 
 use crate::RW;
 
@@ -19,7 +20,7 @@ pub fn CardViewer() -> impl IntoView {
         let layout = layouts.get();
 
         layout
-            .to_layout(&settings.read(), theme)
+            .finalize(&settings.read(), theme)
             .render()
             .map(|card| {
                 let css = gen_css(&theme.get_encre_css_config(), &card);
@@ -40,7 +41,7 @@ pub fn CardViewer() -> impl IntoView {
         <div class="relative h-full w-full p-4 content-center justify-center items-center grid place-items-center">
             // Background grid
             <div style=move || {
-                let color = themes.get().colors().primary;
+                let color = themes.get().colors().text;
                 format!(
                     r#"position: absolute;
                     top: 0;

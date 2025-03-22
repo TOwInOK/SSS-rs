@@ -1,9 +1,9 @@
-<div class="h-full w-full bg-[{{ secondary }}] flex justify-center items-center p-4 overflow-clip">
+<div class="h-full w-full bg-[{{ background }}] flex justify-center items-center p-4 overflow-clip">
   <div class="max-w-md w-full bg-black/20 rounded-2xl border border-black p-1 overflow-scroll-x">
-    <div class="p-4 rounded-lg border-t-2 border-b-2 border-[{{ thirdly }}] flex flex-col gap-4">
+    <div class="p-4 rounded-lg border-t-2 border-b-2 border-[{{ accent }}] flex flex-col gap-4">
 
       {# Names section #}
-      <div class="items-center text-[{{ primary }}] grid grid-cols-2">
+      <div class="items-center text-[{{ text }}] grid grid-cols-2">
         <div class="text-lg md:text-xl font-bold flex justify-evenly">
           Some({{ name }})
         </div>
@@ -11,7 +11,7 @@
           <span>[</span>
           <div class="flex flex-col items-center text-sm md:text-md truncate">
               <span>{{ current_nickname.word }}</span>
-              <span class="text-[{{ thirdly }}]/80">{{ current_nickname.pronounce }}</span>
+              <span class="text-[{{ accent }}]/80">{{ current_nickname.pronounce }}</span>
           </div>
           <span>]</span>
         </div>
@@ -21,28 +21,29 @@
       <div class="grid grid-cols-2 gap-2 md:gap-4">
         <div class="grid gap-2">
           {% for spec in specifications %}
-          <div class="text-[{{ primary }}] flex items-center justify-between text-xl md:text-2xl gap-4">
+          <div class="text-[{{ text }}] flex items-center justify-between text-xl md:text-2xl gap-4">
               <span class="w-[15px]">[</span>
               <span class="text-xs md:text-sm text-center flex-1">{{ spec }}</span>
               <span class="w-[15px]">]</span>
           </div>
           {% endfor %}
         </div>
-        <div class="text-[{{ thirdly }}] text-right text-sm md:text-base text-balance max-h-[200px] truncate">
+        <div class="text-[{{ accent }}] text-right text-sm md:text-base text-balance max-h-[200px] truncate">
           {{ about }}
         </div>
       </div>
 
+
       {# Section with repos #}
-      <div class="flex justify-evenly w-full text-[{{ primary }}]">
+      <div class="flex justify-evenly w-full text-[{{ text }}]">
         {% for repo in repos %}
         <a href="{{ repo.link.link }}" class="flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out group">
             <span class="group-hover:scale-92 transition-transform duration-300">[</span>
-            <div class="h-[48px] flex-col justify-evenly items-center flex text-[{{ thirdly }}]">
+            <div class="h-[48px] flex-col justify-evenly items-center flex text-[{{ accent }}]">
                 <div class="group-hover:scale-108 transition-transform duration-300">
                     {{ get_svg(icon=repo.link.icon) | safe }}
                 </div>
-                <div class="flex text-[{{ primary }}] text-xs md:text-sm">
+                <div class="flex text-[{{ text }}] text-xs md:text-sm">
                   {{ repo.name }}
                 </div>
             </div>
@@ -52,15 +53,15 @@
       </div>
       {# hover:scale-200 too fun#}
       {# Social section #}
-      <div class="flex justify-evenly w-full text-[{{ primary }}] gap-4">
+      <div class="flex justify-evenly w-full text-[{{ text }}] gap-4">
         {% for social in socials %}
         <a href="{{ social.link }}" class="group flex items-center justify-evenly w-full text-xl md:text-2xl transition duration-300 ease-in-out">
           <span class="group-hover:scale-92 transition-transform duration-300">[</span>
-          <div class="h-[48px] flex-col justify-evenly items-center flex text-[{{ thirdly }}]">
+          <div class="h-[48px] flex-col justify-evenly items-center flex text-[{{ accent }}]">
               <div class="group-hover:scale-108 transition-transform duration-300">
                   {{ get_svg(icon=social.icon) | safe }}
               </div>
-              <div class="flex text-[{{ primary }}] text-xs md:text-sm">
+              <div class="flex text-[{{ text }}] text-xs md:text-sm">
                 {{ get_icon_name(icon=social.icon) }}
               </div>
           </div>
@@ -78,13 +79,13 @@
               {% set opacity = 80 %}
             {% endif %}
           <a href="{{ skill.repo_link.link }}" class="text-center opacity-{{ opacity }} transition duration-300 ease-in-out group">
-            <div class="text-xl md:text-2xl text-[{{ primary }}] group-hover:scale-102 transition-transform duration-300">
+            <div class="text-xl md:text-2xl text-[{{ text }}] group-hover:scale-102 transition-transform duration-300">
               {{ skill.skill }}
             </div>
-            <div class="flex justify-center text-xs md:text-sm text-[{{ thirdly }}]">
+            <div class="flex justify-center text-xs md:text-sm text-[{{ accent }}]">
               {{ skill.since.start }} -> {% if skill.since.end != 0 %}{{ skill.since.end }}{% else %}today{% endif %}
             </div>
-            <div class="group-hover:scale-105 group-hover:text-[{{ primary }}] transition-all duration-300 flex justify-center text-xs md:text-sm text-[{{ border }}] hover:scale-105 transition duration-300 ease-in-out">
+            <div class="group-hover:scale-105 group-hover:text-[{{ text }}] transition-all duration-300 flex justify-center text-xs md:text-sm text-[{{ border }}] hover:scale-105 transition duration-300 ease-in-out">
                {{ get_icon_name(icon=skill.repo_link.icon ) }}
             </div>
           </a>

@@ -15,7 +15,7 @@ pub fn TextArea<
 ) -> impl IntoView {
     view! {
         <textarea
-            class="border"
+            class="border indent-2"
             on:input:target=move |ev| { action(ev) }
             prop:value=prop
             title=alt

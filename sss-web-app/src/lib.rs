@@ -84,7 +84,7 @@ pub fn App() -> impl IntoView {
 
             <Router>
                 <div
-                    style=move || {format!("background-color: {}; color: {}", themes.0.read().colors().secondary, themes.0.read().colors().primary)}
+                    style=move || {format!("background-color: {}; color: {}", themes.0.read().colors().background, themes.0.read().colors().text)}
                     class="grid min-h-dvh overflow-y-scroll overflow-hidden transition duration-300 ease-in transition-discrete transition-all"
                 >
                     <Routes fallback=|| view! { NotFound }>

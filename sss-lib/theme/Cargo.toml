@@ -1,0 +1,10 @@
+[package]
+name = "theme"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+encre-css.workspace = true

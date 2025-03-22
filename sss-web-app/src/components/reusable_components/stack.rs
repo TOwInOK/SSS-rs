@@ -6,7 +6,7 @@ pub fn Stack(
     children: Children,
 ) -> impl IntoView {
     view! {
-        <div class="grid gap-2 p-1.5 border">
+        <div class="grid gap-2 p-4 border">
             <p class="pl-2 font-bold">{title}</p>
             {children()}
         </div>

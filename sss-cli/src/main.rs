@@ -16,7 +16,7 @@ use cli::{
     args::Args,
     subcommands::{self, Commands},
 };
-use commands::{gen::command_gen, new::command_new, run::command_run};
+use commands::{geneneration::command_generation, new::command_new, run::command_run};
 use settings::SSSCliSettings;
 use tokio::sync::RwLock;
 use tracing::Level;
@@ -91,6 +91,6 @@ async fn main() -> anyhow::Result<()> {
         Commands::Gen {
             output_type,
             output_name,
-        } => command_gen(output_type, output_name, &args).await,
+        } => command_generation(output_type, output_name, &args).await,
     }
 }

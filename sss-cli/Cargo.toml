@@ -8,10 +8,11 @@ license.workspace = true
 
 [dependencies]
 # Local deps
-sss_core = { path="../sss-lib/sss-core", features = ["full"]}
-sss_std = { path="../sss-lib/sss-std", features = ["full"] }
-render = { path="../sss-lib/render" }
-parser = {path = "../sss-lib/parser"}
+sss_core = { path = "../sss-lib/sss-core", features = ["full"] }
+sss_std = { path = "../sss-std", features = ["full"] }
+render = { path = "../sss-lib/render" }
+theme = { path = "../sss-lib/theme" }
+parser = { path = "../sss-lib/parser" }
 # Workspace deps
 ## errors
 thiserror.workspace = true
@@ -26,13 +27,13 @@ serde.workspace = true
 serde_json.workspace = true
 toml.workspace = true
 ## cli deps
-clap = { workspace = true, features = [ "derive"] }
+clap = { workspace = true, features = ["derive"] }
 # Local deps
 ## file checker
 notify = "8.0.0"
 ## web server
 axum = "0.8.1"
-utoipa = {workspace = true}
+utoipa = { workspace = true }
 utoipa-scalar = { version = "0.3.0", features = ["axum"] }
 ## base64
 base64_light.workspace = true

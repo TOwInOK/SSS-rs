@@ -1,20 +1,19 @@
 use leptos::prelude::*;
-use sss_std::themes::Themes;
+use sss_std::prelude::*;
 
 use crate::{
+    RW,
     components::toster::{ToastContext, ToastStore},
     tools::gen_example_config,
-    RW,
 };
 
 use leptos::task::spawn_local;
 use leptos::wasm_bindgen::JsValue;
 use leptos::web_sys;
-use render::layout::Finalise;
-use sss_core::{types::provider::Tabler, Settings};
+use sss_core::{Settings, types::provider::Tabler};
 use sss_std::prelude::Layouts;
 use wasm_bindgen_futures::JsFuture;
-use web_sys::{js_sys, Blob, Url};
+use web_sys::{Blob, Url, js_sys};
 
 use crate::tools::SSSsetings;
 
@@ -27,9 +26,6 @@ pub fn Button<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
 ) -> impl IntoView {
     let themes = use_context::<RW<Themes>>().unwrap().0;
     let css = "border font-bold".to_string();
-    // if label.as_borrowed().to_html() == *"+" {
-    //     css.push_str(" p-4");
-    // }
     view! {
         <button
             title=alt
@@ -39,8 +35,8 @@ pub fn Button<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
             class=css
             style=move || format!(
                 "background-color: {}; color: {}",
-                themes.get().colors().primary,
-                themes.get().colors().secondary
+                themes.get().colors().text,
+                themes.get().colors().background
             )
         >{label}</button>
     }
@@ -64,8 +60,8 @@ pub fn AddButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
             class=css
             style=move || format!(
                 "background-color: {}; color: {}",
-                themes.get().colors().primary,
-                themes.get().colors().secondary
+                themes.get().colors().text,
+                themes.get().colors().background
             )
         >{label}</button>
     }
@@ -213,7 +209,7 @@ pub fn DownloadButton() -> impl IntoView {
     let download_handler = move || {
         let t = themes.get().into();
         let s = settings.get();
-        match layouts.get().to_layout(&s, t).finalize() {
+        match layouts.get().finalize(&s, t).render() {
             Ok(html_content) => {
                 let window = web_sys::window().expect("no global window exists");
 

@@ -9,17 +9,17 @@ pub fn Section(
 ) -> impl IntoView {
     let themes = use_context::<RW<Themes>>().unwrap().0;
     view! {
-        <div class="grid gap-4 p-1.5 border"
+        <div class="grid gap-4 p-4 border"
             style=move || format!(
                 "background-color: {};",
-                themes.get().colors().secondary
+                themes.get().colors().background
             )
         >
             <p class="pl-2 font-bold"
                 style=move || format!(
                     "background-color: {}; color: {}",
-                    themes.get().colors().primary,
-                    themes.get().colors().secondary
+                    themes.get().colors().text,
+                    themes.get().colors().background
                 )
             >
                 {title}

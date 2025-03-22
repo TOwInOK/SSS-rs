@@ -4,7 +4,7 @@ use serde::Serialize;
 /// Represents hexadecimal color values as static string references.
 /// These are used to define theme colors throughout the application.
 /// The values should be valid hex color codes like "#FF0000".
-type Color = &'static str;
+pub type Color = &'static str;
 
 /// Defines the overall theme configuration by combining colors, padding values,
 /// and gap settings into a single coherent theme structure.
@@ -22,11 +22,11 @@ pub struct Theme {
 #[derive(Default, Serialize, Debug)]
 pub struct Colors {
     /// Primary theme [Color] used for main (like text) UI elements
-    pub primary: Color,
+    pub text: Color,
     /// Secondary theme [Color] for background elements
-    pub secondary: Color,
+    pub background: Color,
     /// Tertiary theme [Color] for additional accent elements
-    pub thirdly: Color,
+    pub accent: Color,
     /// [Color] used for borders, texts and separators
     pub border: Color,
 }

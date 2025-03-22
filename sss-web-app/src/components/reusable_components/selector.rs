@@ -24,8 +24,8 @@ pub fn ThemeSelector() -> impl IntoView {
 
                 style=move || format!(
                     "background-color: {}; color: {}",
-                    get.read().colors().primary,
-                    get.read().colors().secondary
+                    get.read().colors().text,
+                    get.read().colors().background
                 )
                 on:change=move |ev| {
                     if let Ok(value) = event_target_value(&ev).parse() {
@@ -68,8 +68,8 @@ pub fn LayoutSelector() -> impl IntoView {
             <select
                 style=move || format!(
                     "background-color: {}; color: {}",
-                    theme.get().colors().primary,
-                    theme.get().colors().secondary
+                    theme.get().colors().text,
+                    theme.get().colors().background
                 )
                 on:change=move |ev| {
                     if let Ok(value) = event_target_value(&ev).parse() {
@@ -118,8 +118,8 @@ where
                         <option value=category.to_string()
                             style=move || format!(
                                 "background-color: {}; color: {}",
-                                theme.get().colors().primary,
-                                theme.get().colors().secondary
+                                theme.get().colors().text,
+                                theme.get().colors().background
                             )
                         >
                             {category.to_string()}

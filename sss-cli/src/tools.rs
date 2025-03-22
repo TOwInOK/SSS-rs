@@ -1,7 +1,7 @@
 use std::ops::Deref;
 
-use render::layout::Finalise;
 use sss_core::{
+    Settings,
     types::{
         link::Link,
         nickname::Nickname,
@@ -10,18 +10,16 @@ use sss_core::{
         skill::{Project, Skill},
         user::User,
     },
-    Settings,
 };
 use sss_std::{
     converter::{pdf::html_to_pdf, png::html_to_image},
-    prelude::Layouts,
-    themes::Themes,
+    prelude::*,
 };
 use tracing::{debug, error, info, instrument};
 
 use crate::{
-    settings::{services::Services, SSSCliSettings},
     HTML, PDF, PNG, SETTINGS,
+    settings::{SSSCliSettings, services::Services},
 };
 
 pub type Result<T = ()> =
@@ -108,8 +106,9 @@ pub async fn refresh_html() -> Result {
         let settings = SETTINGS.read().await;
         let layout = settings
             .layouts
-            .to_layout(&settings.sss_user_settings, (&settings.themes).into());
-        *HTML.write().await = layout.finalize()?;
+            .finalize(&settings.sss_user_settings, (&settings.themes).into())
+            .render()?;
+        *HTML.write().await = layout;
     }
     info!("Done HTML");
     Ok(())
