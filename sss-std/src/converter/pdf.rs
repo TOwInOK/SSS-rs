@@ -1,7 +1,7 @@
 use std::{error::Error, time::Duration};
 
 use base64_light::base64_encode;
-use headless_chrome::{types::PrintToPdfOptions, Browser, LaunchOptionsBuilder};
+use headless_chrome::{Browser, LaunchOptionsBuilder, types::PrintToPdfOptions};
 
 pub async fn html_to_pdf(
     html_content: &str,
@@ -42,22 +42,12 @@ pub async fn html_to_pdf(
     tab.wait_for_xpath("//div[1]/div[1]")?;
 
     let pdf_options = print_options.unwrap_or(PrintToPdfOptions {
-        landscape: Some(false),
-        display_header_footer: Some(false),
         print_background: Some(true),
         scale: Some(1.0),
         paper_width: Some(8.27),  // A4
         paper_height: Some(11.7), // A4
-        margin_top: Some(0.0),
-        margin_bottom: Some(0.0),
-        margin_left: Some(0.0),
-        margin_right: Some(0.0),
-        page_ranges: None,
-        ignore_invalid_page_ranges: Some(false),
-        header_template: None,
-        footer_template: None,
         prefer_css_page_size: Some(true),
-        transfer_mode: None,
+        ..Default::default()
     });
 
     let pdf_data = tab.print_to_pdf(Some(pdf_options))?;
