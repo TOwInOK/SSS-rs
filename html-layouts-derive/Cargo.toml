@@ -1,5 +1,5 @@
 [package]
-name = "layouts-derive"
+name = "html-layouts-derive"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true

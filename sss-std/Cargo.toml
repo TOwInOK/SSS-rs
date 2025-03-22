@@ -10,7 +10,7 @@ license.workspace = true
 render = { path = "../sss-lib/render" }
 theme = { path = "../sss-lib/theme" }
 sss_core = { path = "../sss-lib/sss-core" }
-layouts-derive = { path = "../layouts-derive" }
+html-layouts-derive = { path = "../html-layouts-derive" }
 
 tera = "1.20.0"
 encre-css.workspace = true

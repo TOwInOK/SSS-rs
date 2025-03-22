@@ -6,7 +6,7 @@ members = [
     "sss-lib/sss-core",
     "sss-std",
     "sss-cli",
-    "layouts-derive",
+    "html-layouts-derive",
     "sss-web-app",
     "icon-derive",
 ]
