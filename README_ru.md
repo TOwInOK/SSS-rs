@@ -20,7 +20,7 @@ SSS-rs (Skill, Slick, Style) - это библиотека и инструмен
      - GrooveBox
      - Dracula
 
-3. **Макеты** (`render`, trait `Layout` + `Finalize`)
+3. **Макеты** (`render`, trait `Layout`)
    - Система шаблонов на основе Tera
    - Поддержка HTML и [TailwindCSS*](https://crates.io/crates/encre-css)
    - Адаптивный дизайн
@@ -29,14 +29,14 @@ SSS-rs (Skill, Slick, Style) - это библиотека и инструмен
 
 ```rust
 use sss_core::Settings;
-use sss_std::prelude::*;
+use sss_std::prelude::{Themes, HtmlLayouts};
 
 // Создание конфигурации
 let settings = Settings::default();
 
 // Выбор темы и макета
 let theme = Themes::Umbrella;
-let layout = Layouts::Umbrella;
+let layout = HtmlLayouts::Umbrella;
 
 // Генерация HTML
 let html = layout.finalize(&settings, &theme.into())

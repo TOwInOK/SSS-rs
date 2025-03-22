@@ -18,7 +18,7 @@ SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish deve
      - GrooveBox
      - Dracula
 
-3. **Layouts** (`render`, trait `Layout` + `Finalize`)
+3. **Layouts** (`render`, trait `Layout`)
    - Tera-based templating system
    - HTML and [TailwindCSS*](https://crates.io/crates/encre-css) support
    - Responsive design
@@ -27,8 +27,7 @@ SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish deve
 
 ```rust
 use sss_core::Settings;
-use sss_std::themes::Themes;
-use sss_std::layouts::HtmlLayouts;
+use sss_std::prelude::{Themes, HtmlLayouts};
 
 // Create configuration
 let settings = Settings::default();
