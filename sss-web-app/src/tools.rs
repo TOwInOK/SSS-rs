@@ -2,11 +2,12 @@ use base64_light::{base64_decode_str, base64_encode};
 use leptos::prelude::{Get, ReadSignal, Set, WriteSignal};
 use serde::{Deserialize, Serialize};
 use sss_core::Settings;
-use sss_std::{prelude::Layouts, themes::Themes};
+use sss_std::prelude::{Layouts, Themes};
 
 #[inline]
 pub fn gen_example_config() -> Settings {
     use sss_core::{
+        Settings,
         types::{
             link::Link,
             nickname::Nickname,
@@ -15,7 +16,6 @@ pub fn gen_example_config() -> Settings {
             skill::{Project, Skill},
             user::User,
         },
-        Settings,
     };
     Settings {
         user: User {

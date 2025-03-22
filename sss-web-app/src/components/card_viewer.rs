@@ -2,7 +2,6 @@ use leptos::{html::Div, prelude::*};
 use render::layout::Layout;
 use sss_core::Settings;
 use sss_std::{prelude::*, tools::gen_css};
-use theme::Shade;
 
 use crate::RW;
 

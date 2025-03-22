@@ -3,7 +3,7 @@ use anyhow::anyhow;
 use serde::{Deserialize, Serialize};
 use services::Services;
 use sss_core::Settings;
-use sss_std::{prelude::Layouts, themes::Themes};
+use sss_std::prelude::{Layouts, Themes};
 
 pub mod services;
 

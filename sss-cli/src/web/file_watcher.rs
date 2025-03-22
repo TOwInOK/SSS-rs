@@ -1,5 +1,5 @@
-use notify::{recommended_watcher, Event, RecursiveMode, Watcher};
-use sss_std::{prelude::Layouts, themes::Themes};
+use notify::{Event, RecursiveMode, Watcher, recommended_watcher};
+use sss_std::prelude::{Layouts, Themes};
 use std::path::Path;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, trace};

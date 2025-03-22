@@ -6,7 +6,7 @@ use leptos_router::{components::*, path};
 use leptos_use::storage::use_local_storage;
 use pages::home::HomePage;
 use sss_core::Settings;
-use sss_std::{prelude::Layouts, themes::Themes};
+use sss_std::prelude::{Layouts, Themes};
 use tools::gen_example_config;
 
 // Modules
