@@ -108,7 +108,7 @@ fn impl_generate_layouts(
                         });
 
                         to_layout_matches.push(quote! {
-                            Layouts::#variant_name => {
+                            HtmlLayouts::#variant_name => {
                                 HtmlTeraRender::new(
                                     settings,
                                     theme,
@@ -118,7 +118,7 @@ fn impl_generate_layouts(
                         });
 
                         display_matches.push(quote! {
-                            Layouts::#variant_name => write!(f, #name_str)
+                            HtmlLayouts::#variant_name => write!(f, #name_str)
                         });
 
                         from_str_matches.push(quote! {
@@ -141,18 +141,18 @@ fn impl_generate_layouts(
 
         #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
         #[derive(Debug, Deserialize, Serialize, Clone, clap::ValueEnum, PartialEq)]
-        pub enum Layouts {
+        pub enum HtmlLayouts {
             #(#variants),*
         }
 
 
-        impl Default for Layouts {
+        impl Default for HtmlLayouts {
             fn default() -> Self {
-                Layouts::UMBRELLA
+                HtmlLayouts::UMBRELLA
             }
         }
 
-        impl Layouts {
+        impl HtmlLayouts {
             pub fn render<'a>(
                 &self,
                 settings: &'a Settings,
@@ -166,14 +166,14 @@ fn impl_generate_layouts(
                 (self.render(settings, theme)).finalize(#default_template)
             }
 
-            pub fn all_layouts() -> Vec<Layouts> {
+            pub fn all_layouts() -> Vec<HtmlLayouts> {
                 vec![
-                    #(Layouts::#variants),*
+                    #(HtmlLayouts::#variants),*
                 ]
             }
         }
 
-        impl fmt::Display for Layouts {
+        impl fmt::Display for HtmlLayouts {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 match self {
                     #(#display_matches),*
@@ -181,10 +181,10 @@ fn impl_generate_layouts(
             }
         }
 
-        impl std::str::FromStr for Layouts {
+        impl std::str::FromStr for HtmlLayouts {
             type Err = String;
 
-            fn from_str(s: &str) -> std::result::Result<Layouts, String> {
+            fn from_str(s: &str) -> std::result::Result<HtmlLayouts, String> {
                 match s.to_lowercase().as_str() {
                     #(#from_str_matches)*
                     _ => Err(format!("'{}' is not a valid Layout", s))

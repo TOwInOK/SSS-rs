@@ -29,8 +29,7 @@ SSS-rs (Skill, Slick, Style) - это библиотека и инструмен
 
 ```rust
 use sss_core::Settings;
-use sss_std::themes::Themes;
-use sss_std::layouts::Layouts;
+use sss_std::prelude::*;
 
 // Создание конфигурации
 let settings = Settings::default();
@@ -40,8 +39,8 @@ let theme = Themes::Umbrella;
 let layout = Layouts::Umbrella;
 
 // Генерация HTML
-let html = layout.to_layout(&settings, &theme.into())
-    .finalize()
+let html = layout.finalize(&settings, &theme.into())
+    .render()
     .unwrap();
 ```
 

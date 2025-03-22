@@ -6,7 +6,7 @@ use leptos_router::{components::*, path};
 use leptos_use::storage::use_local_storage;
 use pages::home::HomePage;
 use sss_core::Settings;
-use sss_std::prelude::{Layouts, Themes};
+use sss_std::prelude::{HtmlLayouts, Themes};
 use tools::gen_example_config;
 
 // Modules
@@ -28,7 +28,7 @@ pub fn App() -> impl IntoView {
         use_local_storage::<Settings, JsonSerdeCodec>("settings");
     let (themes_store, themes_set_store, _) = use_local_storage::<Themes, JsonSerdeCodec>("themes");
     let (layouts_store, layouts_set_store, _) =
-        use_local_storage::<Layouts, JsonSerdeCodec>("layouts");
+        use_local_storage::<HtmlLayouts, JsonSerdeCodec>("layouts");
 
     let settings = signal({
         if is_local_storage_settings_exist() {

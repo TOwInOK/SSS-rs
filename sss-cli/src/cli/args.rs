@@ -1,7 +1,7 @@
 use std::fmt::Display;
 
 use clap::{Parser, command};
-use sss_std::{prelude::Layouts, themes::Themes};
+use sss_std::{prelude::HtmlLayouts, themes::Themes};
 use tracing::Level;
 
 use crate::subcommands::Commands;
@@ -32,7 +32,7 @@ pub struct Args {
 
     /// Layout choose
     #[arg(short, long)]
-    pub layout: Option<Layouts>,
+    pub layout: Option<HtmlLayouts>,
 
     /// Log level
     #[arg(long, default_value_t)]

@@ -11,7 +11,7 @@ use leptos::task::spawn_local;
 use leptos::wasm_bindgen::JsValue;
 use leptos::web_sys;
 use sss_core::{Settings, types::provider::Tabler};
-use sss_std::prelude::Layouts;
+use sss_std::prelude::HtmlLayouts;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::{Blob, Url, js_sys};
 
@@ -111,7 +111,7 @@ pub fn RestoreButton() -> impl IntoView {
 pub fn SaveButton() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
     let themes = use_context::<RW<Themes>>().unwrap().0;
-    let layouts = use_context::<RW<Layouts>>().unwrap().0;
+    let layouts = use_context::<RW<HtmlLayouts>>().unwrap().0;
     let store = use_context::<RW<ToastStore>>()
         .expect("ToastStore should be provided")
         .1;
@@ -152,7 +152,7 @@ pub fn SaveButton() -> impl IntoView {
 pub fn LoadButton() -> impl IntoView {
     let set_settings = use_context::<RW<Settings>>().unwrap().1;
     let set_themes = use_context::<RW<Themes>>().unwrap().1;
-    let set_layouts = use_context::<RW<Layouts>>().unwrap().1;
+    let set_layouts = use_context::<RW<HtmlLayouts>>().unwrap().1;
     let store = use_context::<RW<ToastStore>>()
         .expect("ToastStore should be provided")
         .1;
@@ -202,7 +202,7 @@ pub fn LoadButton() -> impl IntoView {
 pub fn DownloadButton() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
     let themes = use_context::<RW<Themes>>().unwrap().0;
-    let layouts = use_context::<RW<Layouts>>().unwrap().0;
+    let layouts = use_context::<RW<HtmlLayouts>>().unwrap().0;
     let store = use_context::<RW<ToastStore>>()
         .expect("ToastStore should be provided")
         .1;

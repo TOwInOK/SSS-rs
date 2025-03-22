@@ -19,9 +19,9 @@ target/
 **/dist
 .DS_Store
 
-sss-lib/sss-std/card.html
-sss-lib/sss-std/card2.html
-sss-lib/sss-std/test.png
+sss-std/card.html
+sss-std/card.png
+sss-std/card.pdf
 
 sss_rs.html
 config.toml

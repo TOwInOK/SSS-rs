@@ -10,7 +10,7 @@ use crate::RW;
 pub fn CardViewer() -> impl IntoView {
     let settings = use_context::<RW<Settings>>().unwrap().0;
     let themes = use_context::<RW<Themes>>().unwrap().0;
-    let layouts = use_context::<RW<Layouts>>().unwrap().0;
+    let layouts = use_context::<RW<HtmlLayouts>>().unwrap().0;
 
     let card_node = NodeRef::<Div>::new();
 

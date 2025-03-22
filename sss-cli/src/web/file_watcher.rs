@@ -1,5 +1,5 @@
 use notify::{Event, RecursiveMode, Watcher, recommended_watcher};
-use sss_std::prelude::{Layouts, Themes};
+use sss_std::prelude::{HtmlLayouts, Themes};
 use std::path::Path;
 use tokio::sync::mpsc;
 use tracing::{debug, error, info, trace};
@@ -11,7 +11,7 @@ use crate::{settings::services::Services, tools::refresh};
 pub async fn check_file_loop(
     path: String,
     themes: Option<&Themes>,
-    layouts: Option<&Layouts>,
+    layouts: Option<&HtmlLayouts>,
     services: Option<&Services>,
     mut shutdown_rx: tokio::sync::broadcast::Receiver<()>,
 ) -> anyhow::Result<()> {

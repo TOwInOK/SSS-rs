@@ -19,7 +19,7 @@ use sss_std::prelude::*;
 #[test]
 fn test_umbrella_layout() {
     let settings = def_set();
-    let ub = Layouts::UMBRELLA.finalize(&settings, &CATPPUCCIN_MAUVE);
+    let ub = HtmlLayouts::UMBRELLA.finalize(&settings, &CATPPUCCIN_MAUVE);
     let html = ub.render().unwrap();
     fs::write(Path::new("./card.html"), html).unwrap();
 }
@@ -27,19 +27,19 @@ fn test_umbrella_layout() {
 #[tokio::test]
 async fn create_image() {
     let settings = def_set();
-    let ub = Layouts::CASTLE.finalize(&settings, &CATPPUCCIN_MAUVE);
+    let ub = HtmlLayouts::CASTLE.finalize(&settings, &CATPPUCCIN_MAUVE);
     let html = ub.render().unwrap();
     let img = html_to_image(&html, None, 12).await.unwrap();
-    fs::write(Path::new("./img.png"), img).unwrap();
+    fs::write(Path::new("./card.png"), img).unwrap();
 }
 #[cfg(feature = "image_generation")]
 #[tokio::test]
 async fn create_pdf() {
     let settings = def_set();
-    let ub = Layouts::CASTLE.finalize(&settings, &CATPPUCCIN_MAUVE);
+    let ub = HtmlLayouts::CASTLE.finalize(&settings, &CATPPUCCIN_MAUVE);
     let html = ub.render().unwrap();
     let pdf = html_to_pdf(&html, None).await.unwrap();
-    fs::write(Path::new("./pdf.pdf"), pdf).unwrap();
+    fs::write(Path::new("./card.pdf"), pdf).unwrap();
 }
 
 fn def_set() -> Settings {

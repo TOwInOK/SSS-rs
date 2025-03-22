@@ -31,7 +31,7 @@ pub type Result<T = ()> =
 pub async fn refresh_settings(
     path: &str,
     themes: Option<&Themes>,
-    layouts: Option<&Layouts>,
+    layouts: Option<&HtmlLayouts>,
     services: Option<&Services>,
 ) -> Result<()> {
     info!("Settings is't actual!");
@@ -68,7 +68,7 @@ pub enum SettingsUpdateType {
 pub async fn refresh(
     path: &str,
     themes: Option<&Themes>,
-    layouts: Option<&Layouts>,
+    layouts: Option<&HtmlLayouts>,
     services: Option<&Services>,
 ) -> Result {
     debug!("Themes in cli: {:#?}", &themes);
@@ -227,7 +227,7 @@ pub fn gen_example_config() -> SSSCliSettings {
             ],
         },
         themes: Themes::default(),
-        layouts: Layouts::default(),
+        layouts: HtmlLayouts::default(),
         services: Services::default(),
     }
 }

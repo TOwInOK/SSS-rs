@@ -3,7 +3,7 @@ use anyhow::anyhow;
 use serde::{Deserialize, Serialize};
 use services::Services;
 use sss_core::Settings;
-use sss_std::prelude::{Layouts, Themes};
+use sss_std::prelude::{HtmlLayouts, Themes};
 
 pub mod services;
 
@@ -24,7 +24,7 @@ pub struct SSSCliSettings {
     /// Layout configuration
     #[serde(rename = "layout")]
     #[serde(default)]
-    pub layouts: Layouts,
+    pub layouts: HtmlLayouts,
     #[serde(rename = "services")]
     #[serde(default)]
     pub services: Services,

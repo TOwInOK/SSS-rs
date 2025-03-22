@@ -1,4 +1,4 @@
-use sss_std::prelude::{Layouts, Themes};
+use sss_std::prelude::{HtmlLayouts, Themes};
 use tokio::signal;
 #[cfg(not(windows))]
 use tokio::signal::unix::SignalKind;
@@ -17,7 +17,7 @@ pub async fn command_run(
     is_watch: bool,
     is_web: bool,
     path: &str,
-    layouts: &Option<Layouts>,
+    layouts: &Option<HtmlLayouts>,
     address: &str,
     themes: &Option<Themes>,
     html: bool,

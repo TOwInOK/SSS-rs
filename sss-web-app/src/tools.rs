@@ -2,7 +2,7 @@ use base64_light::{base64_decode_str, base64_encode};
 use leptos::prelude::{Get, ReadSignal, Set, WriteSignal};
 use serde::{Deserialize, Serialize};
 use sss_core::Settings;
-use sss_std::prelude::{Layouts, Themes};
+use sss_std::prelude::{HtmlLayouts, Themes};
 
 #[inline]
 pub fn gen_example_config() -> Settings {
@@ -121,14 +121,14 @@ pub struct SSSsetings {
     /// Layout configuration
     #[serde(rename = "layout")]
     #[serde(default)]
-    pub l: Layouts,
+    pub l: HtmlLayouts,
 }
 
 impl SSSsetings {
     pub fn new(
         s: Settings,
         t: Themes,
-        l: Layouts,
+        l: HtmlLayouts,
     ) -> Self {
         Self { s, t, l }
     }
@@ -148,7 +148,7 @@ impl SSSsetings {
         &self,
         s: W<Settings>,
         t: W<Themes>,
-        l: W<Layouts>,
+        l: W<HtmlLayouts>,
     ) {
         s.set(self.s.clone());
         t.set(self.t.clone());
@@ -158,7 +158,7 @@ impl SSSsetings {
     pub fn from_context(
         s: R<Settings>,
         t: R<Themes>,
-        l: R<Layouts>,
+        l: R<HtmlLayouts>,
     ) -> Self {
         Self {
             s: s.get(),

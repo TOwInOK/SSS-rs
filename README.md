@@ -28,18 +28,18 @@ SSS-rs (Skill, Slick, Style) is a library and CLI tool for creating stylish deve
 ```rust
 use sss_core::Settings;
 use sss_std::themes::Themes;
-use sss_std::layouts::Layouts;
+use sss_std::layouts::HtmlLayouts;
 
 // Create configuration
 let settings = Settings::default();
 
 // Choose theme and layout
 let theme = Themes::Umbrella;
-let layout = Layouts::Umbrella;
+let layout = HtmlLayouts::Umbrella;
 
 // Generate HTML
-let html = layout.to_layout(&settings, &theme.into())
-    .finalize()
+let html = layout.finalize(&settings, &theme.into())
+    .render()
     .unwrap();
 ```
 

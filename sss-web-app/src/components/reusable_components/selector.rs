@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use sss_std::{prelude::Layouts, themes::Themes};
+use sss_std::{prelude::HtmlLayouts, themes::Themes};
 
 use crate::RW;
 
@@ -51,12 +51,12 @@ pub fn ThemeSelector() -> impl IntoView {
 /// Селектор для выбора макета карточки.
 #[component]
 pub fn LayoutSelector() -> impl IntoView {
-    let (get, set) = use_context::<RW<Layouts>>().unwrap();
+    let (get, set) = use_context::<RW<HtmlLayouts>>().unwrap();
     let theme = use_context::<RW<Themes>>().unwrap().0;
     let current = get.get_untracked();
     let items = std::iter::once(current.clone())
         .chain(
-            Layouts::all_layouts()
+            HtmlLayouts::all_layouts()
                 .iter()
                 .filter(|theme| *theme != &current)
                 .cloned(),
