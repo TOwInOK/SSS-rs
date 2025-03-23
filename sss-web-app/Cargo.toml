@@ -7,22 +7,22 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-leptos = { version = "0.7.5", features = ["csr"] }
-leptos_meta = { version = "0.7.5" }
-leptos_router = { version = "0.7.5" }
-console_log = "1"
-log = "0.4"
+leptos = { version = "0.7.8", features = ["csr"] }
+leptos_meta = { version = "0.7.8" }
+leptos_router = { version = "0.7.8" }
+console_log = "1.0.0"
+log = "0.4.26"
 base64_light.workspace = true
 sss_core = { path = "../sss-lib/sss-core", features = ["leptos"] }
 sss_std = { path = "../sss-std" }
 render = { path = "../sss-lib/render" }
 theme = { path = "../sss-lib/theme" }
 toml.workspace = true
-wasm-bindgen-futures = { version = "0.4" }
+wasm-bindgen-futures = { version = "0.4.50" }
 serde = { workspace = true, features = ["derive"] }
 getrandom = { version = "0.2", features = ["js"] }
-console_error_panic_hook = { version = "0.1" }
-web-sys = { version = "0.3", features = [
+console_error_panic_hook = { version = "0.1.7" }
+web-sys = { version = "0.3.77", features = [
     "Document",
     "Window",
     "Navigator",
@@ -31,8 +31,8 @@ web-sys = { version = "0.3", features = [
     "Response",
     "RequestInit",
 ] }
-codee = { version = "^0.3", features = ["json_serde"] }
-serde-wasm-bindgen = "0.6"
+codee = { version = "0.3.0", features = ["json_serde"] }
+serde-wasm-bindgen = "0.6.5"
 leptos-use = { version = "0.15.7", features = ["storage"] }
 serde_json.workspace = true
 

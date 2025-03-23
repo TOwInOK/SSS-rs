@@ -12,11 +12,10 @@ description = "Macros for fast incremental loading tabler icons"
 proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["full"] }
-reqwest = { version = "0.11", features = ["blocking"] }
+reqwest = { version = "^0.12", features = ["blocking"] }
 
 [dev-dependencies]
-tabler-icon-definer = {path = ".", features = ["full"]}
-
+tabler-icon-definer = { path = ".", features = ["full"] }
 
 
 [lib]

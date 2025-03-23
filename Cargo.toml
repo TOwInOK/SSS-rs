@@ -8,7 +8,8 @@ members = [
     "sss-cli",
     "html-layouts-derive",
     "sss-web-app",
-    "icon-derive", "theme-generator",
+    "icon-derive",
+    "theme-generator",
 ]
 resolver = "2"
 
