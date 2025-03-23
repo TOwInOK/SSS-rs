@@ -1,5 +1,5 @@
+pub mod html_meta;
 pub mod html_tera_builder;
-
 use html_layouts_derive::generate_layouts;
 pub use html_tera_builder::{HtmlTeraFinalize, HtmlTeraRender};
 use serde::{Deserialize, Serialize};

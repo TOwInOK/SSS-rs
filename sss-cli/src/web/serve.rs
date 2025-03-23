@@ -1,9 +1,9 @@
 use axum::{
+    Json, Router,
     body::Bytes,
-    http::{header, StatusCode},
+    http::{StatusCode, header},
     response::{Html, IntoResponse},
     routing::get,
-    Json, Router,
 };
 use serde::Serialize;
 use serde_json::json;
@@ -12,7 +12,7 @@ use tracing::{error, info, instrument};
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::{Scalar, Servable};
 
-use crate::{settings::SSSCliSettings, HTML, PDF, PNG, SETTINGS};
+use crate::{HTML, PDF, PNG, SETTINGS, settings::SSSCliSettings};
 
 #[derive(OpenApi)]
 #[openapi(

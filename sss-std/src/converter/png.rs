@@ -1,7 +1,7 @@
 use base64_light::base64_encode;
 use headless_chrome::{
-    protocol::cdp::Page::CaptureScreenshotFormatOption, protocol::cdp::Page::Viewport, Browser,
-    LaunchOptionsBuilder,
+    Browser, LaunchOptionsBuilder, protocol::cdp::Page::CaptureScreenshotFormatOption,
+    protocol::cdp::Page::Viewport,
 };
 use image::{Rgba, RgbaImage};
 use std::{error::Error, io::Cursor, time::Duration};

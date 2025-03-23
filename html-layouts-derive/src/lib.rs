@@ -162,7 +162,7 @@ fn impl_generate_layouts(
                     #(#to_layout_matches)*
                 }
             }
-            pub fn finalize<'a>(&self, settings: &'a Settings, theme: &'static Theme) -> HtmlTeraFinalize<'a, HtmlTeraRender<'a>> {
+            pub fn finalize<'a>(&self, settings: &'a Settings, theme: &'static Theme) -> HtmlTeraFinalize<HtmlTeraRender<'a>> {
                 (self.render(settings, theme)).finalize(#default_template)
             }
 

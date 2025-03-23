@@ -33,7 +33,6 @@
         </div>
       </div>
 
-
       {# Section with repos #}
       <div class="flex justify-evenly w-full text-[{{ text }}]">
         {% for repo in repos %}

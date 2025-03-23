@@ -1,12 +1,12 @@
 use crate::components::reusable_components::{button::AddButton, prelude::*};
 use leptos::prelude::*;
 use sss_core::{
+    Settings,
     types::{
         link::Link,
         nickname::Nickname,
         skill::{Project, Skill},
     },
-    Settings,
 };
 use sss_std::themes::Themes;
 

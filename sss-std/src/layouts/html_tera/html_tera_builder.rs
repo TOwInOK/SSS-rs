@@ -1,12 +1,15 @@
 //! HTML Tera builder
 //!
 //! -
+
 use render::prelude::*;
 use sss_core::{Settings, types::provider::Tabler};
 use tera::{Context, Tera};
 use theme::{Shade, Theme};
 
 use crate::tools::gen_css;
+
+use crate::layouts::html_tera::html_meta::Meta;
 
 /// Base Tera component
 #[derive(Clone, Debug)]
@@ -36,6 +39,7 @@ impl<'a> HtmlTeraRender<'a> {
     ) -> HtmlTeraFinalize<Self> {
         HtmlTeraFinalize {
             template,
+            meta: Meta::from((self.settings, self.theme)),
             component: self,
         }
     }
@@ -161,6 +165,7 @@ where
 {
     /// Finalize template
     pub template: &'static str,
+    pub meta: Meta,
     pub component: L,
 }
 
@@ -191,7 +196,7 @@ impl<L: Layout + TeraData> Layout for HtmlTeraFinalize<L> {
 
         // meta
 
-        context.insert("meta", &vec![("key", "value")]);
+        self.meta.insert_to_context(&mut context);
 
         let rendered = tera.render("layout.html", &context)?;
         Ok(rendered)

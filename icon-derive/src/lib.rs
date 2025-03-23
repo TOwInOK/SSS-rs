@@ -61,11 +61,10 @@ use std::{
 use proc_macro::TokenStream;
 use quote::{format_ident, quote};
 use syn::{
-    bracketed,
+    Attribute, Expr, Lit, Meta, Result, Token, bracketed,
     parse::{Parse, ParseStream},
     parse_macro_input,
     punctuated::Punctuated,
-    Attribute, Expr, Lit, Meta, Result, Token,
 };
 #[derive(Debug)]
 struct IconInner {
