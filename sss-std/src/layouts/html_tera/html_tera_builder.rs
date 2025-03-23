@@ -33,10 +33,8 @@ impl<'a> HtmlTeraRender<'a> {
     pub fn finalize(
         self,
         template: &'static str,
-    ) -> HtmlTeraFinalize<'a, Self> {
+    ) -> HtmlTeraFinalize<Self> {
         HtmlTeraFinalize {
-            settings: self.settings,
-            theme: self.theme,
             template,
             component: self,
         }
@@ -157,20 +155,16 @@ impl Layout for HtmlTeraRender<'_> {
 
 /// Wrapper for Tera component [HtmlTeraRender]
 /// It's wrap component into Html document
-pub struct HtmlTeraFinalize<'a, L>
+pub struct HtmlTeraFinalize<L>
 where
     L: Layout,
 {
-    /// Settings
-    pub settings: &'a Settings,
-    /// Theme
-    pub theme: &'static Theme,
     /// Finalize template
     pub template: &'static str,
     pub component: L,
 }
 
-impl<L: Layout> Layout for HtmlTeraFinalize<'_, L> {
+impl<L: Layout + TeraData> Layout for HtmlTeraFinalize<L> {
     fn render(&self) -> render::Result<String> {
         // render card
         let card = self.component.render()?;
@@ -231,15 +225,15 @@ impl TeraData for HtmlTeraRender<'_> {
     }
 }
 
-impl<L: Layout> TeraData for HtmlTeraFinalize<'_, L> {
+impl<L: Layout + TeraData> TeraData for HtmlTeraFinalize<L> {
     #[inline]
     fn get_data(&self) -> &Settings {
-        self.settings
+        self.component.get_data()
     }
 
     #[inline]
     fn get_theme(&self) -> &Theme {
-        self.theme
+        self.component.get_theme()
     }
 
     #[inline]
