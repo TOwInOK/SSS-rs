@@ -1,13 +1,13 @@
 use base64_light::{base64_decode_str, base64_encode};
 use leptos::prelude::{Get, ReadSignal, Set, WriteSignal};
 use serde::{Deserialize, Serialize};
-use sss_core::Settings;
+use sss_core::Data;
 use sss_std::prelude::{HtmlLayouts, Themes};
 
 #[inline]
-pub fn gen_example_config() -> Settings {
+pub fn gen_example_config() -> Data {
     use sss_core::{
-        Settings,
+        LayoutData,
         types::{
             link::Link,
             nickname::Nickname,
@@ -17,90 +17,96 @@ pub fn gen_example_config() -> Settings {
             user::User,
         },
     };
-    Settings {
-        user: User {
-            name: "Dmitry".to_string(),
-            current_nickname: Nickname {
-                word: "TOwInOK".to_string(),
-                pronounce: "тУвинок".to_string(),
-            },
-            prevision_nicknames: vec![Nickname {
-                word: "nqcq".to_string(),
-                pronounce: "нкьюСиКью".to_string(),
-            }],
-        },
-        specifications: vec![
-            "Full-Stack developer".to_string(),
-            "Q/A".to_string(),
-            "DevOps".to_string(),
-        ],
-        about: "Software developer without soul, only mind...".to_string(),
-        repos: vec![
-            Project {
-                name: "SSS-rs".to_string(),
-                link: Link {
-                    icon: Tabler::OUTLINE_GITHUB,
-                    link: "https://github.com/TOwInOK/SSS-rs".to_string(),
+    Data {
+        layout: LayoutData {
+            user: User {
+                name: "Dmitry".to_string(),
+                current_nickname: Nickname {
+                    word: "TOwInOK".to_string(),
+                    pronounce: "тУвинок".to_string(),
                 },
+                prevision_nicknames: vec![Nickname {
+                    word: "nqcq".to_string(),
+                    pronounce: "нкьюСиКью".to_string(),
+                }],
             },
-            Project {
-                name: "zen-rs".to_string(),
-                link: Link {
-                    icon: Tabler::OUTLINE_GITHUB,
-                    link: "https://github.com/TOwInOK/zen-rs".to_string(),
-                },
-            },
-        ],
-        socials: vec![
-            Link {
-                icon: Tabler::OUTLINE_GITHUB,
-                link: "https://github.com/TOwInOK".to_string(),
-            },
-            Link {
-                icon: Tabler::OUTLINE_TELEGRAM,
-                link: "https://t.me/towinok".to_string(),
-            },
-        ],
-        skills: vec![
-            Skill {
-                skill: "Rust".to_string(),
-                projects: vec![Project {
+            specifications: vec![
+                "Full-Stack developer".to_string(),
+                "Q/A".to_string(),
+                "DevOps".to_string(),
+            ],
+            about: "Software developer without soul, only mind...".to_string(),
+            repos: vec![
+                Project {
                     name: "SSS-rs".to_string(),
                     link: Link {
                         icon: Tabler::OUTLINE_GITHUB,
                         link: "https://github.com/TOwInOK/SSS-rs".to_string(),
                     },
-                }],
-                since: Since {
-                    start: 2020,
-                    end: 0,
                 },
-                main: true,
-                repo_link: Link {
-                    icon: Tabler::OUTLINE_GITHUB,
-                    link: "https://github.com/TOwInOK".to_string(),
-                },
-            },
-            Skill {
-                skill: "JS/TS".to_string(),
-                projects: vec![Project {
-                    name: "GSM-example".to_string(),
+                Project {
+                    name: "zen-rs".to_string(),
                     link: Link {
                         icon: Tabler::OUTLINE_GITHUB,
-                        link: "https://github.com/TOwInOK/Game-Sample-Market".to_string(),
+                        link: "https://github.com/TOwInOK/zen-rs".to_string(),
                     },
-                }],
-                since: Since {
-                    start: 2022,
-                    end: 2025,
                 },
-                main: false,
-                repo_link: Link {
+            ],
+            socials: vec![
+                Link {
                     icon: Tabler::OUTLINE_GITHUB,
                     link: "https://github.com/TOwInOK".to_string(),
                 },
-            },
-        ],
+                Link {
+                    icon: Tabler::OUTLINE_DISCORD,
+                    link: "https://discordapp.com/users/965639480797184021".to_string(),
+                },
+                Link {
+                    icon: Tabler::OUTLINE_TELEGRAM,
+                    link: "https://t.me/towinok".to_string(),
+                },
+            ],
+            skills: vec![
+                Skill {
+                    skill: "Rust".to_string(),
+                    projects: vec![Project {
+                        name: "SSS-rs".to_string(),
+                        link: Link {
+                            icon: Tabler::OUTLINE_GITHUB,
+                            link: "https://github.com/TOwInOK/SSS-rs".to_string(),
+                        },
+                    }],
+                    since: Since {
+                        start: 2020,
+                        end: 0,
+                    },
+                    main: true,
+                    repo_link: Link {
+                        icon: Tabler::OUTLINE_GITHUB,
+                        link: "https://github.com/TOwInOK".to_string(),
+                    },
+                },
+                Skill {
+                    skill: "JS/TS".to_string(),
+                    projects: vec![Project {
+                        name: "GSM-example".to_string(),
+                        link: Link {
+                            icon: Tabler::OUTLINE_GITHUB,
+                            link: "https://github.com/TOwInOK/Game-Sample-Market".to_string(),
+                        },
+                    }],
+                    since: Since {
+                        start: 2022,
+                        end: 2025,
+                    },
+                    main: false,
+                    repo_link: Link {
+                        icon: Tabler::OUTLINE_GITHUB,
+                        link: "https://github.com/TOwInOK".to_string(),
+                    },
+                },
+            ],
+        },
     }
 }
 
@@ -111,7 +117,7 @@ pub struct SSSsetings {
     /// User specific settings
     #[serde(rename = "user")]
     #[serde(default)]
-    pub s: Settings,
+    pub s: Data,
 
     /// Theme configuration
     #[serde(rename = "theme")]
@@ -126,7 +132,7 @@ pub struct SSSsetings {
 
 impl SSSsetings {
     pub fn new(
-        s: Settings,
+        s: Data,
         t: Themes,
         l: HtmlLayouts,
     ) -> Self {
@@ -146,7 +152,7 @@ impl SSSsetings {
     }
     pub fn update_context(
         &self,
-        s: W<Settings>,
+        s: W<Data>,
         t: W<Themes>,
         l: W<HtmlLayouts>,
     ) {
@@ -156,7 +162,7 @@ impl SSSsetings {
     }
 
     pub fn from_context(
-        s: R<Settings>,
+        s: R<Data>,
         t: R<Themes>,
         l: R<HtmlLayouts>,
     ) -> Self {

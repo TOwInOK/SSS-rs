@@ -16,7 +16,7 @@ use crate::{
 pub async fn command_run(
     is_watch: bool,
     is_web: bool,
-    path: &str,
+    path: std::path::PathBuf,
     layouts: &Option<HtmlLayouts>,
     address: &str,
     themes: &Option<Themes>,
@@ -48,7 +48,7 @@ pub async fn command_run(
         None
     };
 
-    refresh(path, themes.as_ref(), layouts.as_ref(), services.as_ref())
+    refresh(&path, themes.as_ref(), layouts.as_ref(), services.as_ref())
         .await
         .map_err(|e| anyhow::anyhow!("Load failed: {}", e))?;
 
@@ -64,15 +64,15 @@ pub async fn command_run(
             || settings_services.share
             || settings_services.api
         {
-            let path_clone = path.to_string();
             let themes = themes.clone();
             let layouts = layouts.clone();
             let services = services.clone();
             let shutdown_rx = shutdown_tx.subscribe();
+            let path = path.clone();
 
             tokio::spawn(async move {
                 if let Err(e) = check_file_loop(
-                    path_clone,
+                    &path,
                     themes.as_ref(),
                     layouts.as_ref(),
                     services.as_ref(),

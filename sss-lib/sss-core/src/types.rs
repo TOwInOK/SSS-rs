@@ -4,6 +4,8 @@ use since::Since;
 use skill::Skill;
 use user::User;
 
+use crate::LayoutLimitations;
+
 pub mod link;
 pub mod nickname;
 pub mod provider;
@@ -29,4 +31,8 @@ pub fn skill() -> Skill {
 
 pub fn since() -> Since {
     Since::default()
+}
+
+pub fn limitations() -> LayoutLimitations {
+    LayoutLimitations::default()
 }

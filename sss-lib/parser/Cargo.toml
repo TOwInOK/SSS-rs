@@ -6,8 +6,11 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-sss_core = { path = "../sss-core" }
 serde = { workspace = true, features = ["derive"] }
 serde_json.workspace = true
 thiserror.workspace = true
 toml.workspace = true
+ron.workspace = true
+
+[dev-dependencies]
+sss_core = { path = "../sss-core" }

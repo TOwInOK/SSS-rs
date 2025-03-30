@@ -41,7 +41,7 @@ pub async fn command_generation(
         _ => None,
     };
     refresh_settings(
-        &args.config_path,
+        Path::new(&args.config_path),
         args.theme.as_ref(),
         args.layout.as_ref(),
         services.as_ref(),

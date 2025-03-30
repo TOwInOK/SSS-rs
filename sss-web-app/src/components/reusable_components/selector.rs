@@ -57,7 +57,7 @@ pub fn LayoutSelector() -> impl IntoView {
     let current = get.get_untracked();
     let items = std::iter::once(current.clone())
         .chain(
-            HtmlLayouts::all_layouts()
+            HtmlLayouts::all()
                 .iter()
                 .filter(|theme| *theme != &current)
                 .cloned(),

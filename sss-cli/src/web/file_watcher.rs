@@ -9,7 +9,7 @@ use crate::{settings::services::Services, tools::refresh};
 
 // Function to watch a file and refresh settings upon modification
 pub async fn check_file_loop(
-    path: String,
+    path: &Path,
     themes: Option<&Themes>,
     layouts: Option<&HtmlLayouts>,
     services: Option<&Services>,
@@ -34,7 +34,7 @@ pub async fn check_file_loop(
     let mut prevision_processed_hash = calculate_xxhash(&file_content);
     drop(file_content);
 
-    info!("Start watching changes for file: {}", &path);
+    info!("Start watching changes for file: {}", &path.display());
 
     loop {
         tokio::select! {
@@ -42,7 +42,7 @@ pub async fn check_file_loop(
             Some(event) = rx.recv() => {
                     match event {
                         Event { kind, .. } if kind.is_modify() => {
-                            trace!("Received modify event for {}", path);
+                            trace!("Received modify event for {}", path.display());
                             // Read the file content
                             let file_content = tokio::fs::read(&path).await?;
                             // Calculate the current hash
@@ -53,12 +53,12 @@ pub async fn check_file_loop(
                                 // Update the hash to the current one
                                 prevision_processed_hash = current_hash;
                                     // Refresh settings
-                                    if let Err(e) = refresh(&path, themes, layouts, services).await {
+                                    if let Err(e) = refresh(path, themes, layouts, services).await {
                                         error!("Failed to refresh settings: {}", e);
                                     }
                             } else {
                                 info!("Nothing to change");
-                                trace!("Skipped identical update for {}", path);
+                                trace!("Skipped identical update for {}", path.display());
                             }
                         }
                         _ => (),

@@ -5,11 +5,13 @@ use leptos::{ev::Targeted, prelude::*};
 pub fn TextArea<
     I: Fn(Targeted<Event, HtmlTextAreaElement>) + 'static,
     P: Fn() -> String + 'static + Send,
+    L: Fn() -> usize + 'static + Send + Sync,
     Alt: Fn() -> String + 'static + Send,
     Placeholder: Fn() -> String + 'static + Send,
 >(
     action: I,
     prop: P,
+    maxlength: L,
     alt: Alt,
     placeholder: Placeholder,
 ) -> impl IntoView {
@@ -20,6 +22,7 @@ pub fn TextArea<
             prop:value=prop
             title=alt
             placeholder=placeholder
+            maxlength=maxlength
         />
     }
 }

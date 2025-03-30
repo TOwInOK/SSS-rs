@@ -1,27 +1,53 @@
-use crate::components::reusable_components::{button::AddButton, prelude::*};
+use crate::components::reusable_components::{
+    button::ButtonStyle,
+    input::{InputNumeric, InputUrl},
+    prelude::*,
+};
 use leptos::prelude::*;
+use render::layout::Limitations;
 use sss_core::{
-    Settings,
+    Data,
     types::{
         link::Link,
         nickname::Nickname,
         skill::{Project, Skill},
     },
 };
-use sss_std::themes::Themes;
+use sss_std::{prelude::HtmlLayouts, themes::Themes};
 
 use crate::RW;
 
 /// Main settings component, displays all settings sections.
 #[component]
 pub fn SettingsBuilder() -> impl IntoView {
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
+
     view! {
         <div class="grid grid-cols-1 gap-4 h-full md:max-h-dvh md:overflow-y-scroll md:will-change-scroll">
-            <UserSection/>
-            <AboutSection/>
-            <RepositoriesSection/>
-            <SocialsSection/>
-            <SkillsSection/>
+            <Show
+                when={move || limitations.get().is_user_section_allowed()}>
+                <UserSection/>
+            </Show>
+            <Show
+                when={move || limitations.get().is_about_section_allowed()}>
+                <AboutSection/>
+            </Show>
+            <Show
+                when={move || limitations.get().is_specification_section_allowed()}>
+                <SpecificationsSection/>
+            </Show>
+            <Show
+                when={move || limitations.get().is_repositories_section_allowed()}>
+                <RepositoriesSection/>
+            </Show>
+            <Show
+                when={move || limitations.get().is_socials_section_allowed()}>
+                <SocialsSection/>
+            </Show>
+            <Show
+                when={move || limitations.get().is_skills_section_allowed()}>
+                <SkillsSection/>
+            </Show>
         </div>
     }
 }
@@ -29,17 +55,20 @@ pub fn SettingsBuilder() -> impl IntoView {
 /// Component for configuring user data.
 #[component]
 pub fn UserSection() -> impl IntoView {
-    let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
+    let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
+
     view! {
-        <Section title="User section">
+        <SectionInverted title="User section">
             <Stack title="name">
                 <Input
                     alt=|| "User name".to_string()
                     placeholder=|| "Enter your name (e.g. Dmitry)".to_string()
                     action=move |ev| {
-                        set_settings.update(|x| x.user.name = ev.target().value());
+                        set_settings.update(|x| x.layout.user.name = ev.target().value());
                     }
-                    prop=move || {settings.get().user.name}
+                    prop=move || {settings.get().layout.user.name}
+                    maxlength=move || limitations.read().user_name_len()
                 />
             </Stack>
 
@@ -49,88 +78,113 @@ pub fn UserSection() -> impl IntoView {
                         alt=|| "Current nickname".to_string()
                         placeholder=|| "Enter nickname (e.g. TOwInOK)".to_string()
                         action=move |ev| {
-                            set_settings.update(|x| x.user.current_nickname.word = ev.target().value());
+                            set_settings.update(|x| x.layout.user.current_nickname.word = ev.target().value());
                         }
-                        prop=move || settings.get().user.current_nickname.word
+                        prop=move || settings.get().layout.user.current_nickname.word
+                        maxlength=move || limitations.read().user_global_nickname_len()
                     />
                     <Input
                         alt=|| "Nickname pronunciation".to_string()
                         placeholder=|| "Enter pronunciation".to_string()
                         action=move |ev| {
-                            set_settings.update(|x| x.user.current_nickname.pronounce = ev.target().value());
+                            set_settings.update(|x| x.layout.user.current_nickname.pronounce = ev.target().value());
                         }
-                        prop=move || settings.get().user.current_nickname.pronounce
+                        prop=move || settings.get().layout.user.current_nickname.pronounce
+                        maxlength=move || limitations.read().user_global_nickname_pronounce_len()
                     />
                 </ScrollableBox>
             </Stack>
 
-            <Stack title="prevision names">
-                <ScrollXBar>
-                    <For
-                        each=move || (0..settings.read().user.prevision_nicknames.len())
-                        key=|index| format!("prevision-names-stack-{}", index)
-                        let:index
-                    >
-                        <ScrollableBox>
-                            <Input
-                                alt=|| "Previous nickname".to_string()
-                                placeholder=|| "Enter previous nickname (e.g. nqcq)".to_string()
-                                action=move |ev| {
-                                    set_settings.update(|s| s.user.prevision_nicknames[index].word = ev.target().value());
-                                }
-                                prop=move || settings.read().user.prevision_nicknames[index].word.clone()
-                            />
-                            <Input
-                                alt=|| "Previous nickname pronunciation".to_string()
-                                placeholder=|| "Enter pronunciation".to_string()
-                                action=move |ev| {
-                                    set_settings.update(|s| s.user.prevision_nicknames[index].pronounce = ev.target().value());
-                                }
-                                prop=move || settings.read().user.prevision_nicknames[index].pronounce.clone()
-                            />
-                            <Button
-                                alt=|| "Remove previous nickname".to_string()
-                                label="x"
-                                action=move || {
-                                    set_settings.update(|s| {s.user.prevision_nicknames.remove(index);});
-                                }
-                            />
-                        </ScrollableBox>
-                    </For>
-                    <AddButton
-                        alt=|| "Add new previous nickname".to_string()
-                        label="+"
-                        action=move || {
-                            set_settings.update(|s| s.user.prevision_nicknames.push(Nickname::default()));
-                        }
-                    />
-                </ScrollXBar>
-            </Stack>
-        </Section>
+            <Show
+                when={move || limitations.read().is_user_prevision_nicknames_section_allowed()}
+                >
+                <Stack title="prevision names">
+                    <ScrollXBar>
+                        <For
+                            each=move || (0..settings.read().layout.user.prevision_nicknames.len())
+                            key=|index| format!("prevision-names-stack-{}", index)
+                            let:index
+                        >
+                            <ScrollableBox>
+                                <Input
+                                    alt=|| "Previous nickname".to_string()
+                                    placeholder=|| "Enter previous nickname (e.g. nqcq)".to_string()
+                                    action=move |ev| {
+                                        set_settings.update(|x| x.layout.user.prevision_nicknames[index].word = ev.target().value());
+                                    }
+                                    prop=move || settings.read().layout.user.prevision_nicknames[index].word.clone()
+                                    maxlength=move || limitations.read().user_global_nickname_len()
+                                />
+                                <Input
+                                    alt=|| "Previous nickname pronunciation".to_string()
+                                    placeholder=|| "Enter pronunciation".to_string()
+                                    action=move |ev| {
+                                        set_settings.update(|x| x.layout.user.prevision_nicknames[index].pronounce = ev.target().value());
+                                    }
+                                    prop=move || settings.read().layout.user.prevision_nicknames[index].pronounce.clone()
+                                    maxlength=move || limitations.read().user_global_nickname_pronounce_len()
+                                />
+                                <Button
+                                    alt=|| "Remove previous nickname".to_string()
+                                    action=move || {
+                                        set_settings.update(|x| {x.layout.user.prevision_nicknames.remove(index);});
+                                    }
+                                    style= ButtonStyle::Remove
+                                />
+                            </ScrollableBox>
+                        </For>
+                        <Show
+                            when=move || settings.read().layout.specifications.len() < limitations.read().user_prevision_nicknames_max_count()
+                        >
+                        <Button
+                            alt=|| "Add new previous nickname".to_string()
+                            action=move || {
+                                set_settings.update(|x| x.layout.user.prevision_nicknames.push(Nickname::default()));
+                            }
+                            style= ButtonStyle::Add
+                        />
+                        </Show>
+                    </ScrollXBar>
+                </Stack>
+            </Show>
+
+        </SectionInverted>
     }
 }
 
 /// Component for configuring the "About" section.
 #[component]
 pub fn AboutSection() -> impl IntoView {
-    let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
+    let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
 
     view! {
-        <Section title="About section">
+        <SectionInverted title="About section">
             <Stack title="about">
                 <TextArea
                     alt=|| "Text about yourself".to_string()
                     placeholder=|| "Write about yourself...".to_string()
                     action=move |ev| {
-                        set_settings.update(|x| x.about = ev.target().value());
+                        set_settings.update(|x| x.layout.about = ev.target().value());
                     }
-                    prop=move || {settings.get().about}
+                    prop=move || {settings.read().layout.about.clone()}
+                    maxlength=move || limitations.read().about()
                 />
             </Stack>
+        </SectionInverted>
+    }
+}
+
+#[component]
+pub fn SpecificationsSection() -> impl IntoView {
+    let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
+    view! {
+        <SectionInverted title="Specifications section">
             <Stack title="specifications">
                 <ScrollXBar>
                     <For
-                        each=move || (0..settings.read().specifications.len())
+                        each=move || (0..settings.read().layout.specifications.len())
                         key=|index| format!("specifications-stack-{}", index)
                         let:index
                     >
@@ -139,43 +193,48 @@ pub fn AboutSection() -> impl IntoView {
                                 alt=|| "Specification".to_string()
                                 placeholder=|| "Enter specification (e.g. Full-Stack developer)".to_string()
                                 action=move |ev| {
-                                    set_settings.update(|x| x.specifications[index] = ev.target().value());
+                                    set_settings.update(|x| x.layout.specifications[index] = ev.target().value());
                                 }
-                                prop=move || settings.read().specifications[index].clone()
+                                prop=move || settings.read().layout.specifications[index].clone()
+                                maxlength=move || limitations.read().specifications_count().1
                             />
                             <Button
                                 alt=|| "Remove specification".to_string()
-                                label="x"
                                 action=move || {
-                                    set_settings.update(|x| {x.specifications.remove(index);});
+                                    set_settings.update(|x| {x.layout.specifications.remove(index);});
                                 }
+                                style = ButtonStyle::Remove
                             />
                         </div>
                     </For>
-                    <AddButton
-                        alt=|| "Add new specification".to_string()
-                        label="+"
-                        action=move || {
-                            set_settings.update(|x| x.specifications.push(String::new()));
-                        }
-                    />
+                    <Show
+                        when=move || settings.read().layout.specifications.len() < limitations.read().specifications_count().0
+                    >
+                        <Button
+                            alt=|| "Add new specification".to_string()
+                            action=move || {
+                                set_settings.update(|x| x.layout.specifications.push(String::new()));
+                            }
+                            style = ButtonStyle::Add
+                        />
+                    </Show>
                 </ScrollXBar>
             </Stack>
-        </Section>
+        </SectionInverted>
     }
 }
 
 /// Component for configuring the "Projects" section.
 #[component]
 pub fn RepositoriesSection() -> impl IntoView {
-    let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
-
+    let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
-        <Section title="Projects section">
+        <SectionInverted title="Projects section">
             <Stack title="repositories">
                 <ScrollXBar>
                     <For
-                        each=move || (0..settings.read().repos.len())
+                        each=move || (0..settings.read().layout.repos.len())
                         key=|index| format!("projects-stack-{}", index)
                         let:index
                     >
@@ -184,113 +243,124 @@ pub fn RepositoriesSection() -> impl IntoView {
                                 alt=|| "Repository name".to_string()
                                 placeholder=|| "Enter repository name (e.g. SSS-rs)".to_string()
                                 action=move |ev| {
-                                    set_settings.update(|s| s.repos[index].name = ev.target().value());
+                                    set_settings.update(|x| x.layout.repos[index].name = ev.target().value());
                                 }
-                                prop=move || settings.read().repos[index].name.clone()
+                                prop=move || settings.read().layout.repos[index].name.clone()
+                                maxlength=move || limitations.read().repositories_max_string_len()
                             />
-                            <Input
+                            <InputUrl
                                 alt=|| "Repository link".to_string()
                                 placeholder=|| "Enter repository URL".to_string()
                                 action=move |ev| {
-                                    set_settings.update(|s| s.repos[index].link.link = ev.target().value());
+                                    set_settings.update(|x| x.layout.repos[index].link.link = ev.target().value());
                                 }
-                                prop=move || settings.read().repos[index].link.link.clone()
+                                prop=move || settings.read().layout.repos[index].link.link.clone()
                             />
                             <IconSelector
                                 action=move |ev| {
                                     if let Ok(value) = event_target_value(&ev).parse() {
-                                        set_settings.update(|s| s.repos[index].link.icon = value);
+                                        set_settings.update(|x| x.layout.repos[index].link.icon = value);
                                     }
                                 }
-                                prop=move || settings.read().repos[index].link.icon.to_string()
+                                prop=move || settings.read().layout.repos[index].link.icon.to_string()
                             />
+
                             <Button
                                 alt=|| "Remove repository".to_string()
-                                label="x"
                                 action=move || {
-                                    set_settings.update(|s| { s.repos.remove(index); });
+                                    set_settings.update(|x| { x.layout.repos.remove(index); });
                                 }
+                                style = ButtonStyle::Remove
                             />
                         </ScrollableBox>
                     </For>
-                    <AddButton
+                    <Show
+                        when=move || settings.read().layout.repos.len() < limitations.read().repositories_max_len()
+                    >
+                    <Button
                         alt=|| "Add new repository".to_string()
-                        label="+"
                         action=move || {
-                            set_settings.update(|s| s.repos.push(Project::default()));
+                            set_settings.update(|x| x.layout.repos.push(Project::default()));
                         }
+                        style = ButtonStyle::Add
                     />
+                    </Show>
                 </ScrollXBar>
             </Stack>
-        </Section>
+        </SectionInverted>
     }
 }
 
 /// Component for configuring the "Social Networks" section.
 #[component]
 pub fn SocialsSection() -> impl IntoView {
-    let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
-
+    let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
-        <Section title="Social section">
+        <SectionInverted title="Social section">
             <Stack title="social sites">
                 <ScrollXBar>
                 <For
-                    each=move || (0..settings.read().socials.len())
+                    each=move || (0..settings.read().layout.socials.len())
                         key=|index| format!("social-section-stack-{}", index)
                     let:index
                 >
                     <ScrollableBox>
-                        <Input
+                        <InputUrl
                             alt=|| "Social link".to_string()
                             placeholder=|| "Enter social media URL".to_string()
                             action=move |ev| {
-                                set_settings.update(|s| s.socials[index].link = ev.target().value());
+                                set_settings.update(|x| x.layout.socials[index].link = ev.target().value());
                             }
-                            prop=move || settings.read().socials[index].link.clone()
+                            prop=move || settings.read().layout.socials[index].link.clone()
                         />
                         <IconSelector
                             action=move |ev| {
                                 if let Ok(value) = event_target_value(&ev).parse() {
-                                    set_settings.update(|s| s.socials[index].icon = value);
+                                    set_settings.update(|x| x.layout.socials[index].icon = value);
                                 }
                             }
-                            prop=move || settings.read().socials[index].icon.to_string()
+                            prop=move || settings.read().layout.socials[index].icon.to_string()
                         />
                         <Button
                             alt=|| "Remove social link".to_string()
-                            label="x"
                             action=move || {
-                                set_settings.update(|s| { s.socials.remove(index); });
+                                set_settings.update(|x| { x.layout.socials.remove(index); });
                             }
+                            style = ButtonStyle::Remove
                         />
                     </ScrollableBox>
                 </For>
-                    <AddButton
+                <Show
+                    when=move || settings.read().layout.socials.len() < limitations.read().socials()
+                >
+                    <Button
                         alt=|| "Add new social link".to_string()
-                        label="+"
                         action=move || {
-                            set_settings.update(|s| s.socials.push(Link::default()));
+                            set_settings.update(|x| x.layout.socials.push(Link::default()));
                         }
+                        style = ButtonStyle::Add
                     />
+                </Show>
                 </ScrollXBar>
             </Stack>
-        </Section>
+        </SectionInverted>
     }
 }
 
 /// Component for configuring the "Skills" section.
 #[component]
-pub fn SkillsSection() -> impl IntoView {
-    let (settings, set_settings) = use_context::<RW<Settings>>().unwrap();
-    let themes = use_context::<RW<Themes>>().unwrap().0;
 
+pub fn SkillsSection() -> impl IntoView {
+    let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
+    let themes = use_context::<RW<Themes>>().unwrap().0;
+    let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
-        <Section title="Skills section">
+        <SectionInverted title="Skills section">
             <Stack title="skills">
                 <ScrollXBar>
                     <For
-                        each=move || (0..settings.read().skills.len())
+                        each=move || (0..settings.read().layout.skills.len())
                             key=|index| format!("skills-section-stack-{}", index)
                         let:index
                     >
@@ -299,52 +369,62 @@ pub fn SkillsSection() -> impl IntoView {
                                 alt=|| "Skill name".to_string()
                                 placeholder=|| "Enter skill name (e.g. Rust)".to_string()
                                 action=move |ev| {
-                                    set_settings.update(|s| s.skills[index].skill = ev.target().value());
+                                    set_settings.update(|x| x.layout.skills[index].skill = ev.target().value());
                                 }
-                                prop=move || settings.read().skills[index].skill.clone()
+                                prop=move || settings.read().layout.skills[index].skill.clone()
+                                maxlength=move || limitations.read().skills_skill_len()
                             />
 
-                            <div class="grid grid-cols-2 gap-2">
-                                <Input
-                                    alt=|| "Start year".to_string()
-                                    placeholder=|| "Enter start year".to_string()
-                                    action=move |ev| {
-                                        set_settings.update(|s| s.skills[index].since.start = ev.target().value().parse().unwrap_or_default());
-                                    }
-                                    prop=move || settings.read().skills[index].since.start.to_string()
-                                />
-                                <Input
-                                    alt=|| "End year".to_string()
-                                    placeholder=|| "Enter end year".to_string()
-                                    action=move |ev| {
-                                        set_settings.update(|s| s.skills[index].since.end = ev.target().value().parse().unwrap_or_default());
-                                    }
-                                    prop=move || settings.read().skills[index].since.end.to_string()
-                                />
-                            </div>
-
-                            <ScrollableBox>
-                                <Input
-                                    alt=|| "Repository link".to_string()
-                                    placeholder=|| "Enter repository URL".to_string()
-                                    action=move |ev| {
-                                        set_settings.update(|s| s.skills[index].repo_link.link = ev.target().value());
-                                    }
-                                    prop=move || settings.read().skills[index].repo_link.link.clone()
-                                />
-                                <IconSelector
-                                    action=move |ev| {
-                                        if let Ok(value) = event_target_value(&ev).parse() {
-                                            set_settings.update(|s| s.skills[index].repo_link.icon = value);
+                            <Show when=move || limitations.read().skills_since()>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <InputNumeric
+                                        alt=|| "Start year".to_string()
+                                        placeholder=|| "Enter start year".to_string()
+                                        action=move |ev| {
+                                            set_settings.update(|x| x.layout.skills[index].since.start = ev.target().value().parse().unwrap_or_default());
                                         }
-                                    }
-                                    prop=move || settings.read().skills[index].repo_link.icon.to_string()
-                                />
-                            </ScrollableBox>
+                                        prop=move || settings.read().layout.skills[index].since.start.to_string()
+                                    />
+                                    <InputNumeric
+                                        alt=|| "End year".to_string()
+                                        placeholder=|| "Enter end year".to_string()
+                                        action=move |ev| {
+                                            set_settings.update(|x| x.layout.skills[index].since.end = ev.target().value().parse().unwrap_or_default());
+                                        }
+                                        prop=move || settings.read().layout.skills[index].since.end.to_string()
+                                    />
+                                </div>
+                            </Show>
 
-                            <Stack title="projects">
+                            <Show
+                                when=move || limitations.read().skills_repo_link()
+                            >
+                                <ScrollableBox>
+                                    <InputUrl
+                                        alt=|| "Repository link".to_string()
+                                        placeholder=|| "Enter repository URL".to_string()
+                                        action=move |ev| {
+                                            set_settings.update(|x| x.layout.skills[index].repo_link.link = ev.target().value());
+                                        }
+                                        prop=move || settings.read().layout.skills[index].repo_link.link.clone()
+                                    />
+                                    <IconSelector
+                                        action=move |ev| {
+                                            if let Ok(value) = event_target_value(&ev).parse() {
+                                                set_settings.update(|x| x.layout.skills[index].repo_link.icon = value);
+                                            }
+                                        }
+                                        prop=move || settings.read().layout.skills[index].repo_link.icon.to_string()
+                                    />
+                                </ScrollableBox>
+                            </Show>
+
+                            <Show
+                                when=move || limitations.read().is_projects_in_skills_allowed()
+                            >
+                                <Stack title="projects">
                                 <For
-                                    each=move || (0..settings.read().skills[index].projects.len())
+                                    each=move || (0..settings.read().layout.skills[index].projects.len())
                                     key=|project_index| format!("skills-section-stack-project-section-stack-{}", project_index)
                                     let:project_index
                                 >
@@ -353,94 +433,104 @@ pub fn SkillsSection() -> impl IntoView {
                                             alt=|| "Project name".to_string()
                                             placeholder=|| "Enter project name".to_string()
                                             action=move |ev| {
-                                                set_settings.update(|s| s.skills[index].projects[project_index].name = ev.target().value());
+                                                set_settings.update(|x| x.layout.skills[index].projects[project_index].name = ev.target().value());
                                             }
-                                            prop=move || settings.read().skills[index].projects[project_index].name.clone()
+                                            prop=move || settings.read().layout.skills[index].projects[project_index].name.clone()
+                                            maxlength=move || limitations.read().skills().1.projects.unwrap_or_default().1
                                         />
-                                        <Input
+                                        <InputUrl
                                             alt=|| "Project link".to_string()
                                             placeholder=|| "Enter project URL".to_string()
                                             action=move |ev| {
-                                                set_settings.update(|s| s.skills[index].projects[project_index].link.link = ev.target().value());
+                                                set_settings.update(|x| x.layout.skills[index].projects[project_index].link.link = ev.target().value());
                                             }
-                                            prop=move || settings.read().skills[index].projects[project_index].link.link.clone()
+                                            prop=move || settings.read().layout.skills[index].projects[project_index].link.link.clone()
                                         />
                                         <IconSelector
                                             action=move |ev| {
                                                 if let Ok(value) = event_target_value(&ev).parse() {
-                                                    set_settings.update(|s| s.skills[index].projects[project_index].link.icon = value);
+                                                    set_settings.update(|x| x.layout.skills[index].projects[project_index].link.icon = value);
                                                 }
                                             }
-                                            prop=move || settings.read().skills[index].projects[project_index].link.icon.to_string()
+                                            prop=move || settings.read().layout.skills[index].projects[project_index].link.icon.to_string()
                                         />
                                         <Button
                                             alt=|| "Remove project".to_string()
-                                            label="x"
                                             action=move || {
-                                                set_settings.update(|s| { s.skills[index].projects.remove(project_index); });
+                                                set_settings.update(|x| { x.layout.skills[index].projects.remove(project_index); });
                                             }
+                                            style = ButtonStyle::Remove
                                         />
                                     </ScrollableBox>
                                 </For>
-                                <AddButton
-                                    alt=|| "Add new project".to_string()
-                                    label="+"
-                                    action=move || {
-                                        set_settings.update(|s| s.skills[index].projects.push(Project::default()));
-                                    }
-                                />
+                                <Show when=move || settings.read().layout.skills[index].projects.len() < limitations.read().skills_projects().0 >
+                                    <Button
+                                        alt=|| "Add new project".to_string()
+                                        action=move || {
+                                            set_settings.update(|x| x.layout.skills[index].projects.push(Project::default()));
+                                        }
+                                        style = ButtonStyle::Add
+                                    />
+                                </Show>
                             </Stack>
+                            </Show>
 
-                            <button
-                                title="Change main state"
-                                on:click=move |_| {
-                                    set_settings.update(|s| s.skills[index].main = !s.skills[index].main);
-                                }
-                                class="border"
-                                style=move || {
-                                    if !settings.read().skills[index].main {
-                                        format!(
-                                            "background-color: {}; color: {}; border-color: {};",
-                                            themes.get().colors().background,
-                                            themes.get().colors().text,
-                                            themes.get().colors().text
-                                        )
-                                    } else {
-                                        format!(
-                                            "background-color: {}; color: {}; border-color: {};",
-                                            themes.get().colors().text,
-                                            themes.get().colors().background,
-                                            themes.get().colors().background
-                                        )
+                            <Show when=move || limitations.read().skills_main()>
+                                <button
+                                    title="main"
+                                    on:click=move |_| {
+                                        set_settings.update(|x| x.layout.skills[index].main = !x.layout.skills[index].main);
                                     }
-                                }
-                            >
-                                main
-                            </button>
+                                    class="border"
+                                    style=move || {
+                                        if !settings.read().layout.skills[index].main {
+                                            format!(
+                                                "background-color: {}; color: {}; border-color: {};",
+                                                themes.get().colors().background,
+                                                themes.get().colors().text,
+                                                themes.get().colors().text
+                                            )
+                                        } else {
+                                            format!(
+                                                "background-color: {}; color: {}; border-color: {};",
+                                                themes.get().colors().text,
+                                                themes.get().colors().background,
+                                                themes.get().colors().background
+                                            )
+                                        }
+                                    }
+                                >
+                                    main
+                                </button>
+                            </Show>
 
                             <Button
                                 alt=|| "Remove skill".to_string()
-                                label="x"
                                 action=move || {
-                                    set_settings.update(|s| { s.skills.remove(index); });
+                                    set_settings.update(|x| { x.layout.skills.remove(index); });
                                 }
+                                style = ButtonStyle::Remove
                             />
                         </ScrollableBox>
                     </For>
-                    <AddButton
-                        alt=|| "Add new skill".to_string()
-                        label="+"
-                        action=move || {
-                            set_settings.update(|s| {
-                                s.skills.push(Skill::default());
-                                if let Some(e) = s.skills.last_mut() {
-                                    e.projects.push(Project::default());
-                                }
-                            });
-                        }
-                    />
+                    <Show
+                        when=move || settings.read().layout.skills.len() < limitations.read().skills_max_len()
+                    >
+                        <Button
+                            alt=|| "Add new skill".to_string()
+                            action=move || {
+                                set_settings.update(|x| {
+                                    x.layout.skills.push(Skill::default());
+                                    if let Some(e) = x.layout.skills.last_mut() {
+                                        e.projects.push(Project::default());
+                                    }
+                                });
+                            }
+                            style = ButtonStyle::Add
+                        />
+                    </Show>
                 </ScrollXBar>
             </Stack>
-        </Section>
+        </SectionInverted>
     }
 }

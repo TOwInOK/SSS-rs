@@ -1,8 +1,7 @@
-use crate::tools::Result;
-use anyhow::anyhow;
+use parser::parse::{Loader, Saver};
 use serde::{Deserialize, Serialize};
 use services::Services;
-use sss_core::Settings;
+use sss_core::Data;
 use sss_std::prelude::{HtmlLayouts, Themes};
 
 pub mod services;
@@ -14,7 +13,7 @@ pub struct SSSCliSettings {
     /// User specific settings
     #[serde(rename = "user")]
     #[serde(default)]
-    pub sss_user_settings: Settings,
+    pub data: Data,
 
     /// Theme configuration
     #[serde(rename = "theme")]
@@ -25,44 +24,12 @@ pub struct SSSCliSettings {
     #[serde(rename = "layout")]
     #[serde(default)]
     pub layouts: HtmlLayouts,
+
+    /// Services to run
     #[serde(rename = "services")]
     #[serde(default)]
     pub services: Services,
 }
 
-impl SSSCliSettings {
-    /// Load [SSSCliSettings] from path
-    #[inline]
-    pub async fn load(path: impl AsRef<str>) -> Result<Self> {
-        Self::parse(path.as_ref()).await
-    }
-    /// parse path to [SSSCliSettings]
-    #[inline]
-    async fn fetch(path: &str) -> Result<String> {
-        Ok(tokio::fs::read_to_string(path).await?)
-    }
-    #[inline]
-    /// Parse config [SSSCliSettings] from toml file
-    async fn parse_toml(path: &str) -> Result<SSSCliSettings> {
-        let file = Self::fetch(path).await?;
-        Ok(toml::from_str(&file)?)
-    }
-    #[inline]
-    /// Parse config [SSSCliSettings] from json file
-    async fn parse_json(path: &str) -> Result<SSSCliSettings> {
-        let file = Self::fetch(path).await?;
-        Ok(serde_json::from_str(&file)?)
-    }
-    #[inline]
-    async fn parse(path: &str) -> Result<SSSCliSettings> {
-        let aspect = path
-            .split(".")
-            .last()
-            .ok_or(anyhow!("Not found file extension!"))?;
-        match aspect {
-            "json" => Self::parse_json(path).await,
-            "toml" => Self::parse_toml(path).await,
-            _ => Err(anyhow!(format!("Unexpected file extension: {}", aspect)).into()),
-        }
-    }
-}
+impl Loader for SSSCliSettings {}
+impl Saver for SSSCliSettings {}

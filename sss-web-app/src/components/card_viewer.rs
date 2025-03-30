@@ -1,6 +1,6 @@
 use leptos::{html::Div, prelude::*};
-use render::layout::Layout;
-use sss_core::Settings;
+use render::render::Render;
+use sss_core::Data;
 use sss_std::{prelude::*, tools::gen_css};
 
 use crate::RW;
@@ -8,18 +8,20 @@ use crate::RW;
 /// Компонент для отображения сгенерированной карточки на основе настроек.
 #[component]
 pub fn CardViewer() -> impl IntoView {
-    let settings = use_context::<RW<Settings>>().unwrap().0;
+    let settings = use_context::<RW<Data>>().unwrap().0;
     let themes = use_context::<RW<Themes>>().unwrap().0;
     let layouts = use_context::<RW<HtmlLayouts>>().unwrap().0;
 
     let card_node = NodeRef::<Div>::new();
 
     let rendered_card = Memo::new(move |_| {
+        let data = settings.get();
         let theme = themes.get().into();
         let layout = layouts.get();
 
-        layout
-            .finalize(&settings.read(), theme)
+        let render = HtmlTeraRender::new(&data, theme, &layout);
+        render
+            .finalize(&DefaultTemplates::STANDART)
             .render()
             .map(|card| {
                 let css = gen_css(&theme.get_encre_css_config(), &card);

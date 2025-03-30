@@ -3,7 +3,7 @@ use leptos::prelude::*;
 #[component]
 pub fn HomePage() -> impl IntoView {
     view! {
-        <div class="grid md:grid-cols-2 gap-8 md:gap-20 p-4 md:p-8 max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8 md:gap-20 lg:gap-30 p-4 md:p-8 max-w-7xl mx-auto items-center justify-center">
             // Left Panel - Information
             <div class="inline-flex flex-col gap-8">
                 <Section title="SSS-rs (Skill, Slick, Style)">
@@ -18,7 +18,7 @@ pub fn HomePage() -> impl IntoView {
 
                         // Feature Icons
                         <Stack title="Features">
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                                 <FeatureCard
                                     icon=view! {
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brush"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21v-4a4 4 0 1 1 4 4h-4" /><path d="M21 3a16 16 0 0 0 -12.8 10.2" /><path d="M21 3a16 16 0 0 1 -10.2 12.8" /><path d="M10.6 9a9 9 0 0 1 4.4 4.4" /></svg>
@@ -66,18 +66,18 @@ pub fn HomePage() -> impl IntoView {
 
                         // Getting Started
                         <Stack title="How to Use">
-                            <div class="space-y-4">
+                            <div class="grid gap-4">
                                 <StepCard
                                     number=1
                                     title="Edit Your Card"
                                     text="Use our intuitive editor to customize your profile"
-                                    action=view! { <a href="editor" class="p-2 mt-2 rounded-lg border bg-opacity-10 flex">Go to Editor</a> }
+                                    action=view! { <a href="editor" class="p-2 mt-2 rounded-lg border bg-opacity-10 flex transform hover:scale-102 transition-all duration-600">Go to Editor</a> }
                                 />
                                 <StepCard
                                     number=2
                                     title="Export & Share"
                                     text="Generate Base64 string or HTML and share anywhere"
-                                    action=view! { <a href="editor" class="p-2 mt-2 rounded-lg border bg-opacity-10 flex">Start sharing?</a> }
+                                    action=view! { <a href="editor" class="p-2 mt-2 rounded-lg border bg-opacity-10 flex transform hover:scale-102 transition-all duration-600">Start sharing?</a> }
                                 />
                             </div>
                         </Stack>
@@ -87,7 +87,7 @@ pub fn HomePage() -> impl IntoView {
 
             // Right Panel - Card Preview
             <div class="sticky flex items-center justify-center content-center">
-                <div class="inline-flex transform-3d rotate-x-51 -rotate-y-10 rotate-z-20  duration-600 ease-in-out transition-all backface-hidden drop-shadow shadow-lg overflow-hidden">
+                <div class="inline-flex md:transform-3d lg:rotate-x-51 md:rotate-x-31 md:-rotate-y-10 md:rotate-z-10 lg:rotate-z-20 duration-600 ease-in-out transition-all backface-hidden drop-shadow shadow-lg overflow-hidden p-1.5 md:p-2 lg:p-4">
                     <CardViewer/>
                 </div>
             </div>
@@ -107,8 +107,8 @@ fn FeatureCard(
                 {icon}
             </span>
             <div>
-                <h3 class="font-bold text-lg">{title}</h3>
-                <p class="text-sm opacity-75">{text}</p>
+                <h3 class="font-bold text-sm md:text-lg text-pretty">{title}</h3>
+                <p class="text-ms md:text-sm opacity-75 text-pretty">{text}</p>
             </div>
         </div>
     }
@@ -120,7 +120,7 @@ fn IconLink(
     text: impl IntoView,
 ) -> impl IntoView {
     view! {
-        <a href={href} class="flex items-center gap-2 px-4 py-2 rounded-lg border hover:bg-opacity-10 transition-colors">
+        <a href={href} class="flex items-center gap-2 px-4 py-2 rounded-lg border transform hover:scale-102 transition-all duration-600">
             <span>{text}</span>
         </a>
     }

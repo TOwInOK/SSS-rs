@@ -9,7 +9,7 @@ pub mod tools;
 /// Web utility for serve
 pub mod web;
 
-use std::sync::LazyLock;
+use std::{path::PathBuf, sync::LazyLock};
 
 use clap::Parser;
 use cli::{
@@ -74,7 +74,7 @@ async fn main() -> anyhow::Result<()> {
             command_run(
                 *watch,
                 *serve,
-                &args.config_path,
+                PathBuf::from(&args.config_path),
                 &args.layout,
                 address,
                 &args.theme,

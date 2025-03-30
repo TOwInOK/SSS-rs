@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sss_core::Settings;
+use sss_core::LayoutData;
 use tera::Context;
 use theme::Theme;
 
@@ -47,8 +47,8 @@ impl Meta {
     }
 }
 
-impl From<(&Settings, &Theme)> for Meta {
-    fn from(value: (&Settings, &Theme)) -> Self {
+impl From<(&LayoutData, &Theme)> for Meta {
+    fn from(value: (&LayoutData, &Theme)) -> Self {
         Self {
             title: format!("{}'s card", value.0.user.current_nickname.word),
             description: value.0.about.clone(),

@@ -5,7 +5,8 @@ use leptos_meta::*;
 use leptos_router::{components::*, path};
 use leptos_use::storage::use_local_storage;
 use pages::home::HomePage;
-use sss_core::Settings;
+
+use sss_core::Data;
 use sss_std::prelude::{HtmlLayouts, Themes};
 use tools::gen_example_config;
 
@@ -17,6 +18,7 @@ pub mod tools;
 use crate::pages::card_editor::CardEditor;
 
 pub type RW<T> = (ReadSignal<T>, WriteSignal<T>);
+pub type M<T> = Memo<T>;
 
 /// An app router which renders the homepage and handles 404's
 #[component]
@@ -25,7 +27,7 @@ pub fn App() -> impl IntoView {
     provide_meta_context();
 
     let (settings_store, settings_set_store, _) =
-        use_local_storage::<Settings, JsonSerdeCodec>("settings");
+        use_local_storage::<Data, JsonSerdeCodec>("settings");
     let (themes_store, themes_set_store, _) = use_local_storage::<Themes, JsonSerdeCodec>("themes");
     let (layouts_store, layouts_set_store, _) =
         use_local_storage::<HtmlLayouts, JsonSerdeCodec>("layouts");

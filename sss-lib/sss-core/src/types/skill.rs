@@ -26,6 +26,10 @@ pub struct Skill {
     /// - gitlab
     pub repo_link: Link,
 }
+
+impl parser::prelude::Loader for Skill {}
+impl parser::prelude::Saver for Skill {}
+
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 #[derive(Debug, Serialize, Deserialize, Default, Clone, PartialEq)]
 pub struct Project {
@@ -33,4 +37,22 @@ pub struct Project {
     pub name: String,
     /// Link to project
     pub link: Link,
+}
+
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+#[derive(Debug, Serialize, Default, Deserialize, Clone, Copy, PartialEq)]
+/// Skill limitations
+pub struct SkillLimitation {
+    /// Max len of skill [String]
+    pub skill_len: usize,
+    /// need to contain projects?
+    ///
+    /// (max len of [Vec], Max len name field peer item)
+    pub projects: Option<(usize, usize)>,
+    /// can it be since?
+    pub since: bool,
+    /// can it be main?
+    pub main: bool,
+    /// can it have a link to repository?
+    pub repo_link: bool,
 }
