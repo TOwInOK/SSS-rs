@@ -360,7 +360,7 @@ pub fn SkillsSection() -> impl IntoView {
             <Stack title="skills">
                 <ScrollXBar>
                     <For
-                        each=move || (0..settings.read().layout.skills.len())
+                        each=move || 0..settings.read().layout.skills.len()
                             key=|index| format!("skills-section-stack-{}", index)
                         let:index
                     >
@@ -381,17 +381,17 @@ pub fn SkillsSection() -> impl IntoView {
                                         alt=|| "Start year".to_string()
                                         placeholder=|| "Enter start year".to_string()
                                         action=move |ev| {
-                                            set_settings.update(|x| x.layout.skills[index].since.start = ev.target().value().parse().unwrap_or_default());
+                                            set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.since.start = ev.target().value().parse::<usize>().unwrap_or_default()).unwrap_or_default());
                                         }
-                                        prop=move || settings.read().layout.skills[index].since.start.to_string()
+                                        prop=move || settings.with(|x| x.layout.skills.get(index).map(|x| x.since.start).unwrap_or_default()).to_string()
                                     />
                                     <InputNumeric
                                         alt=|| "End year".to_string()
                                         placeholder=|| "Enter end year".to_string()
                                         action=move |ev| {
-                                            set_settings.update(|x| x.layout.skills[index].since.end = ev.target().value().parse().unwrap_or_default());
+                                            set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.since.end = ev.target().value().parse().unwrap_or_default()).unwrap_or_default());
                                         }
-                                        prop=move || settings.read().layout.skills[index].since.end.to_string()
+                                        prop=move || settings.with(|x| x.layout.skills.get(index).map(|x| x.since.end).unwrap_or_default()).to_string()
                                     />
                                 </div>
                             </Show>
@@ -404,17 +404,17 @@ pub fn SkillsSection() -> impl IntoView {
                                         alt=|| "Repository link".to_string()
                                         placeholder=|| "Enter repository URL".to_string()
                                         action=move |ev| {
-                                            set_settings.update(|x| x.layout.skills[index].repo_link.link = ev.target().value());
+                                            set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.repo_link.link = ev.target().value()).unwrap_or_default());
                                         }
-                                        prop=move || settings.read().layout.skills[index].repo_link.link.clone()
+                                        prop=move || settings.with(|x| x.layout.skills.get(index).map(|x| x.repo_link.link.clone()).unwrap_or_default())
                                     />
                                     <IconSelector
                                         action=move |ev| {
                                             if let Ok(value) = event_target_value(&ev).parse() {
-                                                set_settings.update(|x| x.layout.skills[index].repo_link.icon = value);
+                                                set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.repo_link.icon = value).unwrap_or_default());
                                             }
                                         }
-                                        prop=move || settings.read().layout.skills[index].repo_link.icon.to_string()
+                                        prop=move || settings.with(|x| x.layout.skills.get(index).map(|x| x.repo_link.icon.to_string()).unwrap_or_default())
                                     />
                                 </ScrollableBox>
                             </Show>
@@ -424,7 +424,7 @@ pub fn SkillsSection() -> impl IntoView {
                             >
                                 <Stack title="projects">
                                 <For
-                                    each=move || (0..settings.read().layout.skills[index].projects.len())
+                                    each=move || (0..settings.read().layout.skills.get(index).map(|x| x.projects.len()).unwrap_or_default())
                                     key=|project_index| format!("skills-section-stack-project-section-stack-{}", project_index)
                                     let:project_index
                                 >
@@ -433,23 +433,23 @@ pub fn SkillsSection() -> impl IntoView {
                                             alt=|| "Project name".to_string()
                                             placeholder=|| "Enter project name".to_string()
                                             action=move |ev| {
-                                                set_settings.update(|x| x.layout.skills[index].projects[project_index].name = ev.target().value());
+                                                set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.projects[project_index].name = ev.target().value()).unwrap_or_default());
                                             }
-                                            prop=move || settings.read().layout.skills[index].projects[project_index].name.clone()
-                                            maxlength=move || limitations.read().skills().1.projects.unwrap_or_default().1
+                                            prop=move || settings.read().layout.skills.get(index).map(|x| x.projects[project_index].name.clone()).unwrap_or_default()
+                                            maxlength=move || limitations.with(|x| x.skills_projects().1)
                                         />
                                         <InputUrl
                                             alt=|| "Project link".to_string()
                                             placeholder=|| "Enter project URL".to_string()
                                             action=move |ev| {
-                                                set_settings.update(|x| x.layout.skills[index].projects[project_index].link.link = ev.target().value());
+                                                set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.projects[project_index].link.link = ev.target().value()).unwrap_or_default());
                                             }
-                                            prop=move || settings.read().layout.skills[index].projects[project_index].link.link.clone()
+                                            prop=move || settings.read().layout.skills.get(index).map(|x| x.projects[project_index].link.link.clone()).unwrap_or_default()
                                         />
                                         <IconSelector
                                             action=move |ev| {
                                                 if let Ok(value) = event_target_value(&ev).parse() {
-                                                    set_settings.update(|x| x.layout.skills[index].projects[project_index].link.icon = value);
+                                                    set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.projects[project_index].link.icon = value).unwrap_or_default());
                                                 }
                                             }
                                             prop=move || settings.read().layout.skills[index].projects[project_index].link.icon.to_string()
@@ -457,17 +457,17 @@ pub fn SkillsSection() -> impl IntoView {
                                         <Button
                                             alt=|| "Remove project".to_string()
                                             action=move || {
-                                                set_settings.update(|x| { x.layout.skills[index].projects.remove(project_index); });
+                                                set_settings.update(|x| { x.layout.skills.get_mut(index).map(|x| x.projects.remove(project_index)).unwrap_or_default(); });
                                             }
                                             style = ButtonStyle::Remove
                                         />
                                     </ScrollableBox>
                                 </For>
-                                <Show when=move || settings.read().layout.skills[index].projects.len() < limitations.read().skills_projects().0 >
+                                <Show when=move || settings.read().layout.skills.get(index).map(|x| x.projects.len()).unwrap_or_default() < limitations.read().skills_projects().0 >
                                     <Button
                                         alt=|| "Add new project".to_string()
                                         action=move || {
-                                            set_settings.update(|x| x.layout.skills[index].projects.push(Project::default()));
+                                            set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.projects.push(Project::default())).unwrap_or_default());
                                         }
                                         style = ButtonStyle::Add
                                     />
@@ -479,11 +479,11 @@ pub fn SkillsSection() -> impl IntoView {
                                 <button
                                     title="main"
                                     on:click=move |_| {
-                                        set_settings.update(|x| x.layout.skills[index].main = !x.layout.skills[index].main);
+                                        set_settings.update(|x| x.layout.skills.get_mut(index).map(|x| x.main = !x.main).unwrap_or_default());
                                     }
                                     class="border"
                                     style=move || {
-                                        if !settings.read().layout.skills[index].main {
+                                        if !settings.read().layout.skills.get(index).map(|x| x.main).unwrap_or_default() {
                                             format!(
                                                 "background-color: {}; color: {}; border-color: {};",
                                                 themes.get().colors().background,
