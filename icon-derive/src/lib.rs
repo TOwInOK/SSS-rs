@@ -308,18 +308,13 @@ pub fn tabler_icon(input: TokenStream) -> TokenStream {
                     if let Some(position) = content.find("<svg") {
                         &content[position..]
                     } else {
-                        content
+                        panic!(
+                            "{} is not correct name with this style: {}!\nPlease check tabler for correct name!\nGot content:{:#?}",
+                            name, style, &content
+                        );
                     }
                 }.to_string();
 
-                // content.trim_start()
-
-                if !is_svg(&content) {
-                    panic!(
-                        "{} is not correct name with this style: {}!\nPlease check tabler for correct name!\nGot content:{:#?}",
-                        name, style, &content
-                    );
-                }
                 fs::write(&cache_path, &content).expect("Failed to cache icon");
                 content
             };
@@ -426,11 +421,6 @@ fn is_cache_fresh(
         }
     }
     false
-}
-
-fn is_svg(data: &str) -> bool {
-    let trimmed = data.trim_start();
-    trimmed.starts_with("<svg")
 }
 
 /// Construct download URL for icons
