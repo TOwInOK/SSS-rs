@@ -66,6 +66,7 @@ use syn::{
     parse_macro_input,
     punctuated::Punctuated,
 };
+
 #[derive(Debug)]
 struct IconInner {
     display_name: Option<String>,
@@ -302,6 +303,17 @@ pub fn tabler_icon(input: TokenStream) -> TokenStream {
                     .text()
                     .expect("Failed to read icon content");
 
+                let content = content.trim_start();
+                let content = {
+                    if let Some(position) = content.find("<svg") {
+                        &content[position..]
+                    } else {
+                        content
+                    }
+                }.to_string();
+
+                // content.trim_start()
+
                 if !is_svg(&content) {
                     panic!(
                         "{} is not correct name with this style: {}!\nPlease check tabler for correct name!\nGot content:{:#?}",
@@ -427,7 +439,7 @@ fn download_link(
     name: &str,
 ) -> String {
     format!(
-        "https://unpkg.com/@tabler/icons@latest/icons/{}/{}.svg",
+        "https://raw.githubusercontent.com/tabler/tabler-icons/refs/heads/main/icons/{}/{}.svg",
         style_variant, name
     )
 }
