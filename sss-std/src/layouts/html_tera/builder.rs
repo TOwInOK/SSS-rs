@@ -4,7 +4,7 @@
 
 use std::borrow::Cow;
 
-use render::prelude::*;
+use render::{prelude::*, render::FilterLimitations};
 use sss_core::Data;
 use tera::{Context, Tera};
 use theme::Theme;
@@ -70,7 +70,7 @@ where
     fn render(&self) -> Result<Cow<String>> {
         // Init data
         let theme = self.get_theme();
-        let settings = self.get_data();
+        let data = &self.filter();
         let mut tera = Tera::default();
         let layout = self.get_layout();
 
@@ -124,7 +124,7 @@ where
 
         // user section
 
-        let user = &settings.layout.user;
+        let user = &data.layout.user;
         // Type Link :
         //  - provider : Provider
         //  - link : String
@@ -134,15 +134,15 @@ where
 
         // specifications
 
-        context.insert("specifications", &settings.layout.specifications);
+        context.insert("specifications", &data.layout.specifications);
 
         // about
 
-        context.insert("about", &settings.layout.about);
+        context.insert("about", &data.layout.about);
 
         // repos
 
-        context.insert("repos", &settings.layout.repos);
+        context.insert("repos", &data.layout.repos);
 
         // Type Link :
         //  - provider : Provider
@@ -150,7 +150,7 @@ where
 
         // socials
 
-        context.insert("socials", &settings.layout.socials);
+        context.insert("socials", &data.layout.socials);
 
         // Type Link :
         //  - provider : Provider
@@ -158,7 +158,7 @@ where
 
         // skills
 
-        context.insert("skills", &settings.layout.skills);
+        context.insert("skills", &data.layout.skills);
 
         // Type Skill :
         // - skill : String
@@ -187,5 +187,120 @@ where
 {
     fn limitations(&self) -> Option<Cow<sss_core::LayoutLimitations>> {
         self.layout.limitations()
+    }
+}
+
+impl<L: Layout<String> + Clone> FilterLimitations for HtmlTeraRender<'_, '_, '_, L> {
+    fn filter(&self) -> Cow<Data> {
+        if let Some(limitations) = &self.limitations() {
+            let mut data = (*self.settings).clone();
+
+            // Filter user section
+            if let Some(user_limits) = limitations.user {
+                safe_truncate(&mut data.layout.user.name, user_limits.name_len);
+                safe_truncate(
+                    &mut data.layout.user.current_nickname.word,
+                    user_limits.global_nickname_len,
+                );
+                safe_truncate(
+                    &mut data.layout.user.current_nickname.pronounce,
+                    user_limits.global_nickname_pronounce_len,
+                );
+
+                if data.layout.user.prevision_nicknames.len()
+                    > user_limits.prevision_nicknames_max_count
+                {
+                    data.layout
+                        .user
+                        .prevision_nicknames
+                        .truncate(user_limits.prevision_nicknames_max_count);
+                }
+
+                for nick in &mut data.layout.user.prevision_nicknames {
+                    safe_truncate(&mut nick.word, user_limits.global_nickname_len);
+                    safe_truncate(
+                        &mut nick.pronounce,
+                        user_limits.global_nickname_pronounce_len,
+                    );
+                }
+            }
+
+            // Filter specifications
+            let (spec_count, spec_len) = limitations.specifications_count;
+            if data.layout.specifications.len() > spec_count {
+                data.layout.specifications.truncate(spec_count);
+            }
+            for spec in &mut data.layout.specifications {
+                safe_truncate(spec, spec_len);
+            }
+
+            // Filter about section
+            if let Some(about_len) = limitations.about {
+                safe_truncate(&mut data.layout.about, about_len);
+            }
+
+            // Filter repositories
+            let (repos_count, repos_string_len) = limitations.repositories;
+            if data.layout.repos.len() > repos_count {
+                data.layout.repos.truncate(repos_count);
+            }
+            for repo in &mut data.layout.repos {
+                safe_truncate(&mut repo.name, repos_string_len);
+                safe_truncate(&mut repo.link.link, repos_string_len);
+            }
+
+            // Filter socials
+            if let Some(socials_count) = limitations.socials {
+                if data.layout.socials.len() > socials_count {
+                    data.layout.socials.truncate(socials_count);
+                }
+            }
+
+            // Filter skills
+            let (skills_count, skill_limits) = limitations.skills;
+            if data.layout.skills.len() > skills_count {
+                data.layout.skills.truncate(skills_count);
+            }
+
+            for skill in &mut data.layout.skills {
+                safe_truncate(&mut skill.skill, skill_limits.skill_len);
+
+                if let Some((proj_count, proj_name_len)) = skill_limits.projects {
+                    if skill.projects.len() > proj_count {
+                        skill.projects.truncate(proj_count);
+                    }
+                    for proj in &mut skill.projects {
+                        safe_truncate(&mut proj.name, proj_name_len);
+                    }
+                }
+
+                if !skill_limits.since {
+                    skill.since = Default::default();
+                }
+                if !skill_limits.main {
+                    skill.main = false;
+                }
+                if !skill_limits.repo_link {
+                    skill.repo_link = Default::default();
+                }
+            }
+
+            Cow::Owned(data)
+        } else {
+            Cow::Borrowed(&self.settings)
+        }
+    }
+}
+
+/// Safe string truncation that counts actual characters (graphemes)
+fn safe_truncate(
+    s: &mut String,
+    max_chars: usize,
+) {
+    if s.chars().count() > max_chars {
+        let mut char_indices = s.char_indices();
+        if let Some((idx, _)) = char_indices.nth(max_chars) {
+            s.truncate(idx);
+        }
     }
 }

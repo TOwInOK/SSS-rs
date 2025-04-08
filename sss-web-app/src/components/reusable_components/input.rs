@@ -16,7 +16,6 @@ pub fn Input<
 ) -> impl IntoView {
     view! {
         <input
-            class="border indent-2"
             on:input:target=action
             prop:value=prop
             title=alt
@@ -40,7 +39,6 @@ pub fn InputNumeric<
 ) -> impl IntoView {
     view! {
         <input
-            class="border indent-2"
             on:input:target=action
             prop:value=prop
             title=alt
@@ -64,7 +62,6 @@ pub fn InputUrl<
 ) -> impl IntoView {
     view! {
         <input
-            class="border indent-2"
             on:input:target=action
             prop:value=prop
             title=alt

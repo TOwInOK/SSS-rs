@@ -1,9 +1,5 @@
-use crate::{
-    RW,
-    components::reusable_components::text::{Text, TextStyle},
-};
+use crate::components::reusable_components::text::{Text, TextStyle};
 use leptos::prelude::*;
-use sss_std::themes::Themes;
 #[component]
 /// Section with items
 pub fn SectionInverted(
@@ -68,13 +64,11 @@ pub fn SectionWith(
 
 #[component]
 pub fn BlankedSection(children: Children) -> impl IntoView {
-    let themes = use_context::<RW<Themes>>().unwrap().0;
     view! {
         <div class="grid gap-4 p-4 border"
-            style=move || format!(
-                "background-color: {};",
-                themes.get().colors().background
-            )
+            style=
+                "background-color: var(--color-background);"
+
         >
             {children()}
         </div>

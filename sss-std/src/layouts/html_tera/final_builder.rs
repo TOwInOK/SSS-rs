@@ -3,8 +3,9 @@ use std::borrow::Cow;
 use render::{
     Component,
     layout::{Layout, Limitations},
-    render::Render,
+    render::{FilterLimitations, Render},
 };
+use sss_core::Data;
 use tera::{Context, Tera};
 use theme::Shade;
 
@@ -90,5 +91,15 @@ where
 {
     fn limitations(&self) -> Option<Cow<sss_core::LayoutLimitations>> {
         self.layout.limitations()
+    }
+}
+
+impl<C, L> FilterLimitations for HtmlTeraFinalize<'_, '_, C, L>
+where
+    C: Component<String> + TeraData + Clone,
+    L: Layout<String> + Clone,
+{
+    fn filter(&self) -> Cow<Data> {
+        Cow::Borrowed(self.get_data())
     }
 }

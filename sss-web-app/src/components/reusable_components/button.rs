@@ -1,7 +1,4 @@
 use leptos::prelude::*;
-use sss_std::prelude::*;
-
-use crate::RW;
 
 #[derive(Default)]
 pub enum ButtonStyle {
@@ -45,68 +42,45 @@ pub fn DefaultButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
     action: A,
     alt: Alt,
 ) -> impl IntoView {
-    let themes = use_context::<RW<Themes>>().unwrap().0;
-    let css = "border font-bold".to_string();
     view! {
         <button
             title=alt
             on:click=move |_| {
                 action()
             }
-            class=css
-            style=move || format!(
-                "background-color: {}; color: {}",
-                themes.get().colors().text,
-                themes.get().colors().background
-            )
+            class="button"
         >{label}</button>
     }
 }
 
-/// Add button
 #[component]
 pub fn AddButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
     action: A,
     alt: Alt,
 ) -> impl IntoView {
-    let themes = use_context::<RW<Themes>>().unwrap().0;
-    let css = "border font-bold p-4".to_string();
     view! {
         <button
             title=alt
             on:click=move |_| {
                 action()
             }
-            class=css
-            style=move || format!(
-                "background-color: {}; color: {}",
-                themes.get().colors().text,
-                themes.get().colors().background
-            )
+            class="button button-add"
         >+</button>
     }
 }
 
-/// Remove button
 #[component]
 pub fn RemoveButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
     action: A,
     alt: Alt,
 ) -> impl IntoView {
-    let themes = use_context::<RW<Themes>>().unwrap().0;
-    let css = "border font-bold".to_string();
     view! {
         <button
             title=alt
             on:click=move |_| {
                 action()
             }
-            class=css
-            style=move || format!(
-                "background-color: {}; color: {}",
-                themes.get().colors().text,
-                themes.get().colors().background
-            )
+            class="button"
         >x</button>
     }
 }

@@ -1,1 +1,74 @@
 @import "tailwindcss";
+
+* {
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--color-background);
+        border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: 5px;
+
+        &:hover {
+            background: var(--color-accent);
+        }
+    }
+}
+
+&::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 5px;
+    transition: background 0.3s ease;
+
+    &:hover {
+        background: var(--color-accent);
+    }
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-background);
+}
+
+:root {
+    --color-text: #f7d5c4;
+    --color-background: #2d3142;
+    --color-accent: #c3bac6;
+    --color-border: #564f5e;
+}
+
+.colored-inverted {
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+.colored {
+    color: var(--color-background);
+    background-color: var(--color-text);
+}
+
+.button {
+    border: 1px solid var(--color-border);
+    font-weight: bold;
+    background-color: var(--color-text);
+    color: var(--color-background);
+
+    &.button-add {
+        padding: 1rem;
+    }
+}
+
+input {
+    border: 1px solid var(--color-text);
+    text-indent: 0.5rem;
+}
+
+textarea {
+    border: 1px solid var(--color-text);
+    text-indent: 0.5rem;
+}

@@ -82,6 +82,10 @@ pub fn App() -> impl IntoView {
         <Link rel="preconnect" href="https://fonts.googleapis.com" />
         <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
         <link href={move || themes.0.read().font().1} rel="stylesheet" />
+        <Style>
+            {move ||
+                format!(r#":root {{--color-text: {}; --color-background: {}; --color-accent: {}; --color-border: {};}}"#, themes.0.read().colors().text, themes.0.read().colors().background, themes.0.read().colors().accent, themes.0.read().colors().border)}
+        </Style>
 
 
             <Router>

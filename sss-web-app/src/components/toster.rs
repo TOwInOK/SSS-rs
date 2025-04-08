@@ -167,6 +167,7 @@ pub enum ToastContext {
     Warn(String),
 }
 
+// TODO: Move to css
 impl ToastContext {
     pub fn title(&self) -> &'static str {
         match self {

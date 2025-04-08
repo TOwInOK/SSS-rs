@@ -22,12 +22,7 @@ pub fn ThemeSelector() -> impl IntoView {
         <div class="grid grid-flow-col gap-2 items-center border p-1.5 justify-center">
             <div>Themes</div>
             <select
-            class="truncate max-w-48 items-center w-full"
-                style=move || format!(
-                    "background-color: {}; color: {}",
-                    get.read().colors().text,
-                    get.read().colors().background
-                )
+            class="truncate max-w-48 items-center w-full colored"
                 on:change=move |ev| {
                     if let Ok(value) = event_target_value(&ev).parse() {
                         set.update(|x| *x = value);
@@ -53,7 +48,6 @@ pub fn ThemeSelector() -> impl IntoView {
 #[component]
 pub fn LayoutSelector() -> impl IntoView {
     let (get, set) = use_context::<RW<HtmlLayouts>>().unwrap();
-    let theme = use_context::<RW<Themes>>().unwrap().0;
     let current = get.get_untracked();
     let items = std::iter::once(current.clone())
         .chain(
@@ -67,12 +61,7 @@ pub fn LayoutSelector() -> impl IntoView {
         <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-center">
             <div>Layouts</div>
             <select
-                class="truncate max-w-48 items-center w-full"
-                style=move || format!(
-                    "background-color: {}; color: {}",
-                    theme.get().colors().text,
-                    theme.get().colors().background
-                )
+                class="truncate max-w-48 items-center w-full colored"
                 on:change=move |ev| {
                     if let Ok(value) = event_target_value(&ev).parse() {
                         set.update(|x| *x = value);
@@ -104,7 +93,6 @@ where
     A: Fn(leptos::web_sys::Event) + 'static,
     P: Fn() -> String + 'static + Send,
 {
-    let theme = use_context::<RW<Themes>>().unwrap().0;
     let providers = sss_core::types::provider::Tabler::all_icons();
     view! {
         <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-between">
@@ -118,11 +106,7 @@ where
                 providers.iter().map(|category| {
                     view! {
                         <option value=category.to_string()
-                            style=move || format!(
-                                "background-color: {}; color: {}",
-                                theme.get().colors().text,
-                                theme.get().colors().background
-                            )
+                        class="colored"
                         >
                             {category.to_string()}
                         </option>
