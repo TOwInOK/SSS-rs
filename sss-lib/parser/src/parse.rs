@@ -1,3 +1,4 @@
+use ron::ser::PrettyConfig;
 use serde::{Deserialize, Serialize};
 
 use crate::error::{Error, Result};
@@ -44,7 +45,7 @@ pub fn save_ron<T: Serialize>(
     path: impl AsRef<Path>,
     data: &T,
 ) -> Result<()> {
-    let file = ron::to_string(data)?;
+    let file = ron::ser::to_string_pretty(data, PrettyConfig::default())?;
     fs::write(path, file).map_err(Error::from)
 }
 
