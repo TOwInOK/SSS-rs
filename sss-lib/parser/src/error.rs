@@ -14,6 +14,8 @@ pub enum Error {
     ArgumentIncorrect(String),
     #[error("fail to save toml: {0}")]
     TomlSave(#[from] toml::ser::Error),
+    #[error("Wrong path: {0}")]
+    WrongFilePath(String),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

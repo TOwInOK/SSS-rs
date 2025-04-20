@@ -246,7 +246,6 @@ impl<L: Layout<String> + Clone> FilterLimitations for HtmlTeraRender<'_, '_, '_,
             }
             for repo in &mut data.layout.repos {
                 safe_truncate(&mut repo.name, repos_string_len);
-                safe_truncate(&mut repo.link.link, repos_string_len);
             }
 
             // Filter socials

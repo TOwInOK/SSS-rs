@@ -3,25 +3,29 @@ use serde::{Deserialize, Serialize};
 use crate::error::{Error, Result};
 use std::{fs, path::Path, str::FromStr};
 /// Fetch file by path
-pub fn fetch(path: &Path) -> Result<String> {
+pub fn fetch(path: impl AsRef<Path>) -> Result<String> {
     Ok(fs::read_to_string(path)?)
 }
 /// Parse config [Settings] from toml file
-pub fn parse_toml<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
+pub fn parse_toml<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let file = fetch(path)?;
     Ok(toml::from_str(&file)?)
 }
 /// Parse config [Settings] from json file
-pub fn parse_json<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
+pub fn parse_json<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let file = fetch(path)?;
     Ok(serde_json::from_str(&file)?)
 }
 
 pub fn save<T: Serialize>(
-    path: &Path,
+    path: impl AsRef<Path>,
     data: &T,
 ) -> Result<()> {
-    match FetchType::from_str(path.to_str().unwrap_or_default())? {
+    match FetchType::from_str(
+        path.as_ref()
+            .to_str()
+            .ok_or_else(|| Error::WrongFilePath(path.as_ref().display().to_string()))?,
+    )? {
         FetchType::Json => save_json(path, data),
         FetchType::Toml => save_toml(path, data),
         FetchType::Ron => save_ron(path, data),
@@ -29,7 +33,7 @@ pub fn save<T: Serialize>(
 }
 
 pub fn save_toml<T: Serialize>(
-    path: &Path,
+    path: impl AsRef<Path>,
     data: &T,
 ) -> Result<()> {
     let file = toml::to_string(data)?;
@@ -37,7 +41,7 @@ pub fn save_toml<T: Serialize>(
 }
 
 pub fn save_ron<T: Serialize>(
-    path: &Path,
+    path: impl AsRef<Path>,
     data: &T,
 ) -> Result<()> {
     let file = ron::to_string(data)?;
@@ -45,7 +49,7 @@ pub fn save_ron<T: Serialize>(
 }
 
 pub fn save_json<T: Serialize>(
-    path: &Path,
+    path: impl AsRef<Path>,
     data: &T,
 ) -> Result<()> {
     let file = serde_json::to_string_pretty(data)?;
@@ -53,14 +57,19 @@ pub fn save_json<T: Serialize>(
 }
 
 /// Parse config [Settings] from ron file
-pub fn parse_ron<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
+pub fn parse_ron<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let file = fetch(path)?;
     ron::from_str(&file).map_err(|e| Error::from(ron::Error::from(e)))
 }
 
 /// Fetch [Settings] by path
-pub fn parse<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
-    match FetchType::from_str(path.to_str().unwrap_or_default())? {
+pub fn parse<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
+    let path_str = path
+        .as_ref()
+        .to_str()
+        .ok_or_else(|| Error::WrongFilePath(path.as_ref().display().to_string()))?;
+
+    match FetchType::from_str(path_str)? {
         FetchType::Json => parse_json(path),
         FetchType::Toml => parse_toml(path),
         FetchType::Ron => parse_ron(path),
@@ -94,7 +103,7 @@ impl FromStr for FetchType {
 
 pub trait Loader {
     /// Load any T from file
-    fn load<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T> {
+    fn load<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
         parse(path)
     }
 }
@@ -102,7 +111,7 @@ pub trait Loader {
 pub trait Saver {
     /// Save any T to file
     fn save<T: Serialize>(
-        path: &Path,
+        path: impl AsRef<Path>,
         data: &T,
     ) -> Result<()> {
         save(path, data)
