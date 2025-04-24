@@ -101,23 +101,19 @@ pub fn ToastStore() -> impl IntoView {
     });
 
     view! {
-        <div class="fixed bottom-0 right-0 grid gap-2 z-50 w-screen md:w-1/2 transition-discrete transition-all will-change-transform will-change-opacity will-change-contents ease-in-out duration-300" style={move ||
-            if !store.0.read().items.is_empty() {
-                "opacity: 100; transform: translateY(0);"
-            } else {
-                "opacity: 0; transform: translateY(100%);"
+        <div
+            class="fixed bottom-0 right-0 grid gap-2 z-50 w-screen md:w-1/2 transition-discrete transition-all will-change-transform will-change-opacity will-change-contents ease-in-out duration-300"
+            style=move || {
+                if !store.0.read().items.is_empty() {
+                    "opacity: 100; transform: translateY(0);"
+                } else {
+                    "opacity: 0; transform: translateY(100%);"
+                }
             }
-        }>
+        >
             <SectionInverted title="Notifications">
-                <For
-                    each=move || store.0.read().items.clone()
-                    key=|item| item.id
-                    let:item
-                >
-                    <Toast
-                        context=item.context.clone()
-                        id=item.id
-                    />
+                <For each=move || store.0.read().items.clone() key=|item| item.id let:item>
+                    <Toast context=item.context.clone() id=item.id />
                 </For>
             </SectionInverted>
         </div>
@@ -135,23 +131,23 @@ fn Toast(
 
     view! {
         <div
-            id={id}
+            id=id
             class="grid gap-4 p-1.5 border z-50 "
             style=move || format!("background-color: {};", context.get().bg())
         >
             <SectionInvertedWith
-                title={context.get_untracked().title()}
-                with=view!{
+                title=context.get_untracked().title()
+                with=view! {
                     <Button
                         alt=|| "Close toast".to_string()
-                        action=move || {store.update(|s| s.remove(id));}
-                        style = ButtonStyle::Remove
+                        action=move || {
+                            store.update(|s| s.remove(id));
+                        }
+                        style=ButtonStyle::Remove
                     />
                 }
             >
-            <p>
-                {move || context.get().inner()}
-            </p>
+                <p>{move || context.get().inner()}</p>
             </SectionInvertedWith>
         </div>
     }

@@ -10,7 +10,7 @@ use crate::components::toster::ToastStore;
 pub fn CardEditor() -> impl IntoView {
     view! {
         <div class="grid grid-row-2 md:grid-row-1 md:grid-cols-2 md:gap-4 md:grid-cols-[1fr_1fr] ">
-            <SettingsBuilder/>
+            <SettingsBuilder />
             // card view and selectors
             <div class="flex-col h-screen overflow-y-auto  md:h-full inline-flex md:gap-4 order-first md:order-last relative">
                 <div class="grid 2xl:grid-cols-3 gap-4 p-1.5 -pl-1.5 border">
@@ -19,9 +19,8 @@ pub fn CardEditor() -> impl IntoView {
                     <LayoutSelector />
                 </div>
                 <CardViewer />
-                <ToastStore/>
+                <ToastStore />
             </div>
         </div>
-
     }
 }

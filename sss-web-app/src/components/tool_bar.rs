@@ -15,11 +15,11 @@ pub mod save_button;
 pub fn ToolBar() -> impl IntoView {
     view! {
         <div class="flex border p-1.5 justify-evenly md:gap-0">
-            <DropButton/>
-            <RestoreButton/>
-            <SaveButton/>
-            <LoadButton/>
-            <DownloadButton/>
+            <DropButton />
+            <RestoreButton />
+            <SaveButton />
+            <LoadButton />
+            <DownloadButton />
         </div>
     }
 }

@@ -23,9 +23,11 @@ pub fn Text(
     };
     let colored = { if inverted { "colored" } else { "colored-inverted" } };
     view! {
-            <p class=format!("pl-2 {} {} {}", if indented { "pl-2" } else { "" }, style, colored)
-            >
-                {title}
-            </p>
+        <p class=format!(
+            "pl-2 {} {} {}",
+            if indented { "pl-2" } else { "" },
+            style,
+            colored,
+        )>{title}</p>
     }
 }

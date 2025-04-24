@@ -78,28 +78,40 @@ pub fn App() -> impl IntoView {
         <Title text="SSS-rs test" />
         <Meta charset="UTF-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="darkreader" content="none"/>
+        <meta name="darkreader" content="none" />
         <Link rel="preconnect" href="https://fonts.googleapis.com" />
         <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link href={move || themes.0.read().font().1} rel="stylesheet" />
+        <link href=move || themes.0.read().font().1 rel="stylesheet" />
         <Style>
-            {move ||
-                format!(r#":root {{--color-text: {}; --color-background: {}; --color-accent: {}; --color-border: {};}}"#, themes.0.read().colors().text, themes.0.read().colors().background, themes.0.read().colors().accent, themes.0.read().colors().border)}
+            {move || {
+                format!(
+                    r#":root {{--color-text: {}; --color-background: {}; --color-accent: {}; --color-border: {};}}"#,
+                    themes.0.read().colors().text,
+                    themes.0.read().colors().background,
+                    themes.0.read().colors().accent,
+                    themes.0.read().colors().border,
+                )
+            }}
         </Style>
 
+        <Router>
+            <div
+                style=move || {
+                    format!(
+                        "background-color: {}; color: {}",
+                        themes.0.read().colors().background,
+                        themes.0.read().colors().text,
+                    )
+                }
+                class="grid min-h-dvh overflow-y-scroll overflow-hidden transition duration-300 ease-in transition-discrete transition-all"
+            >
+                <Routes fallback=|| view! { NotFound }>
+                    <Route path=path!("/") view=HomePage />
+                    <Route path=path!("/editor") view=CardEditor />
+                </Routes>
 
-            <Router>
-                <div
-                    style=move || {format!("background-color: {}; color: {}", themes.0.read().colors().background, themes.0.read().colors().text)}
-                    class="grid min-h-dvh overflow-y-scroll overflow-hidden transition duration-300 ease-in transition-discrete transition-all"
-                >
-                    <Routes fallback=|| view! { NotFound }>
-                        <Route path=path!("/") view=HomePage />
-                        <Route path=path!("/editor") view=CardEditor />
-                    </Routes>
-
-                </div>
-            </Router>
+            </div>
+        </Router>
     }
 }
 

@@ -73,8 +73,8 @@ pub fn DownloadButton() -> impl IntoView {
     view! {
         <Button
             alt=|| "Download html with card".to_string()
-            action=download_handler label=view! {
-            {Tabler::OUTLINE_HTML.to_leptos()}
-        }/>
+            action=download_handler
+            label=view! { {Tabler::OUTLINE_HTML.to_leptos()} }
+        />
     }
 }

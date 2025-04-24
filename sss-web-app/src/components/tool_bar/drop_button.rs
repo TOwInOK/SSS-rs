@@ -24,12 +24,15 @@ pub fn DropButton() -> impl IntoView {
         .1;
     view! {
         <Button
-        alt=|| "Drop config".to_string()
-        label=view! {
-           { Tabler::OUTLINE_TRASH.to_leptos() }
-        } action= move || {
-            set_settings.set(Data::default());
-             store.update(|x| x.push(ToastContext::Info("Configuration has dropped!".to_string())));
-        }/>
+            alt=|| "Drop config".to_string()
+            label=view! { {Tabler::OUTLINE_TRASH.to_leptos()} }
+            action=move || {
+                set_settings.set(Data::default());
+                store
+                    .update(|x| {
+                        x.push(ToastContext::Info("Configuration has dropped!".to_string()))
+                    });
+            }
+        />
     }
 }

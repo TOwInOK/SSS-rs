@@ -43,13 +43,9 @@ pub fn DefaultButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
     alt: Alt,
 ) -> impl IntoView {
     view! {
-        <button
-            title=alt
-            on:click=move |_| {
-                action()
-            }
-            class="button"
-        >{label}</button>
+        <button title=alt on:click=move |_| { action() } class="button">
+            {label}
+        </button>
     }
 }
 
@@ -59,13 +55,9 @@ pub fn AddButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
     alt: Alt,
 ) -> impl IntoView {
     view! {
-        <button
-            title=alt
-            on:click=move |_| {
-                action()
-            }
-            class="button button-add"
-        >+</button>
+        <button title=alt on:click=move |_| { action() } class="button button-add">
+            +
+        </button>
     }
 }
 
@@ -75,12 +67,8 @@ pub fn RemoveButton<A: Fn() + 'static, Alt: Fn() -> String + 'static + Send>(
     alt: Alt,
 ) -> impl IntoView {
     view! {
-        <button
-            title=alt
-            on:click=move |_| {
-                action()
-            }
-            class="button"
-        >x</button>
+        <button title=alt on:click=move |_| { action() } class="button">
+            x
+        </button>
     }
 }

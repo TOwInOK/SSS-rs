@@ -8,7 +8,11 @@ pub fn SectionInverted(
 ) -> impl IntoView {
     view! {
         <BlankedSection>
-            <Text title={title} inverted=true style=crate::components::reusable_components::text::TextStyle::Primary/>
+            <Text
+                title=title
+                inverted=true
+                style=crate::components::reusable_components::text::TextStyle::Primary
+            />
             {children()}
         </BlankedSection>
     }
@@ -22,7 +26,11 @@ pub fn Section(
 ) -> impl IntoView {
     view! {
         <BlankedSection>
-            <Text title={title} inverted=true style=crate::components::reusable_components::text::TextStyle::Primary/>
+            <Text
+                title=title
+                inverted=true
+                style=crate::components::reusable_components::text::TextStyle::Primary
+            />
             {children()}
         </BlankedSection>
     }
@@ -37,7 +45,7 @@ pub fn SectionInvertedWith(
     view! {
         <BlankedSection>
             <div class="grid grid-cols-[5fr_1fr] gap-4">
-                <Text title={title} inverted=true style=TextStyle::Primary/>
+                <Text title=title inverted=true style=TextStyle::Primary />
                 {with}
             </div>
             {children()}
@@ -54,7 +62,7 @@ pub fn SectionWith(
     view! {
         <BlankedSection>
             <div class="grid grid-cols-[5fr_1fr] gap-4">
-                <Text title={title} style=TextStyle::Primary/>
+                <Text title=title style=TextStyle::Primary />
                 {with}
             </div>
             {children()}
@@ -65,11 +73,8 @@ pub fn SectionWith(
 #[component]
 pub fn BlankedSection(children: Children) -> impl IntoView {
     view! {
-        <div class="grid gap-4 p-4 border"
-            style=
-                "background-color: var(--color-background);"
+        <div class="grid gap-4 p-4 border" style="background-color: var(--color-background);">
 
-        >
             {children()}
         </div>
     }

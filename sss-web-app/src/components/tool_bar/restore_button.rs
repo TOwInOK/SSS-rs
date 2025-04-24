@@ -25,12 +25,15 @@ pub fn RestoreButton() -> impl IntoView {
 
     view! {
         <Button
-        alt=|| "Drop config".to_string()
-        label=view! {
-            {Tabler::OUTLINE_RESTORE.to_leptos()}
-        } action= move || {
-            set_settings.set(gen_example_config());
-             store.update(|x| x.push(ToastContext::Info("Configuration has restored!".to_string())));
-        }/>
+            alt=|| "Drop config".to_string()
+            label=view! { {Tabler::OUTLINE_RESTORE.to_leptos()} }
+            action=move || {
+                set_settings.set(gen_example_config());
+                store
+                    .update(|x| {
+                        x.push(ToastContext::Info("Configuration has restored!".to_string()))
+                    });
+            }
+        />
     }
 }

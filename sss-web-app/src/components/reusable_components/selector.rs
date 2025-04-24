@@ -22,7 +22,7 @@ pub fn ThemeSelector() -> impl IntoView {
         <div class="grid grid-flow-col gap-2 items-center border p-1.5 justify-center">
             <div>Themes</div>
             <select
-            class="truncate max-w-48 items-center w-full colored"
+                class="truncate max-w-48 items-center w-full colored"
                 on:change=move |ev| {
                     if let Ok(value) = event_target_value(&ev).parse() {
                         set.update(|x| *x = value);
@@ -30,15 +30,12 @@ pub fn ThemeSelector() -> impl IntoView {
                 }
                 prop:value=move || get.read().to_string()
             >
-            {
-                items.into_iter().map(|category| {
-                    view! {
-                        <option value=category.to_string()>
-                            {category.to_string()}
-                        </option>
-                    }
-                }).collect::<Vec<_>>()
-            }
+                {items
+                    .into_iter()
+                    .map(|category| {
+                        view! { <option value=category.to_string()>{category.to_string()}</option> }
+                    })
+                    .collect::<Vec<_>>()}
             </select>
         </div>
     }
@@ -69,15 +66,12 @@ pub fn LayoutSelector() -> impl IntoView {
                 }
                 prop:value=move || get.read().to_string()
             >
-            {
-                items.into_iter().map(|category| {
-                    view! {
-                        <option value=category.to_string()>
-                            {category.to_string()}
-                        </option>
-                    }
-                }).collect::<Vec<_>>()
-            }
+                {items
+                    .into_iter()
+                    .map(|category| {
+                        view! { <option value=category.to_string()>{category.to_string()}</option> }
+                    })
+                    .collect::<Vec<_>>()}
             </select>
         </div>
     }
@@ -97,22 +91,17 @@ where
     view! {
         <div class=" grid grid-flow-col gap-2 items-center self-center appearance-auto border p-1.5 justify-between">
             <div>Icon :</div>
-            <select
-            class="border"
-                on:change=action
-                prop:value=prop
-            >
-            {
-                providers.iter().map(|category| {
-                    view! {
-                        <option value=category.to_string()
-                        class="colored"
-                        >
-                            {category.to_string()}
-                        </option>
-                    }
-                }).collect_view()
-            }
+            <select class="border" on:change=action prop:value=prop>
+                {providers
+                    .iter()
+                    .map(|category| {
+                        view! {
+                            <option value=category.to_string() class="colored">
+                                {category.to_string()}
+                            </option>
+                        }
+                    })
+                    .collect_view()}
             </select>
         </div>
     }
