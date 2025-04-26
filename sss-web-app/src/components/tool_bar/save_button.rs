@@ -41,22 +41,20 @@ pub fn SaveButton() -> impl IntoView {
                             });
                             store
                                 .update(|x| {
-                                    x
-                                        .push(
-                                            ToastContext::Info(
-                                                "Your configuration has saved into clipboard!\nPaste it in sss-cli :)"
-                                                    .to_string(),
-                                            ),
-                                        )
+                                    x.push(
+                                        ToastContext::Info(
+                                            "Your configuration has saved into clipboard!\nPaste it in sss-cli :)"
+                                                .to_string(),
+                                        ),
+                                    )
                                 });
                         }
                         Err(e) => {
                             store
                                 .update(|x| {
-                                    x
-                                        .push(
-                                            ToastContext::Error("Got error, check console".to_string()),
-                                        )
+                                    x.push(
+                                        ToastContext::Error("Got error, check console".to_string()),
+                                    )
                                 });
                             web_sys::console::error_1(&JsValue::from_str(&e.to_string()))
                         }

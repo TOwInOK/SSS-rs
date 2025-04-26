@@ -38,10 +38,9 @@ pub fn LoadButton() -> impl IntoView {
                                     if value.is_empty() {
                                         store
                                             .update(|x| {
-                                                x
-                                                    .push(
-                                                        ToastContext::Warn("Your clipboard is empty".to_string()),
-                                                    )
+                                                x.push(
+                                                    ToastContext::Warn("Your clipboard is empty".to_string()),
+                                                )
                                             });
                                         return;
                                     }
@@ -50,20 +49,18 @@ pub fn LoadButton() -> impl IntoView {
                                         Ok(e) => {
                                             store
                                                 .update(|x| {
-                                                    x
-                                                        .push(
-                                                            ToastContext::Info("Your base64 has loaded!".to_string()),
-                                                        )
+                                                    x.push(
+                                                        ToastContext::Info("Your base64 has loaded!".to_string()),
+                                                    )
                                                 });
                                             e.update_context(set_settings, set_themes, set_layouts)
                                         }
                                         Err(e) => {
                                             store
                                                 .update(|x| {
-                                                    x
-                                                        .push(
-                                                            ToastContext::Error("Your base64 is't valid".to_string()),
-                                                        )
+                                                    x.push(
+                                                        ToastContext::Error("Your base64 is't valid".to_string()),
+                                                    )
                                                 });
                                             web_sys::console::error_1(
                                                 &JsValue::from_str(&e.to_string()),
@@ -75,10 +72,9 @@ pub fn LoadButton() -> impl IntoView {
                             Err(err) => {
                                 store
                                     .update(|x| {
-                                        x
-                                            .push(
-                                                ToastContext::Error("Got error, check console".to_string()),
-                                            )
+                                        x.push(
+                                            ToastContext::Error("Got error, check console".to_string()),
+                                        )
                                     });
                                 web_sys::console::error_1(&err);
                             }

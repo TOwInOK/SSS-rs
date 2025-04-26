@@ -1,5 +1,5 @@
 use base64_light::{base64_decode_str, base64_encode};
-use leptos::prelude::{Get, ReadSignal, Set, WriteSignal};
+use leptos::prelude::{Get, Set, Signal, WriteSignal};
 use serde::{Deserialize, Serialize};
 use sss_core::Data;
 use sss_std::prelude::{HtmlLayouts, Themes};
@@ -175,4 +175,4 @@ impl SSSsetings {
 }
 
 type W<T> = WriteSignal<T>;
-type R<T> = ReadSignal<T>;
+type R<T> = Signal<T>;

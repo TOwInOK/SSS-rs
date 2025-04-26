@@ -17,7 +17,7 @@ pub mod tools;
 // Top-Level pages
 use crate::pages::card_editor::CardEditor;
 
-pub type RW<T> = (ReadSignal<T>, WriteSignal<T>);
+pub type RW<T> = (Signal<T>, WriteSignal<T>);
 pub type M<T> = Memo<T>;
 
 /// An app router which renders the homepage and handles 404's
@@ -26,70 +26,45 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    let (settings_store, settings_set_store, _) =
-        use_local_storage::<Data, JsonSerdeCodec>("settings");
-    let (themes_store, themes_set_store, _) = use_local_storage::<Themes, JsonSerdeCodec>("themes");
-    let (layouts_store, layouts_set_store, _) =
-        use_local_storage::<HtmlLayouts, JsonSerdeCodec>("layouts");
+    let (settings, set_settings, _) = use_local_storage::<Data, JsonSerdeCodec>("settings");
+    let (themes, set_themes, _) = use_local_storage::<Themes, JsonSerdeCodec>("themes");
+    let (layouts, set_layouts, _) = use_local_storage::<HtmlLayouts, JsonSerdeCodec>("layouts");
 
-    let settings = signal({
-        if is_local_storage_settings_exist() {
-            settings_store
-                .try_get_untracked()
-                .map_or_else(gen_example_config, |x| x)
-        } else {
-            gen_example_config()
-        }
-    });
-    let themes = signal(if is_local_storage_themes_exist() {
-        themes_store
-            .try_get_untracked()
-            .map_or_else(|| Themes::ROSE_PINE, |x| x)
-    } else {
-        Themes::ROSE_PINE
-    });
-    let layouts = signal(layouts_store.get_untracked());
-    let toster_store = signal(ToastStore::default());
+    if (move || settings.custom_try_read().is_none())() {
+        set_settings.set(gen_example_config());
+    }
+    if (move || themes.custom_try_read().is_none())() {
+        set_themes.set(Themes::default());
+    }
+    if (move || layouts.custom_try_read().is_none())() {
+        set_layouts.set(HtmlLayouts::default());
+    }
 
-    provide_context(themes);
-    provide_context(settings);
-    provide_context(layouts);
-    provide_context(toster_store);
+    let toaster_store = signal(ToastStore::default());
 
-    Effect::watch(
-        move || settings.0.get(),
-        move |current, _, _| settings_set_store.set(current.clone()),
-        true,
-    );
-    Effect::watch(
-        move || themes.0.get(),
-        move |current, _, _| themes_set_store.set(current.clone()),
-        true,
-    );
-    Effect::watch(
-        move || layouts.0.get(),
-        move |current, _, _| layouts_set_store.set(current.clone()),
-        true,
-    );
+    provide_context((settings, set_settings));
+    provide_context((themes, set_themes));
+    provide_context((layouts, set_layouts));
+    provide_context::<RW<ToastStore>>((toaster_store.0.into(), toaster_store.1));
 
     view! {
         <Html attr:lang="en" attr:dir="ltr" />
 
         <Title text="SSS-rs test" />
         <Meta charset="UTF-8" />
-        <Meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <Meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="darkreader" content="none" />
         <Link rel="preconnect" href="https://fonts.googleapis.com" />
         <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link href=move || themes.0.read().font().1 rel="stylesheet" />
+        <link href=move || themes.read().font().1 rel="stylesheet" />
         <Style>
             {move || {
                 format!(
                     r#":root {{--color-text: {}; --color-background: {}; --color-accent: {}; --color-border: {};}}"#,
-                    themes.0.read().colors().text,
-                    themes.0.read().colors().background,
-                    themes.0.read().colors().accent,
-                    themes.0.read().colors().border,
+                    themes.read().colors().text,
+                    themes.read().colors().background,
+                    themes.read().colors().accent,
+                    themes.read().colors().border,
                 )
             }}
         </Style>
@@ -99,8 +74,8 @@ pub fn App() -> impl IntoView {
                 style=move || {
                     format!(
                         "background-color: {}; color: {}",
-                        themes.0.read().colors().background,
-                        themes.0.read().colors().text,
+                        themes.read().colors().background,
+                        themes.read().colors().text,
                     )
                 }
                 class="grid min-h-dvh overflow-y-scroll overflow-hidden transition duration-300 ease-in transition-discrete transition-all"
@@ -113,24 +88,4 @@ pub fn App() -> impl IntoView {
             </div>
         </Router>
     }
-}
-
-fn is_local_storage_settings_exist() -> bool {
-    window()
-        .local_storage()
-        .ok()
-        .flatten()
-        .and_then(|storage| storage.get_item("settings").ok())
-        .flatten()
-        .is_some()
-}
-
-fn is_local_storage_themes_exist() -> bool {
-    window()
-        .local_storage()
-        .ok()
-        .flatten()
-        .and_then(|storage| storage.get_item("themes").ok())
-        .flatten()
-        .is_some()
 }

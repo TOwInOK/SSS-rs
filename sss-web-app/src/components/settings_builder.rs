@@ -2,6 +2,7 @@ use crate::components::reusable_components::{
     button::ButtonStyle,
     input::{InputNumeric, InputUrl},
     prelude::*,
+    stack::DynamicStack,
 };
 use leptos::prelude::*;
 use render::layout::Limitations;
@@ -63,7 +64,9 @@ pub fn UserSection() -> impl IntoView {
                     }
                     prop=move || { settings.get().layout.user.name }
                     maxlength=move || limitations.read().user_name_len()
+                    current_length=move || { settings.get().layout.user.name.chars().count() }
                 />
+
             </Stack>
 
             <Stack title="current name">
@@ -79,7 +82,11 @@ pub fn UserSection() -> impl IntoView {
                         }
                         prop=move || settings.get().layout.user.current_nickname.word
                         maxlength=move || limitations.read().user_global_nickname_len()
+                        current_length=move || {
+                            settings.read().layout.user.current_nickname.word.chars().count()
+                        }
                     />
+
                     <Input
                         alt=|| "Nickname pronunciation".to_string()
                         placeholder=|| "Enter pronunciation".to_string()
@@ -91,7 +98,11 @@ pub fn UserSection() -> impl IntoView {
                         }
                         prop=move || settings.get().layout.user.current_nickname.pronounce
                         maxlength=move || limitations.read().user_global_nickname_pronounce_len()
+                        current_length=move || {
+                            settings.read().layout.user.current_nickname.pronounce.chars().count()
+                        }
                     />
+
                 </ScrollableBox>
             </Stack>
 
@@ -125,7 +136,17 @@ pub fn UserSection() -> impl IntoView {
                                             .clone()
                                     }
                                     maxlength=move || limitations.read().user_global_nickname_len()
+                                    current_length=move || {
+                                        settings
+                                            .read()
+                                            .layout
+                                            .specifications[index]
+                                            .clone()
+                                            .chars()
+                                            .count()
+                                    }
                                 />
+
                                 <Input
                                     alt=|| "Previous nickname pronunciation".to_string()
                                     placeholder=|| "Enter pronunciation".to_string()
@@ -149,7 +170,17 @@ pub fn UserSection() -> impl IntoView {
                                     maxlength=move || {
                                         limitations.read().user_global_nickname_pronounce_len()
                                     }
+                                    current_length=move || {
+                                        settings
+                                            .read()
+                                            .layout
+                                            .specifications[index]
+                                            .clone()
+                                            .chars()
+                                            .count()
+                                    }
                                 />
+
                                 <Button
                                     alt=|| "Remove previous nickname".to_string()
                                     action=move || {
@@ -202,6 +233,7 @@ pub fn AboutSection() -> impl IntoView {
                     }
                     prop=move || { settings.read().layout.about.clone() }
                     maxlength=move || limitations.read().about()
+                    current_length=move || { settings.read().layout.about.clone().chars().count() }
                 />
             </Stack>
         </SectionInverted>
@@ -214,55 +246,59 @@ pub fn SpecificationsSection() -> impl IntoView {
     let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
         <SectionInverted title="Specifications section">
-            <Stack title="specifications">
-                <ScrollXBar>
-                    <For
-                        each=move || (0..settings.read().layout.specifications.len())
-                        key=|index| format!("specifications-stack-{}", index)
-                        let:index
-                    >
-                        <div class="grid gap-2 snap-start">
-                            <Input
-                                alt=|| "Specification".to_string()
-                                placeholder=|| {
-                                    "Enter specification (e.g. Full-Stack developer)".to_string()
-                                }
-                                action=move |ev| {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.specifications[index] = ev.target().value();
-                                        });
-                                }
-                                prop=move || settings.read().layout.specifications[index].clone()
-                                maxlength=move || limitations.read().specifications_count().1
-                            />
-                            <Button
-                                alt=|| "Remove specification".to_string()
-                                action=move || {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.specifications.remove(index);
-                                        });
-                                }
-                                style=ButtonStyle::Remove
-                            />
-                        </div>
-                    </For>
-                    <Show when=move || {
-                        settings.read().layout.specifications.len()
-                            < limitations.read().specifications_count().0
-                    }>
+            <DynamicStack
+                title="specifications"
+                max_length=move || limitations.read().specifications_count().0
+                current_length=move || settings.read().layout.specifications.len()
+            >
+                <For
+                    each=move || (0..settings.read().layout.specifications.len())
+                    key=|index| format!("specifications-stack-{}", index)
+                    let:index
+                >
+                    <div class="grid gap-2 snap-start">
+                        <Input
+                            alt=|| "Specification".to_string()
+                            placeholder=|| {
+                                "Enter specification (e.g. Full-Stack developer)".to_string()
+                            }
+                            action=move |ev| {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.specifications[index] = ev.target().value();
+                                    });
+                            }
+                            prop=move || settings.read().layout.specifications[index].clone()
+                            maxlength=move || limitations.read().specifications_count().1
+                            current_length=move || {
+                                settings.read().layout.specifications[index].clone().chars().count()
+                            }
+                        />
                         <Button
-                            alt=|| "Add new specification".to_string()
+                            alt=|| "Remove specification".to_string()
                             action=move || {
                                 set_settings
-                                    .update(|x| x.layout.specifications.push(String::new()));
+                                    .update(|x| {
+                                        x.layout.specifications.remove(index);
+                                    });
                             }
-                            style=ButtonStyle::Add
+                            style=ButtonStyle::Remove
                         />
-                    </Show>
-                </ScrollXBar>
-            </Stack>
+                    </div>
+                </For>
+                <Show when=move || {
+                    settings.read().layout.specifications.len()
+                        < limitations.read().specifications_count().0
+                }>
+                    <Button
+                        alt=|| "Add new specification".to_string()
+                        action=move || {
+                            set_settings.update(|x| x.layout.specifications.push(String::new()));
+                        }
+                        style=ButtonStyle::Add
+                    />
+                </Show>
+            </DynamicStack>
         </SectionInverted>
     }
 }
@@ -274,75 +310,79 @@ pub fn RepositoriesSection() -> impl IntoView {
     let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
         <SectionInverted title="Projects section">
-            <Stack title="repositories">
-                <ScrollXBar>
-                    <For
-                        each=move || (0..settings.read().layout.repos.len())
-                        key=|index| format!("projects-stack-{}", index)
-                        let:index
-                    >
-                        <ScrollableBox>
-                            <Input
-                                alt=|| "Repository name".to_string()
-                                placeholder=|| "Enter repository name (e.g. SSS-rs)".to_string()
-                                action=move |ev| {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.repos[index].name = ev.target().value();
-                                        });
-                                }
-                                prop=move || settings.read().layout.repos[index].name.clone()
-                                maxlength=move || limitations.read().repositories_max_string_len()
-                            />
-                            <InputUrl
-                                alt=|| "Repository link".to_string()
-                                placeholder=|| "Enter repository URL".to_string()
-                                action=move |ev| {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.repos[index].link.link = ev.target().value();
-                                        });
-                                }
-                                prop=move || settings.read().layout.repos[index].link.link.clone()
-                            />
-                            <IconSelector
-                                action=move |ev| {
-                                    if let Ok(value) = event_target_value(&ev).parse() {
-                                        set_settings
-                                            .update(|x| x.layout.repos[index].link.icon = value);
-                                    }
-                                }
-                                prop=move || {
-                                    settings.read().layout.repos[index].link.icon.to_string()
-                                }
-                            />
-
-                            <Button
-                                alt=|| "Remove repository".to_string()
-                                action=move || {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.repos.remove(index);
-                                        });
-                                }
-                                style=ButtonStyle::Remove
-                            />
-                        </ScrollableBox>
-                    </For>
-                    <Show when=move || {
-                        settings.read().layout.repos.len()
-                            < limitations.read().repositories_max_len()
-                    }>
-                        <Button
-                            alt=|| "Add new repository".to_string()
-                            action=move || {
-                                set_settings.update(|x| x.layout.repos.push(Project::default()));
+            <DynamicStack
+                title="repositories"
+                max_length=move || limitations.read().repositories_max_len()
+                current_length=move || settings.read().layout.repos.len()
+            >
+                <For
+                    each=move || (0..settings.read().layout.repos.len())
+                    key=|index| format!("projects-stack-{}", index)
+                    let:index
+                >
+                    <ScrollableBox>
+                        <Input
+                            alt=|| "Repository name".to_string()
+                            placeholder=|| "Enter repository name (e.g. SSS-rs)".to_string()
+                            action=move |ev| {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.repos[index].name = ev.target().value();
+                                    });
                             }
-                            style=ButtonStyle::Add
+                            prop=move || settings.read().layout.repos[index].name.clone()
+                            maxlength=move || limitations.read().repositories_max_string_len()
+                            current_length=move || {
+                                settings.read().layout.repos[index].name.clone().chars().count()
+                            }
                         />
-                    </Show>
-                </ScrollXBar>
-            </Stack>
+                        <InputUrl
+                            alt=|| "Repository link".to_string()
+                            placeholder=|| "Enter repository URL".to_string()
+                            action=move |ev| {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.repos[index].link.link = ev.target().value();
+                                    });
+                            }
+                            prop=move || settings.read().layout.repos[index].link.link.clone()
+                        />
+                        <IconSelector
+                            action=move |ev| {
+                                if let Ok(value) = event_target_value(&ev).parse() {
+                                    set_settings
+                                        .update(|x| x.layout.repos[index].link.icon = value);
+                                }
+                            }
+                            prop=move || {
+                                settings.read().layout.repos[index].link.icon.to_string()
+                            }
+                        />
+
+                        <Button
+                            alt=|| "Remove repository".to_string()
+                            action=move || {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.repos.remove(index);
+                                    });
+                            }
+                            style=ButtonStyle::Remove
+                        />
+                    </ScrollableBox>
+                </For>
+                <Show when=move || {
+                    settings.read().layout.repos.len() < limitations.read().repositories_max_len()
+                }>
+                    <Button
+                        alt=|| "Add new repository".to_string()
+                        action=move || {
+                            set_settings.update(|x| x.layout.repos.push(Project::default()));
+                        }
+                        style=ButtonStyle::Add
+                    />
+                </Show>
+            </DynamicStack>
         </SectionInverted>
     }
 }
@@ -354,442 +394,453 @@ pub fn SocialsSection() -> impl IntoView {
     let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
         <SectionInverted title="Social section">
-            <Stack title="social sites">
-                <ScrollXBar>
-                    <For
-                        each=move || (0..settings.read().layout.socials.len())
-                        key=|index| format!("social-section-stack-{}", index)
-                        let:index
-                    >
-                        <ScrollableBox>
-                            <InputUrl
-                                alt=|| "Social link".to_string()
-                                placeholder=|| "Enter social media URL".to_string()
-                                action=move |ev| {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.socials[index].link = ev.target().value();
-                                        });
-                                }
-                                prop=move || settings.read().layout.socials[index].link.clone()
-                            />
-                            <IconSelector
-                                action=move |ev| {
-                                    if let Ok(value) = event_target_value(&ev).parse() {
-                                        set_settings
-                                            .update(|x| x.layout.socials[index].icon = value);
-                                    }
-                                }
-                                prop=move || settings.read().layout.socials[index].icon.to_string()
-                            />
-                            <Button
-                                alt=|| "Remove social link".to_string()
-                                action=move || {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.socials.remove(index);
-                                        });
-                                }
-                                style=ButtonStyle::Remove
-                            />
-                        </ScrollableBox>
-                    </For>
-                    <Show when=move || {
-                        settings.read().layout.socials.len() < limitations.read().socials()
-                    }>
-                        <Button
-                            alt=|| "Add new social link".to_string()
-                            action=move || {
-                                set_settings.update(|x| x.layout.socials.push(Link::default()));
+            <DynamicStack
+                title="social sites"
+                current_length=move || settings.read().layout.socials.len()
+                max_length=move || limitations.read().socials()
+            >
+                <For
+                    each=move || (0..settings.read().layout.socials.len())
+                    key=|index| format!("social-section-stack-{}", index)
+                    let:index
+                >
+                    <ScrollableBox>
+                        <InputUrl
+                            alt=|| "Social link".to_string()
+                            placeholder=|| "Enter social media URL".to_string()
+                            action=move |ev| {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.socials[index].link = ev.target().value();
+                                    });
                             }
-                            style=ButtonStyle::Add
+                            prop=move || settings.read().layout.socials[index].link.clone()
                         />
-                    </Show>
-                </ScrollXBar>
-            </Stack>
+                        <IconSelector
+                            action=move |ev| {
+                                if let Ok(value) = event_target_value(&ev).parse() {
+                                    set_settings.update(|x| x.layout.socials[index].icon = value);
+                                }
+                            }
+                            prop=move || settings.read().layout.socials[index].icon.to_string()
+                        />
+                        <Button
+                            alt=|| "Remove social link".to_string()
+                            action=move || {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.socials.remove(index);
+                                    });
+                            }
+                            style=ButtonStyle::Remove
+                        />
+                    </ScrollableBox>
+                </For>
+                <Show when=move || {
+                    settings.read().layout.socials.len() < limitations.read().socials()
+                }>
+                    <Button
+                        alt=|| "Add new social link".to_string()
+                        action=move || {
+                            set_settings.update(|x| x.layout.socials.push(Link::default()));
+                        }
+                        style=ButtonStyle::Add
+                    />
+                </Show>
+            </DynamicStack>
         </SectionInverted>
     }
 }
 
 /// Component for configuring the "Skills" section.
 #[component]
-
 pub fn SkillsSection() -> impl IntoView {
     let (settings, set_settings) = use_context::<RW<Data>>().unwrap();
     let themes = use_context::<RW<Themes>>().unwrap().0;
     let limitations = use_context::<RW<HtmlLayouts>>().unwrap().0;
     view! {
         <SectionInverted title="Skills section">
-            <Stack title="skills">
-                <ScrollXBar>
-                    <For
-                        each=move || 0..settings.read().layout.skills.len()
-                        key=|index| format!("skills-section-stack-{}", index)
-                        let:index
-                    >
-                        <ScrollableBox>
-                            <Input
-                                alt=|| "Skill name".to_string()
-                                placeholder=|| "Enter skill name (e.g. Rust)".to_string()
-                                action=move |ev| {
-                                    set_settings
-                                        .update(|x| {
-                                            x.layout.skills[index].skill = ev.target().value();
-                                        });
-                                }
-                                prop=move || settings.read().layout.skills[index].skill.clone()
-                                maxlength=move || limitations.read().skills_skill_len()
-                            />
+            <DynamicStack
+                title="skills"
+                current_length=move || settings.read().layout.skills.len()
+                max_length=move || limitations.read().skills_max_len()
+            >
+                <For
+                    each=move || 0..settings.read().layout.skills.len()
+                    key=|index| format!("skills-section-stack-{}", index)
+                    let:index
+                >
+                    <ScrollableBox>
+                        <Input
+                            alt=|| "Skill name".to_string()
+                            placeholder=|| "Enter skill name (e.g. Rust)".to_string()
+                            action=move |ev| {
+                                set_settings
+                                    .update(|x| {
+                                        x.layout.skills[index].skill = ev.target().value();
+                                    });
+                            }
+                            prop=move || settings.read().layout.skills[index].skill.clone()
+                            maxlength=move || limitations.read().skills_skill_len()
+                            current_length=move || {
+                                settings.read().layout.skills[index].skill.chars().count()
+                            }
+                        />
 
-                            <Show when=move || limitations.read().skills_since()>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <InputNumeric
-                                        alt=|| "Start year".to_string()
-                                        placeholder=|| "Enter start year".to_string()
-                                        action=move |ev| {
-                                            set_settings
-                                                .update(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get_mut(index)
-                                                        .map(|x| {
-                                                            x.since.start = ev
-                                                                .target()
-                                                                .value()
-                                                                .parse::<usize>()
-                                                                .unwrap_or_default();
-                                                        })
-                                                        .unwrap_or_default()
-                                                });
-                                        }
-                                        prop=move || {
-                                            settings
-                                                .with(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get(index)
-                                                        .map(|x| x.since.start)
-                                                        .unwrap_or_default()
-                                                })
-                                                .to_string()
-                                        }
-                                    />
-                                    <InputNumeric
-                                        alt=|| "End year".to_string()
-                                        placeholder=|| "Enter end year".to_string()
-                                        action=move |ev| {
-                                            set_settings
-                                                .update(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get_mut(index)
-                                                        .map(|x| {
-                                                            x.since.end = ev
-                                                                .target()
-                                                                .value()
-                                                                .parse()
-                                                                .unwrap_or_default();
-                                                        })
-                                                        .unwrap_or_default()
-                                                });
-                                        }
-                                        prop=move || {
-                                            settings
-                                                .with(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get(index)
-                                                        .map(|x| x.since.end)
-                                                        .unwrap_or_default()
-                                                })
-                                                .to_string()
-                                        }
-                                    />
-                                </div>
-                            </Show>
-
-                            <Show when=move || limitations.read().skills_repo_link()>
-                                <ScrollableBox>
-                                    <InputUrl
-                                        alt=|| "Repository link".to_string()
-                                        placeholder=|| "Enter repository URL".to_string()
-                                        action=move |ev| {
-                                            set_settings
-                                                .update(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get_mut(index)
-                                                        .map(|x| x.repo_link.link = ev.target().value())
-                                                        .unwrap_or_default()
-                                                });
-                                        }
-                                        prop=move || {
-                                            settings
-                                                .with(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get(index)
-                                                        .map(|x| x.repo_link.link.clone())
-                                                        .unwrap_or_default()
-                                                })
-                                        }
-                                    />
-                                    <IconSelector
-                                        action=move |ev| {
-                                            if let Ok(value) = event_target_value(&ev).parse() {
-                                                set_settings
-                                                    .update(|x| {
-                                                        x
-                                                            .layout
-                                                            .skills
-                                                            .get_mut(index)
-                                                            .map(|x| x.repo_link.icon = value)
-                                                            .unwrap_or_default()
-                                                    });
-                                            }
-                                        }
-                                        prop=move || {
-                                            settings
-                                                .with(|x| {
-                                                    x
-                                                        .layout
-                                                        .skills
-                                                        .get(index)
-                                                        .map(|x| x.repo_link.icon.to_string())
-                                                        .unwrap_or_default()
-                                                })
-                                        }
-                                    />
-                                </ScrollableBox>
-                            </Show>
-
-                            <Show when=move || limitations.read().is_projects_in_skills_allowed()>
-                                <Stack title="projects">
-                                    <For
-                                        each=move || {
-                                            (0..settings
-                                                .read()
-                                                .layout
-                                                .skills
-                                                .get(index)
-                                                .map(|x| x.projects.len())
-                                                .unwrap_or_default())
-                                        }
-                                        key=|project_index| {
-                                            format!(
-                                                "skills-section-stack-project-section-stack-{}",
-                                                project_index,
-                                            )
-                                        }
-                                        let:project_index
-                                    >
-                                        <ScrollableBox>
-                                            <Input
-                                                alt=|| "Project name".to_string()
-                                                placeholder=|| "Enter project name".to_string()
-                                                action=move |ev| {
-                                                    set_settings
-                                                        .update(|x| {
-                                                            x
-                                                                .layout
-                                                                .skills
-                                                                .get_mut(index)
-                                                                .map(|x| {
-                                                                    x.projects[project_index].name = ev.target().value();
-                                                                })
-                                                                .unwrap_or_default()
-                                                        });
-                                                }
-                                                prop=move || {
-                                                    settings
-                                                        .read()
-                                                        .layout
-                                                        .skills
-                                                        .get(index)
-                                                        .map(|x| x.projects[project_index].name.clone())
-                                                        .unwrap_or_default()
-                                                }
-                                                maxlength=move || {
-                                                    limitations.with(|x| x.skills_projects().1)
-                                                }
-                                            />
-                                            <InputUrl
-                                                alt=|| "Project link".to_string()
-                                                placeholder=|| "Enter project URL".to_string()
-                                                action=move |ev| {
-                                                    set_settings
-                                                        .update(|x| {
-                                                            x
-                                                                .layout
-                                                                .skills
-                                                                .get_mut(index)
-                                                                .map(|x| {
-                                                                    x.projects[project_index].link.link = ev.target().value();
-                                                                })
-                                                                .unwrap_or_default()
-                                                        });
-                                                }
-                                                prop=move || {
-                                                    settings
-                                                        .read()
-                                                        .layout
-                                                        .skills
-                                                        .get(index)
-                                                        .map(|x| x.projects[project_index].link.link.clone())
-                                                        .unwrap_or_default()
-                                                }
-                                            />
-                                            <IconSelector
-                                                action=move |ev| {
-                                                    if let Ok(value) = event_target_value(&ev).parse() {
-                                                        set_settings
-                                                            .update(|x| {
-                                                                x
-                                                                    .layout
-                                                                    .skills
-                                                                    .get_mut(index)
-                                                                    .map(|x| x.projects[project_index].link.icon = value)
-                                                                    .unwrap_or_default()
-                                                            });
-                                                    }
-                                                }
-                                                prop=move || {
-                                                    settings
-                                                        .read()
-                                                        .layout
-                                                        .skills[index]
-                                                        .projects[project_index]
-                                                        .link
-                                                        .icon
-                                                        .to_string()
-                                                }
-                                            />
-                                            <Button
-                                                alt=|| "Remove project".to_string()
-                                                action=move || {
-                                                    set_settings
-                                                        .update(|x| {
-                                                            x.layout
-                                                                .skills
-                                                                .get_mut(index)
-                                                                .map(|x| x.projects.remove(project_index))
-                                                                .unwrap_or_default();
-                                                        });
-                                                }
-                                                style=ButtonStyle::Remove
-                                            />
-                                        </ScrollableBox>
-                                    </For>
-                                    <Show when=move || {
+                        <Show when=move || limitations.read().skills_since()>
+                            <div class="grid grid-cols-2 gap-2">
+                                <InputNumeric
+                                    alt=|| "Start year".to_string()
+                                    placeholder=|| "Enter start year".to_string()
+                                    action=move |ev| {
+                                        set_settings
+                                            .update(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get_mut(index)
+                                                    .map(|x| {
+                                                        x.since.start = ev
+                                                            .target()
+                                                            .value()
+                                                            .parse::<usize>()
+                                                            .unwrap_or_default();
+                                                    })
+                                                    .unwrap_or_default()
+                                            });
+                                    }
+                                    prop=move || {
                                         settings
+                                            .with(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get(index)
+                                                    .map(|x| x.since.start)
+                                                    .unwrap_or_default()
+                                            })
+                                            .to_string()
+                                    }
+                                />
+
+                                <InputNumeric
+                                    alt=|| "End year".to_string()
+                                    placeholder=|| "Enter end year".to_string()
+                                    action=move |ev| {
+                                        set_settings
+                                            .update(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get_mut(index)
+                                                    .map(|x| {
+                                                        x.since.end = ev
+                                                            .target()
+                                                            .value()
+                                                            .parse()
+                                                            .unwrap_or_default();
+                                                    })
+                                                    .unwrap_or_default()
+                                            });
+                                    }
+                                    prop=move || {
+                                        settings
+                                            .with(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get(index)
+                                                    .map(|x| x.since.end)
+                                                    .unwrap_or_default()
+                                            })
+                                            .to_string()
+                                    }
+                                />
+
+                            </div>
+                        </Show>
+
+                        <Show when=move || limitations.read().skills_repo_link()>
+                            <ScrollableBox>
+                                <InputUrl
+                                    alt=|| "Repository link".to_string()
+                                    placeholder=|| "Enter repository URL".to_string()
+                                    action=move |ev| {
+                                        set_settings
+                                            .update(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get_mut(index)
+                                                    .map(|x| x.repo_link.link = ev.target().value())
+                                                    .unwrap_or_default()
+                                            });
+                                    }
+                                    prop=move || {
+                                        settings
+                                            .with(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get(index)
+                                                    .map(|x| x.repo_link.link.clone())
+                                                    .unwrap_or_default()
+                                            })
+                                    }
+                                />
+                                <IconSelector
+                                    action=move |ev| {
+                                        if let Ok(value) = event_target_value(&ev).parse() {
+                                            set_settings
+                                                .update(|x| {
+                                                    x.layout
+                                                        .skills
+                                                        .get_mut(index)
+                                                        .map(|x| x.repo_link.icon = value)
+                                                        .unwrap_or_default()
+                                                });
+                                        }
+                                    }
+                                    prop=move || {
+                                        settings
+                                            .with(|x| {
+                                                x.layout
+                                                    .skills
+                                                    .get(index)
+                                                    .map(|x| x.repo_link.icon.to_string())
+                                                    .unwrap_or_default()
+                                            })
+                                    }
+                                />
+                            </ScrollableBox>
+                        </Show>
+
+                        <Show when=move || limitations.read().is_projects_in_skills_allowed()>
+                            <DynamicStack title="projects" max_length=move || limitations.read().skills_projects().0 current_length=move || settings
+                            .read()
+                            .layout
+                            .skills
+                            .get(index)
+                            .map(|x| x.projects.len())
+                            .unwrap_or_default()>
+                                <For
+                                    each=move || {
+                                        0..settings
                                             .read()
                                             .layout
                                             .skills
                                             .get(index)
                                             .map(|x| x.projects.len())
                                             .unwrap_or_default()
-                                            < limitations.read().skills_projects().0
-                                    }>
-                                        <Button
-                                            alt=|| "Add new project".to_string()
-                                            action=move || {
+                                    }
+                                    key=|project_index| {
+                                        format!(
+                                            "skills-section-stack-project-section-stack-{}",
+                                            project_index,
+                                        )
+                                    }
+                                    let:project_index
+                                >
+                                    <ScrollableBox>
+                                        <Input
+                                            alt=|| "Project name".to_string()
+                                            placeholder=|| "Enter project name".to_string()
+                                            action=move |ev| {
                                                 set_settings
                                                     .update(|x| {
-                                                        x
-                                                            .layout
+                                                        x.layout
                                                             .skills
                                                             .get_mut(index)
-                                                            .map(|x| x.projects.push(Project::default()))
+                                                            .map(|x| {
+                                                                x.projects[project_index].name = ev.target().value();
+                                                            })
                                                             .unwrap_or_default()
                                                     });
                                             }
-                                            style=ButtonStyle::Add
-                                        />
-                                    </Show>
-                                </Stack>
-                            </Show>
-
-                            <Show when=move || limitations.read().skills_main()>
-                                <button
-                                    title="main"
-                                    on:click=move |_| {
-                                        set_settings
-                                            .update(|x| {
-                                                x
+                                            prop=move || {
+                                                settings
+                                                    .read()
                                                     .layout
                                                     .skills
-                                                    .get_mut(index)
-                                                    .map(|x| x.main = !x.main)
+                                                    .get(index)
+                                                    .map(|x| x.projects[project_index].name.clone())
                                                     .unwrap_or_default()
-                                            });
-                                    }
-                                    class="border"
-                                    style=move || {
-                                        if !settings
-                                            .read()
-                                            .layout
-                                            .skills
-                                            .get(index)
-                                            .map(|x| x.main)
-                                            .unwrap_or_default()
-                                        {
-                                            format!(
-                                                "background-color: {}; color: {}; border-color: {};",
-                                                themes.get().colors().background,
-                                                themes.get().colors().text,
-                                                themes.get().colors().text,
-                                            )
-                                        } else {
-                                            format!(
-                                                "background-color: {}; color: {}; border-color: {};",
-                                                themes.get().colors().text,
-                                                themes.get().colors().background,
-                                                themes.get().colors().background,
-                                            )
+                                            }
+                                            maxlength=move || {
+                                                limitations.with(|x| x.skills_projects().1)
+                                            }
+                                            current_length=move || {
+                                                settings
+                                                    .read()
+                                                    .layout
+                                                    .skills
+                                                    .get(index)
+                                                    .map(|x| x.projects[project_index].name.clone())
+                                                    .unwrap_or_default()
+                                                    .chars()
+                                                    .count()
+                                            }
+                                        />
+                                        <InputUrl
+                                            alt=|| "Project link".to_string()
+                                            placeholder=|| "Enter project URL".to_string()
+                                            action=move |ev| {
+                                                set_settings
+                                                    .update(|x| {
+                                                        x.layout
+                                                            .skills
+                                                            .get_mut(index)
+                                                            .map(|x| {
+                                                                x.projects[project_index].link.link = ev.target().value();
+                                                            })
+                                                            .unwrap_or_default()
+                                                    });
+                                            }
+                                            prop=move || {
+                                                settings
+                                                    .read()
+                                                    .layout
+                                                    .skills
+                                                    .get(index)
+                                                    .map(|x| x.projects[project_index].link.link.clone())
+                                                    .unwrap_or_default()
+                                            }
+                                        />
+                                        <IconSelector
+                                            action=move |ev| {
+                                                if let Ok(value) = event_target_value(&ev).parse() {
+                                                    set_settings
+                                                        .update(|x| {
+                                                            x.layout
+                                                                .skills
+                                                                .get_mut(index)
+                                                                .map(|x| x.projects[project_index].link.icon = value)
+                                                                .unwrap_or_default()
+                                                        });
+                                                }
+                                            }
+                                            prop=move || {
+                                                settings
+                                                    .read()
+                                                    .layout
+                                                    .skills[index]
+                                                    .projects[project_index]
+                                                    .link
+                                                    .icon
+                                                    .to_string()
+                                            }
+                                        />
+                                        <Button
+                                            alt=|| "Remove project".to_string()
+                                            action=move || {
+                                                set_settings
+                                                    .update(|x| {
+                                                        x.layout
+                                                            .skills
+                                                            .get_mut(index)
+                                                            .map(|x| x.projects.remove(project_index))
+                                                            .unwrap_or_default();
+                                                    });
+                                            }
+                                            style=ButtonStyle::Remove
+                                        />
+                                    </ScrollableBox>
+                                </For>
+                                <Show when=move || {
+                                    settings
+                                        .read()
+                                        .layout
+                                        .skills
+                                        .get(index)
+                                        .map(|x| x.projects.len())
+                                        .unwrap_or_default()
+                                        < limitations.read().skills_projects().0
+                                }>
+                                    <Button
+                                        alt=|| "Add new project".to_string()
+                                        action=move || {
+                                            set_settings
+                                                .update(|x| {
+                                                    x.layout
+                                                        .skills
+                                                        .get_mut(index)
+                                                        .map(|x| x.projects.push(Project::default()))
+                                                        .unwrap_or_default()
+                                                });
                                         }
-                                    }
-                                >
-                                    main
-                                </button>
-                            </Show>
+                                        style=ButtonStyle::Add
+                                    />
+                                </Show>
+                            </DynamicStack>
+                        </Show>
 
-                            <Button
-                                alt=|| "Remove skill".to_string()
-                                action=move || {
+                        <Show when=move || limitations.read().skills_main()>
+                            <button
+                                title="main"
+                                on:click=move |_| {
                                     set_settings
                                         .update(|x| {
-                                            x.layout.skills.remove(index);
+                                            x.layout
+                                                .skills
+                                                .get_mut(index)
+                                                .map(|x| x.main = !x.main)
+                                                .unwrap_or_default()
                                         });
                                 }
-                                style=ButtonStyle::Remove
-                            />
-                        </ScrollableBox>
-                    </For>
-                    <Show when=move || {
-                        settings.read().layout.skills.len() < limitations.read().skills_max_len()
-                    }>
+                                class="border"
+                                style=move || {
+                                    if !settings
+                                        .read()
+                                        .layout
+                                        .skills
+                                        .get(index)
+                                        .map(|x| x.main)
+                                        .unwrap_or_default()
+                                    {
+                                        format!(
+                                            "background-color: {}; color: {}; border-color: {};",
+                                            themes.get().colors().background,
+                                            themes.get().colors().text,
+                                            themes.get().colors().text,
+                                        )
+                                    } else {
+                                        format!(
+                                            "background-color: {}; color: {}; border-color: {};",
+                                            themes.get().colors().text,
+                                            themes.get().colors().background,
+                                            themes.get().colors().background,
+                                        )
+                                    }
+                                }
+                            >
+                                main
+                            </button>
+                        </Show>
+
                         <Button
-                            alt=|| "Add new skill".to_string()
+                            alt=|| "Remove skill".to_string()
                             action=move || {
                                 set_settings
                                     .update(|x| {
-                                        x.layout.skills.push(Skill::default());
-                                        if let Some(e) = x.layout.skills.last_mut() {
-                                            e.projects.push(Project::default());
-                                        }
+                                        x.layout.skills.remove(index);
                                     });
                             }
-                            style=ButtonStyle::Add
+                            style=ButtonStyle::Remove
                         />
-                    </Show>
-                </ScrollXBar>
-            </Stack>
+                    </ScrollableBox>
+                </For>
+                <Show when=move || {
+                    settings.read().layout.skills.len() < limitations.read().skills_max_len()
+                }>
+                    <Button
+                        alt=|| "Add new skill".to_string()
+                        action=move || {
+                            set_settings
+                                .update(|x| {
+                                    x.layout.skills.push(Skill::default());
+                                    if let Some(e) = x.layout.skills.last_mut() {
+                                        e.projects.push(Project::default());
+                                    }
+                                });
+                        }
+                        style=ButtonStyle::Add
+                    />
+                </Show>
+            </DynamicStack>
         </SectionInverted>
     }
 }
