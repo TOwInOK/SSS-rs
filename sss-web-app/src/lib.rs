@@ -1,9 +1,9 @@
 use codee::string::JsonSerdeCodec;
 use components::toster::ToastStore;
-use leptos::{leptos_dom::logging::console_log, prelude::*};
+use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{components::*, path};
-use leptos_use::storage::{UseStorageOptions, use_local_storage, use_local_storage_with_options};
+use leptos_use::storage::{UseStorageOptions, use_local_storage_with_options};
 use pages::home::HomePage;
 
 use sss_core::Data;
@@ -32,7 +32,7 @@ pub fn App() -> impl IntoView {
     );
     let (themes, set_themes, _) = use_local_storage_with_options::<Themes, JsonSerdeCodec>(
         "themes",
-        UseStorageOptions::default().initial_value(Themes::default()),
+        UseStorageOptions::default().initial_value(Themes::ROSE_PINE),
     );
     let (layouts, set_layouts, _) = use_local_storage_with_options::<HtmlLayouts, JsonSerdeCodec>(
         "layouts",
