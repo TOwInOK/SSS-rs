@@ -5,7 +5,6 @@ use leptos_meta::*;
 use leptos_router::{components::*, path};
 use leptos_use::storage::{UseStorageOptions, use_local_storage_with_options};
 use pages::home::HomePage;
-
 use sss_core::Data;
 use sss_std::prelude::{HtmlLayouts, Themes};
 use tools::gen_example_config;
@@ -45,7 +44,6 @@ pub fn App() -> impl IntoView {
     provide_context((themes, set_themes));
     provide_context((layouts, set_layouts));
     provide_context::<RW<ToastStore>>((toaster_store.0.into(), toaster_store.1));
-
     view! {
         <Html attr:lang="en" attr:dir="ltr" />
 

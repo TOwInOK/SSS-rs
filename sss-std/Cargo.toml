@@ -14,21 +14,21 @@ html-layouts-derive = { path = "../html-layouts-derive" }
 theme-generator = { path = "../theme-generator", features = ["utoipa"] }
 ron.workspace = true
 
-tera = "1.20.0"
+tera = "^1"
 encre-css.workspace = true
 serde = { workspace = true, features = ["derive"] }
 clap = { workspace = true, features = ["derive"] }
 
-image = { version = "0.25.5", default-features = false, optional = true, features = [
+image = { version = "^0", default-features = false, optional = true, features = [
     "png",
 ] }
-headless_chrome = { version = "1.0.15", optional = true }
+headless_chrome = { version = "^1", optional = true }
 base64_light.workspace = true
 
 utoipa = { workspace = true, optional = true }
 
 [dev-dependencies]
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "^1", features = ["full"] }
 sss_std = { path = ".", features = ["full"] }
 
 [features]
