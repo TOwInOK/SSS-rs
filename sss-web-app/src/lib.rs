@@ -1,9 +1,9 @@
 use codee::string::JsonSerdeCodec;
 use components::toster::ToastStore;
-use leptos::prelude::*;
+use leptos::{leptos_dom::logging::console_log, prelude::*};
 use leptos_meta::*;
 use leptos_router::{components::*, path};
-use leptos_use::storage::use_local_storage;
+use leptos_use::storage::{UseStorageOptions, use_local_storage, use_local_storage_with_options};
 use pages::home::HomePage;
 
 use sss_core::Data;
@@ -26,19 +26,18 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    let (settings, set_settings, _) = use_local_storage::<Data, JsonSerdeCodec>("settings");
-    let (themes, set_themes, _) = use_local_storage::<Themes, JsonSerdeCodec>("themes");
-    let (layouts, set_layouts, _) = use_local_storage::<HtmlLayouts, JsonSerdeCodec>("layouts");
-
-    if (move || settings.custom_try_read().is_none())() {
-        set_settings.set(gen_example_config());
-    }
-    if (move || themes.custom_try_read().is_none())() {
-        set_themes.set(Themes::default());
-    }
-    if (move || layouts.custom_try_read().is_none())() {
-        set_layouts.set(HtmlLayouts::default());
-    }
+    let (settings, set_settings, _) = use_local_storage_with_options::<Data, JsonSerdeCodec>(
+        "settings",
+        UseStorageOptions::default().initial_value(gen_example_config()),
+    );
+    let (themes, set_themes, _) = use_local_storage_with_options::<Themes, JsonSerdeCodec>(
+        "themes",
+        UseStorageOptions::default().initial_value(Themes::default()),
+    );
+    let (layouts, set_layouts, _) = use_local_storage_with_options::<HtmlLayouts, JsonSerdeCodec>(
+        "layouts",
+        UseStorageOptions::default().initial_value(HtmlLayouts::UMBRELLA),
+    );
 
     let toaster_store = signal(ToastStore::default());
 

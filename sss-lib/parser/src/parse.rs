@@ -3,16 +3,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{Error, Result};
 use std::{fs, path::Path, str::FromStr};
-/// Fetch file by path
+/// Fetch file to [String] by path
 pub fn fetch(path: impl AsRef<Path>) -> Result<String> {
     Ok(fs::read_to_string(path)?)
 }
-/// Parse config [Settings] from toml file
+/// Parse any T that impl [Deserialize] from toml file
 pub fn parse_toml<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let file = fetch(path)?;
     Ok(toml::from_str(&file)?)
 }
-/// Parse config [Settings] from json file
+/// Parse any T that impl [Deserialize] from json file
 pub fn parse_json<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let file = fetch(path)?;
     Ok(serde_json::from_str(&file)?)
@@ -57,13 +57,13 @@ pub fn save_json<T: Serialize>(
     fs::write(path, file).map_err(Error::from)
 }
 
-/// Parse config [Settings] from ron file
+/// Parse any T that impl [Deserialize] from ron file
 pub fn parse_ron<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let file = fetch(path)?;
     ron::from_str(&file).map_err(|e| Error::from(ron::Error::from(e)))
 }
 
-/// Fetch [Settings] by path
+/// Fetch any T that impl [Deserialize] by path
 pub fn parse<T: for<'de> Deserialize<'de>>(path: impl AsRef<Path>) -> Result<T> {
     let path_str = path
         .as_ref()

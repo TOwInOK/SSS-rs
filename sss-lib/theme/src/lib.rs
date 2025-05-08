@@ -16,7 +16,7 @@ pub struct Theme {
 }
 
 /// Contains the complete color palette configuration for a theme.
-/// Defines colors for different hierarchy levels (primary, secondary, tertiary)
+/// Defines colors for different hierarchy levels (primary, secondary, accent, minor)
 /// as well as border colors.
 /// All colors are specified as hex color codes.
 #[derive(Default, Serialize, Debug, Clone, Copy)]
@@ -54,7 +54,7 @@ pub trait Shade: Sync + Send {
 }
 
 /// Implements the Shading trait for the Theme struct, providing
-/// access to colors, paddings, and gaps configurations.
+/// access to colors.
 impl Shade for Theme {
     /// Returns a reference to this theme's Colors configuration
     #[inline]
