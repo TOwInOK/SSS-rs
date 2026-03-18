@@ -3,10 +3,11 @@ name = "parser"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
+repository.workspace = true
 license.workspace = true
 
 [dependencies]
-serde = { workspace = true, features = ["derive"] }
+serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 toml.workspace = true
