@@ -1,3 +1,15 @@
+//! # Configuration management
+//!
+//! This module handles configuration loading, saving, and service management.
+//!
+//! ## Main types
+//!
+//! - [`SSSCliSettings`]: Main configuration structure combining user data, themes, layouts, and services
+//!
+//! ## Submodules
+//!
+//! - [`services`]: Service flags (html, png, pdf, json, health, share, api)
+
 use parser::parse::{Loader, Saver};
 use serde::{Deserialize, Serialize};
 use services::Services;

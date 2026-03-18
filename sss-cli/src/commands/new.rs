@@ -17,12 +17,12 @@ pub async fn command_new(
         Some(e) => toml::from_str(&base64_light::base64_decode_str(e))?,
         None => gen_example_config(),
     };
-    let mut path_to_settings = args.config_path.split(".").take(1).collect::<String>();
+    let mut path_to_settings = std::path::PathBuf::from(&args.config_path);
+    path_to_settings.set_extension(config_type.to_string());
     info!("Convert to choosd type");
     let config = match config_type {
         ConfigType::Json => {
             info!("Convert to JSON");
-            path_to_settings.push_str(".json");
             serde_json::to_string_pretty(&settings).map_err(|x| {
                 anyhow::anyhow!(
                     "Got error with generating settings to json type {}",
@@ -32,7 +32,6 @@ pub async fn command_new(
         }
         ConfigType::Toml => {
             info!("Convert to TOML");
-            path_to_settings.push_str(".toml");
             toml::to_string_pretty(&settings).map_err(|x| {
                 anyhow::anyhow!(
                     "Got error with generating settings to toml type {}",
@@ -41,8 +40,8 @@ pub async fn command_new(
             })?
         }
     };
-    info!("Try to save config by path: {}", path_to_settings);
+    info!("Try to save config by path: {}", path_to_settings.display());
     fs::write(&path_to_settings, config).await?;
-    info!("Config successfully saved by path: {}", path_to_settings);
+    info!("Config successfully saved by path: {}", path_to_settings.display());
     Ok(())
 }

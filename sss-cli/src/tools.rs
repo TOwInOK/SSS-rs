@@ -1,3 +1,17 @@
+//! # Rendering and refresh utilities
+//!
+//! This module provides functions for rendering HTML, PNG, and PDF,
+//! as well as refreshing configuration and managing global state.
+//!
+//! ## Main functions
+//!
+//! - [`refresh_settings`]: Load and update configuration from file
+//! - [`refresh`]: Refresh all outputs based on service flags
+//! - [`refresh_html`]: Generate HTML from current settings
+//! - [`refresh_png`]: Generate PNG from current HTML
+//! - [`refresh_pdf`]: Generate PDF from current HTML
+//! - [`gen_example_config`]: Generate example configuration
+
 use parser::parse::Loader;
 use render::render::Render;
 use sss_core::{
@@ -26,9 +40,23 @@ use crate::{
 pub type Result<T = ()> =
     std::result::Result<T, Box<dyn std::error::Error + Send + Sync + 'static>>;
 
+/// Load configuration from file and update global settings
+///
+/// This function loads settings from the specified path, optionally overrides
+/// theme/layout/services from CLI arguments, and updates the global [`SETTINGS`].
+///
+/// # Arguments
+///
+/// * `path` - Path to the configuration file (TOML or JSON)
+/// * `themes` - Optional theme override from CLI
+/// * `layouts` - Optional layout override from CLI
+/// * `services` - Optional service flags override from CLI
+///
+/// # Returns
+///
+/// Returns `Ok(())` on success, or an error if loading fails
 #[instrument(skip_all)]
 #[inline]
-/// Update setting
 pub async fn refresh_settings(
     path: &std::path::Path,
     themes: Option<&Themes>,
@@ -62,10 +90,24 @@ pub enum SettingsUpdateType {
     NotActual,
 }
 
+/// Refresh all outputs based on service flags
+///
+/// This function loads settings and refreshes HTML/PNG/PDF based on which
+/// services are enabled. HTML is always refreshed before any binary generation.
+/// PNG and PDF are generated in background tasks.
+///
+/// # Arguments
+///
+/// * `path` - Path to the configuration file
+/// * `themes` - Optional theme override from CLI
+/// * `layouts` - Optional layout override from CLI
+/// * `services` - Service flags to determine which outputs to refresh
+///
+/// # Returns
+///
+/// Returns `Ok(())` on success, or an error if loading/refreshing fails
 #[instrument(skip_all)]
 #[inline]
-/// Once load data
-/// if cli has themes or || and layouts, replace it permanently
 pub async fn refresh(
     path: &std::path::Path,
     themes: Option<&Themes>,
@@ -76,9 +118,9 @@ pub async fn refresh(
     debug!("Layouts in cli: {:#?}", &layouts);
     refresh_settings(path, themes, layouts, services).await?;
 
-    let services = &SETTINGS.read().await.services;
+    let services = SETTINGS.read().await.services.clone();
 
-    if services.html {
+    if services.html || services.png || services.pdf {
         refresh_html().await?;
     }
     if services.png {
@@ -124,7 +166,7 @@ pub async fn refresh_html() -> Result {
 pub async fn refresh_png() -> Result {
     info!("Render PNG");
     {
-        let html = HTML.read().await;
+        let html = HTML.read().await.clone();
         let image = html_to_image(&html, None, 12).await?;
         *PNG.deref().write().await = image;
     }
@@ -138,7 +180,7 @@ pub async fn refresh_png() -> Result {
 pub async fn refresh_pdf() -> Result {
     info!("Render PDF");
     {
-        let html = HTML.read().await;
+        let html = HTML.read().await.clone();
         let image = html_to_pdf(&html, None).await?;
         *PDF.deref().write().await = image;
     }

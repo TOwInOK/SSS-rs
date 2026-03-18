@@ -2,12 +2,28 @@ use notify::{Event, RecursiveMode, Watcher, recommended_watcher};
 use sss_std::prelude::{HtmlLayouts, Themes};
 use std::path::Path;
 use tokio::sync::mpsc;
-use tracing::{debug, error, info, trace};
+use tracing::{debug, error, info, trace, warn};
 use xxhash_rust::xxh3::xxh3_64;
 
 use crate::{settings::services::Services, tools::refresh};
 
-// Function to watch a file and refresh settings upon modification
+/// Watch a file and refresh settings upon modification
+///
+/// This function sets up a file watcher using the notify crate and refreshes
+/// configuration when the file changes. It uses xxHash to detect actual content
+/// changes and avoid redundant refreshes.
+///
+/// # Arguments
+///
+/// * `path` - Path to the configuration file to watch
+/// * `themes` - Optional theme override from CLI
+/// * `layouts` - Optional layout override from CLI
+/// * `services` - Service flags to determine which outputs to refresh
+/// * `shutdown_rx` - Broadcast channel receiver for shutdown signal
+///
+/// # Returns
+///
+/// Returns `Ok(())` on graceful shutdown, or an error if setup fails
 pub async fn check_file_loop(
     path: &Path,
     themes: Option<&Themes>,
@@ -21,7 +37,9 @@ pub async fn check_file_loop(
     // Define a watcher callback
     let watcher = move |res: Result<Event, notify::Error>| {
         if let Ok(event) = res {
-            let _ = tx.try_send(event);
+            if let Err(_) = tx.try_send(event) {
+                warn!("Watcher event dropped: channel is full, consider increasing buffer size");
+            }
         }
     };
 

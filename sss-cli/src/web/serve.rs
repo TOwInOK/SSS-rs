@@ -57,12 +57,26 @@ use crate::{HTML, PDF, PNG, SETTINGS, settings::SSSCliSettings};
 )]
 struct ApiDoc;
 
+/// Start the HTTP server with axum
+///
+/// This function builds an axum router based on the current service flags
+/// and starts the server on the specified address. Routes are conditionally
+/// included based on which services are enabled.
+///
+/// # Arguments
+///
+/// * `address` - Socket address to bind (e.g., "0.0.0.0:8081")
+/// * `shutdown_rx` - Broadcast channel receiver for graceful shutdown signal
+///
+/// # Returns
+///
+/// Returns `Ok(())` on graceful shutdown, or an error if server setup fails
 pub async fn serve(
     address: String,
 
     mut shutdown_rx: Receiver<()>,
 ) -> anyhow::Result<()> {
-    let services = &SETTINGS.read().await.services;
+    let services = SETTINGS.read().await.services.clone();
 
     let mut app = Router::new().route("/", get(root)); // Базовый маршрут всегда доступен
 
