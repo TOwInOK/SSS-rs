@@ -19,7 +19,10 @@ struct VariantDefinition {
 
 /// Expands the parsed macro input into the final `Tabler` enum implementation.
 pub(crate) fn expand_tabler_icon(input: TablerInput) -> TokenStream {
-    let TablerInput { attrs, icons } = input;
+    let TablerInput {
+        attrs,
+        icons,
+    } = input;
     let attributes = enum_attributes(&attrs);
     let variants = collect_variants(&icons);
 

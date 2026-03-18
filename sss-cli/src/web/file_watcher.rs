@@ -36,11 +36,10 @@ pub async fn check_file_loop(
 
     // Define a watcher callback
     let watcher = move |res: Result<Event, notify::Error>| {
-        if let Ok(event) = res {
-            if let Err(_) = tx.try_send(event) {
+        if let Ok(event) = res
+            && tx.try_send(event).is_err() {
                 warn!("Watcher event dropped: channel is full, consider increasing buffer size");
             }
-        }
     };
 
     // Initialize the file watcher

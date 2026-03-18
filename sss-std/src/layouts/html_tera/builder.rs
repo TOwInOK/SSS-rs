@@ -249,11 +249,10 @@ impl<L: Layout<String> + Clone> FilterLimitations for HtmlTeraRender<'_, '_, '_,
             }
 
             // Filter socials
-            if let Some(socials_count) = limitations.socials {
-                if data.layout.socials.len() > socials_count {
+            if let Some(socials_count) = limitations.socials
+                && data.layout.socials.len() > socials_count {
                     data.layout.socials.truncate(socials_count);
                 }
-            }
 
             // Filter skills
             let (skills_count, skill_limits) = limitations.skills;

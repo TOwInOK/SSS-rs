@@ -22,15 +22,12 @@ impl Parse for IconDefinition {
         let attrs = Attribute::parse_outer(input)?;
 
         for attr in attrs {
-            if let Meta::NameValue(meta) = attr.meta {
-                if meta.path.is_ident("name") {
-                    if let Expr::Lit(expr_lit) = meta.value {
-                        if let Lit::Str(lit_str) = expr_lit.lit {
+            if let Meta::NameValue(meta) = attr.meta
+                && meta.path.is_ident("name")
+                    && let Expr::Lit(expr_lit) = meta.value
+                        && let Lit::Str(lit_str) = expr_lit.lit {
                             display_name = Some(lit_str.value());
                         }
-                    }
-                }
-            }
         }
 
         let name = input.parse::<syn::Ident>()?.to_string();
@@ -70,7 +67,10 @@ impl Parse for TablerInput {
             .into_iter()
             .collect();
 
-        Ok(Self { attrs, icons })
+        Ok(Self {
+            attrs,
+            icons,
+        })
     }
 }
 

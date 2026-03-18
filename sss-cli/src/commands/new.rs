@@ -26,7 +26,7 @@ pub async fn command_new(
             serde_json::to_string_pretty(&settings).map_err(|x| {
                 anyhow::anyhow!(
                     "Got error with generating settings to json type {}",
-                    x.to_string()
+                    x
                 )
             })?
         }
@@ -35,13 +35,16 @@ pub async fn command_new(
             toml::to_string_pretty(&settings).map_err(|x| {
                 anyhow::anyhow!(
                     "Got error with generating settings to toml type {}",
-                    x.to_string()
+                    x
                 )
             })?
         }
     };
     info!("Try to save config by path: {}", path_to_settings.display());
     fs::write(&path_to_settings, config).await?;
-    info!("Config successfully saved by path: {}", path_to_settings.display());
+    info!(
+        "Config successfully saved by path: {}",
+        path_to_settings.display()
+    );
     Ok(())
 }
