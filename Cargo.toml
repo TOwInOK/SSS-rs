@@ -24,20 +24,20 @@ license = "Apache-2.0"
 rs-doc-path = "docs"
 
 [workspace.dependencies]
-serde = { version = "^1", features = ["derive"] }
-serde_json = { version = "1" }
-tokio = { version = "^1", features = ["full"] }
-thiserror = "^2"
-tracing = "^0.1"
-tracing-subscriber = "^0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = "0.3"
 encre-css = "0.14.1"
-anyhow = "^1"
+anyhow = "1"
 clap = { version = "4.5.23", features = ["derive"] }
-toml = "^0.8"
+toml = "0.9.8"
 utoipa = "5.3.1"
 base64_light = "0.1.5"
-ron = "^0.10"
-leptos = { version = "^0.8" }
+ron = "0.12"
+leptos = { version = "0.8.14" }
 
 
 [profile.dev]
@@ -52,24 +52,38 @@ incremental = true
 codegen-units = 256
 rpath = false
 
-[profile.release]
-opt-level = 'z'
+[profile.dev.build-override]
+opt-level = 0
+codegen-units = 256
 debug = false
-lto = true
-codegen-units = 24
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = "thin"
+codegen-units = 16
 panic = 'abort'
 strip = true
-incremental = true
+incremental = false
 debug-assertions = false
 overflow-checks = false
+
+[profile.release.build-override]
+opt-level = 0
+codegen-units = 256
 
 [profile.test]
 opt-level = 0
 debug = true
+incremental = true
+debug-assertions = true
+overflow-checks = true
 
 [profile.bench]
 opt-level = 3
 debug = false
+lto = "thin"
+codegen-units = 16
 
 [profile.wasm-release]
 inherits = "release"
