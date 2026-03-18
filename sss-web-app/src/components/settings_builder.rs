@@ -110,7 +110,7 @@ pub fn UserSection() -> impl IntoView {
                 <Stack title="prevision names">
                     <ScrollXBar>
                         <For
-                            each=move || (0..settings.read().layout.user.prevision_nicknames.len())
+                            each=move || 0..settings.read().layout.user.prevision_nicknames.len() 
                             key=|index| format!("prevision-names-stack-{}", index)
                             let:index
                         >
@@ -252,7 +252,7 @@ pub fn SpecificationsSection() -> impl IntoView {
                 current_length=move || settings.read().layout.specifications.len()
             >
                 <For
-                    each=move || (0..settings.read().layout.specifications.len())
+                    each=move || 0..settings.read().layout.specifications.len() 
                     key=|index| format!("specifications-stack-{}", index)
                     let:index
                 >
@@ -316,7 +316,7 @@ pub fn RepositoriesSection() -> impl IntoView {
                 current_length=move || settings.read().layout.repos.len()
             >
                 <For
-                    each=move || (0..settings.read().layout.repos.len())
+                    each=move || 0..settings.read().layout.repos.len() 
                     key=|index| format!("projects-stack-{}", index)
                     let:index
                 >
@@ -400,7 +400,7 @@ pub fn SocialsSection() -> impl IntoView {
                 max_length=move || limitations.read().socials()
             >
                 <For
-                    each=move || (0..settings.read().layout.socials.len())
+                    each=move || 0..settings.read().layout.socials.len() 
                     key=|index| format!("social-section-stack-{}", index)
                     let:index
                 >
