@@ -1,36 +1,35 @@
-use std::{
-    fs::{read_dir, read_to_string},
-    path::{Path, PathBuf},
-};
+//! Code generation for `DefaultTemplates`, the outer wrapper layouts used by HTML rendering.
+//!
+//! Default layouts only wrap already rendered card HTML, so they generate template-related code but
+//! intentionally do not produce per-layout limitation metadata.
 
-use quote::quote;
+use std::path::Path;
 
 use proc_macro2::{Span, TokenStream};
+use quote::quote;
 use syn::Error;
 
-use crate::{generate::check_on_exist, types::DefaultLayout};
+use crate::{
+    discovery::{ensure_exists, find_layout_directories, read_utf8_file, resolve_macro_path},
+    types::DefaultLayout,
+};
 
 const TEMPLATE_DEFAULT_LAYOUT_NAME: &str = "default_layout.html.tera";
 
+/// Resolves the default-layout directory and generates the `DefaultTemplates` token stream.
 pub fn generate_default_layout_stream(path: &Path) -> Result<TokenStream, Error> {
-    let cargo_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| ".".to_string());
-    let templates_path = PathBuf::from(&cargo_dir)
-        .join(path)
-        .canonicalize()
-        .map_err(|e| {
-            syn::Error::new(
-                Span::call_site(),
-                format!("Failed to resolve templates path: {}", e),
-            )
-        })?;
-
-    check_on_exist(&templates_path)?;
+    // Interpret the macro argument relative to the consuming crate before scanning the directory.
+    let templates_path = resolve_macro_path(path, "default layout directory")?;
 
     generate(&templates_path)
 }
 
+/// Builds all generated items related to outer default layouts.
 fn generate(path: &Path) -> Result<TokenStream, Error> {
+    // Discover the available layouts first so every generated impl uses the same deterministic set.
     let templates = find_templates(path)?;
+
+    // Assemble the emitted code in small pieces for readability and easier future maintenance.
     let variants = generates_variants(&templates);
     let layout_trait = generate_layout_trait(&templates);
     let display = generate_display_matches(&templates);
@@ -51,60 +50,30 @@ fn generate(path: &Path) -> Result<TokenStream, Error> {
     })
 }
 
-/// Parse templates
+/// Reads all default layout templates from discovered layout directories.
 fn find_templates(templates: &Path) -> Result<Vec<DefaultLayout>, syn::Error> {
-    let mut results = Vec::new();
+    find_layout_directories(templates, "default layout")?
+        .into_iter()
+        .map(|directory| {
+            // Default layouts only need their wrapper template file.
+            let template_path = directory.path.join(TEMPLATE_DEFAULT_LAYOUT_NAME);
 
-    let entries = read_dir(templates).map_err(|e| {
-        Error::new(
-            Span::call_site(),
-            format!("Failed to read template directory: {}", e),
-        )
-    })?;
+            ensure_exists(&template_path, "default layout template file")?;
 
-    for entry in entries.filter_map(Result::ok) {
-        if entry.path().is_dir() {
-            if let Some(layout_name_os_str) = entry.file_name().to_str() {
-                let layout_name = layout_name_os_str.to_string();
-                let layout_name_upper = layout_name.to_uppercase();
-                let layout_name_lower = layout_name.to_lowercase();
-                let template_path = entry.path().join(TEMPLATE_DEFAULT_LAYOUT_NAME);
-
-                check_on_exist(&template_path)?;
-
-                let template = read_to_string(&template_path)
-                    .map_err(|e| {
-                        Error::new(
-                            Span::call_site(),
-                            format!(
-                                "Failed to read template file {}: {}",
-                                template_path.display(),
-                                e
-                            ),
-                        )
-                    })?
-                    .leak();
-
-                results.push(DefaultLayout {
-                    layout_name: syn::LitStr::new(
-                        &layout_name_lower,
-                        proc_macro2::Span::mixed_site(),
-                    ),
-                    layout_ident: syn::Ident::new(
-                        &layout_name_upper,
-                        proc_macro2::Span::mixed_site(),
-                    ),
-                    template,
-                });
-            }
-        }
-    }
-
-    Ok(results)
+            Ok(DefaultLayout {
+                layout_name: syn::LitStr::new(&directory.layout_name, Span::call_site()),
+                layout_ident: directory.layout_ident,
+                // Read the template verbatim because it will be embedded directly into generated
+                // match arms.
+                template: read_utf8_file(&template_path, "default layout template file")?,
+            })
+        })
+        .collect()
 }
 
-/// Generate variants for [HtmlLayouts]
+/// Generates the `DefaultTemplates` enum declaration.
 fn generates_variants(layouts: &[DefaultLayout]) -> TokenStream {
+    // Preserve discovery order so every generated impl refers to the same variant ordering.
     let templates_stream = layouts.iter().map(|t| &t.layout_ident).collect::<Vec<_>>();
     quote! {
         pub enum DefaultTemplates {
@@ -113,15 +82,16 @@ fn generates_variants(layouts: &[DefaultLayout]) -> TokenStream {
     }
 }
 
-/// Generate template for [Layout]
+/// Generates the body of `Layout::template()` for `DefaultTemplates`.
 fn generate_layout_matches(layouts: &[DefaultLayout]) -> TokenStream {
     let templates_stream = layouts
         .iter()
         .map(|t| {
             let upper = &t.layout_ident;
-            let template = t.template;
+            let template = &t.template;
             quote! {
                 DefaultTemplates::#upper => {
+                    // Embed the wrapper template source directly into the generated enum branch.
                     Cow::Owned(#template.to_string())
                 }
             }
@@ -136,8 +106,9 @@ fn generate_layout_matches(layouts: &[DefaultLayout]) -> TokenStream {
     }
 }
 
-// Generate [Layout] trait
+/// Generates the `Layout<String>` implementation for `DefaultTemplates`.
 fn generate_layout_trait(templates: &[DefaultLayout]) -> TokenStream {
+    // Reuse the generated match body to keep the impl focused on the trait shell.
     let template = generate_layout_matches(templates);
     quote! {
         impl Layout<String> for DefaultTemplates {
@@ -146,20 +117,20 @@ fn generate_layout_trait(templates: &[DefaultLayout]) -> TokenStream {
     }
 }
 
-/// Generate [Limitations] trait
+/// Generates the `Limitations` implementation for `DefaultTemplates`.
 fn generate_layout_limitations_matches() -> TokenStream {
     quote! {
         impl Limitations for DefaultTemplates {
             fn limitations(&self) -> Option<Cow<LayoutLimitations>> {
-                match self {
-                    _ => None
-                }
+                // Default layouts wrap the rendered card and therefore do not impose card field
+                // limitations of their own.
+                None
             }
         }
     }
 }
 
-/// Generate [Display]
+/// Generates the `Display` implementation for `DefaultTemplates`.
 fn generate_display_matches(templates: &[DefaultLayout]) -> TokenStream {
     let templates_stream = templates
         .iter()
@@ -167,6 +138,7 @@ fn generate_display_matches(templates: &[DefaultLayout]) -> TokenStream {
             let upper = &t.layout_ident;
             let name = &t.layout_name;
             quote! {
+                // Use the normalized lowercase name so display output matches string parsing.
                 DefaultTemplates::#upper => write!(f, #name)
             }
         })
@@ -182,7 +154,7 @@ fn generate_display_matches(templates: &[DefaultLayout]) -> TokenStream {
     }
 }
 
-/// Generate [FromStr]
+/// Generates the `FromStr` implementation for `DefaultTemplates`.
 fn generate_from_str_matches(templates: &[DefaultLayout]) -> TokenStream {
     let templates_stream = templates
         .iter()
@@ -190,6 +162,7 @@ fn generate_from_str_matches(templates: &[DefaultLayout]) -> TokenStream {
             let namer = &t.layout_name;
             let upper = &t.layout_ident;
             quote! {
+                // Accept the normalized lowercase name produced during discovery.
                 #namer => Ok(Self::#upper),
             }
         })
@@ -199,6 +172,7 @@ fn generate_from_str_matches(templates: &[DefaultLayout]) -> TokenStream {
             type Err = String;
 
             fn from_str(s: &str) -> std::result::Result<DefaultTemplates, String> {
+                // Normalize user input before matching so lookups stay case-insensitive.
                 match s.to_lowercase().as_str() {
                     #(#templates_stream)*
                     _ => Err(format!("'{}' is not a valid Layout", s))
@@ -208,13 +182,14 @@ fn generate_from_str_matches(templates: &[DefaultLayout]) -> TokenStream {
     }
 }
 
-/// Generate all layouts
+/// Generates the `DefaultTemplates::all()` helper that returns every generated variant.
 fn generate_all_layouts(templates: &[DefaultLayout]) -> TokenStream {
     let templates_stream = templates
         .iter()
         .map(|t| {
             let upper = &t.layout_ident;
             quote! {
+                // Preserve discovery order so callers get a stable list across builds.
                 Self::#upper,
             }
         })
@@ -226,8 +201,10 @@ fn generate_all_layouts(templates: &[DefaultLayout]) -> TokenStream {
     }
 }
 
-/// Return all variants in [DefaultLayout]
+/// Generates inherent helper methods for `DefaultTemplates`.
 fn generate_impl(templates: &[DefaultLayout]) -> TokenStream {
+    // Keep inherent helpers grouped in one impl block, matching the structure used for
+    // `HtmlLayouts`.
     let all_layouts = generate_all_layouts(templates);
     quote! {
         impl DefaultTemplates {
