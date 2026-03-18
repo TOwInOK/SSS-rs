@@ -35,4 +35,4 @@ sss_std = { path = ".", features = ["full"] }
 default = []
 full = ["image_generation", "utoipa"]
 image_generation = ["dep:image", "dep:headless_chrome"]
-utoipa = ["dep:utoipa"]
+utoipa = ["theme-generator/utoipa", "dep:utoipa"]
