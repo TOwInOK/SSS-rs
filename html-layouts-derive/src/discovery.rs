@@ -199,7 +199,7 @@ fn build_layout_directory(
 }
 
 /// Ensures that normalized layout names and generated identifiers stay unique.
-fn validate_unique_layouts(
+pub(crate) fn validate_unique_layouts(
     directories: &[LayoutDirectory],
     kind: &str,
 ) -> Result<(), Error> {
@@ -342,12 +342,29 @@ mod tests {
     #[test]
     /// Verifies that names colliding after lowercase normalization are rejected.
     fn rejects_duplicate_names_after_normalization() {
-        let test_dir = TestDir::new();
-        test_dir.create_dir("github");
-        test_dir.create_dir("GitHub");
+        use super::{validate_unique_layouts, LayoutDirectory};
+        use proc_macro2::Span;
+        use syn::Ident;
 
-        // These names differ on disk but collapse to the same generated runtime layout name.
-        let error = find_layout_directories(test_dir.path(), "template layout")
+        // Create LayoutDirectory objects manually without creating actual directories.
+        // This avoids filesystem case-sensitivity issues on Windows and macOS.
+        let directories = vec![
+            LayoutDirectory {
+                original_name: "github".to_string(),
+                layout_name: "github".to_string(),
+                layout_ident: Ident::new("GITHUB", Span::call_site()),
+                path: PathBuf::from("/fake/path/github"),
+            },
+            LayoutDirectory {
+                original_name: "GitHub".to_string(),
+                layout_name: "github".to_string(),
+                layout_ident: Ident::new("GITHUB", Span::call_site()),
+                path: PathBuf::from("/fake/path/GitHub"),
+            },
+        ];
+
+        // These names differ in original form but collapse to the same normalized name.
+        let error = validate_unique_layouts(&directories, "template layout")
             .expect_err("duplicate normalized names should fail");
 
         assert!(
