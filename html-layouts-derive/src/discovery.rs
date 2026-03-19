@@ -342,7 +342,7 @@ mod tests {
     #[test]
     /// Verifies that names colliding after lowercase normalization are rejected.
     fn rejects_duplicate_names_after_normalization() {
-        use super::{validate_unique_layouts, LayoutDirectory};
+        use super::{LayoutDirectory, validate_unique_layouts};
         use proc_macro2::Span;
         use syn::Ident;
 
