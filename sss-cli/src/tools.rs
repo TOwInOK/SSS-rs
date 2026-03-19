@@ -5,12 +5,12 @@
 //!
 //! ## Main functions
 //!
-//! - [`refresh_settings`]: Load and update configuration from file
-//! - [`refresh`]: Refresh all outputs based on service flags
-//! - [`refresh_html`]: Generate HTML from current settings
-//! - [`refresh_png`]: Generate PNG from current HTML
-//! - [`refresh_pdf`]: Generate PDF from current HTML
-//! - [`gen_example_config`]: Generate example configuration
+//! - `refresh_settings`: Load and update configuration from file
+//! - `refresh`: Refresh all outputs based on service flags
+//! - `refresh_html`: Generate HTML from current settings
+//! - `refresh_png`: Generate PNG from current HTML
+//! - `refresh_pdf`: Generate PDF from current HTML
+//! - `gen_example_config`: Generate example configuration
 
 use parser::parse::Loader;
 use render::render::Render;

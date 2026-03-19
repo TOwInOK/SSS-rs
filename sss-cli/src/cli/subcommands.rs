@@ -51,7 +51,7 @@ pub enum Commands {
         output_type: GenType,
         /// output name
         ///
-        /// [out].[type]
+        /// `[out].[type]`
         ///
         /// by default: sss-rs.html
         #[arg(short = 'o', long = "out", default_value_t = default_gen_out_name())]

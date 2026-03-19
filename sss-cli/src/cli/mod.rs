@@ -4,8 +4,8 @@
 //!
 //! ## Submodules
 //!
-//! - [`args`]: Global arguments (config, theme, layout, tracing)
-//! - [`subcommands`]: Subcommand definitions (new, run, gen)
+//! - `args`: Global arguments (config, theme, layout, tracing)
+//! - `subcommands`: Subcommand definitions (new, run, gen)
 
 pub mod args;
 pub mod subcommands;

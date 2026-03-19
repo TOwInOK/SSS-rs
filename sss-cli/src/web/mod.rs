@@ -4,8 +4,8 @@
 //!
 //! ## Submodules
 //!
-//! - [`file_watcher`]: File system monitoring with notify
-//! - [`serve`]: HTTP server with axum
+//! - `file_watcher`: File system monitoring with notify
+//! - `serve`: HTTP server with axum
 
 pub mod file_watcher;
 pub mod serve;

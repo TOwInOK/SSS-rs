@@ -8,7 +8,7 @@ where
     T: Clone + Display,
     Self: Limitations,
 {
-    /// Return the layout as a Cow<str>
+    /// Return the layout as a `Cow<str>`
     fn template(&'_ self) -> Cow<'_, T>;
 }
 

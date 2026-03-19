@@ -3513,6 +3513,7 @@ dependencies = [
  "serde",
  "syn",
  "theme",
+ "utoipa",
 ]
 
 [[package]]

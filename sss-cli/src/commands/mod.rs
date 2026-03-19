@@ -4,9 +4,9 @@
 //!
 //! ## Submodules
 //!
-//! - [`geneneration`]: Generate HTML/PNG/PDF files
-//! - [`new`]: Create new configuration files
-//! - [`run`]: Run web server and/or file watcher
+//! - `geneneration`: Generate HTML/PNG/PDF files
+//! - `new`: Create new configuration files
+//! - `run`: Run web server and/or file watcher
 
 pub mod geneneration;
 pub mod new;

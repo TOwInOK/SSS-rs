@@ -11,6 +11,7 @@ readme = "Readme.md"
 proc-macro2 = "1"
 quote = "1"
 syn = { version = "2", features = ["full"] }
+utoipa = { version = "5", optional = true }
 
 [dev-dependencies]
 theme = { path = "../sss-lib/theme" }
@@ -22,4 +23,4 @@ proc-macro = true
 
 [features]
 default = []
-utoipa = []
+utoipa = ["dep:utoipa"]

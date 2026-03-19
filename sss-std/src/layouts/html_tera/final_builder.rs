@@ -13,7 +13,7 @@ use crate::tools::gen_css;
 
 use super::{html_meta::Meta, tools::TeraData};
 
-/// Wrapper for Tera component [HtmlTeraRender]
+/// Wrapper for Tera component `HtmlTeraRender`
 /// It's wrap component into Html document
 #[derive(Debug, Clone)]
 pub struct HtmlTeraFinalize<'l, 'c, C, L>
