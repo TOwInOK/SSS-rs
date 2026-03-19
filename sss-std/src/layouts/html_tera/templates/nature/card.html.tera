@@ -1,0 +1,137 @@
+<div class="h-full w-full bg-[{{ background }}] flex justify-center items-center p-6 overflow-clip">
+  <div class="max-w-xl w-full relative">
+    
+    {# Organic leaf decoration #}
+    <div class="absolute -top-4 -left-4 text-[{{ accent }}]/20 text-6xl">🌿</div>
+    <div class="absolute -bottom-4 -right-4 text-[{{ accent }}]/20 text-6xl rotate-180">🌿</div>
+    
+    {# Main card container with organic shape #}
+    <div class="relative bg-[{{ background }}]/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-[{{ border }}]/20">
+      
+      {# Soft gradient overlay #}
+      <div class="absolute inset-0 bg-gradient-to-br from-[{{ accent }}]/5 via-transparent to-[{{ accent }}]/5 rounded-3xl pointer-events-none"></div>
+      
+      {# Header section - organic style #}
+      <div class="relative mb-6 pb-4 border-b border-[{{ border }}]/20 text-center">
+        <div class="text-[{{ accent }}] text-sm mb-3 tracking-widest uppercase opacity-70">
+          ✿ Personal Profile ✿
+        </div>
+        <h1 class="text-4xl font-light text-[{{ text }}] mb-2" style="font-family: 'Georgia', serif;">
+          {{ name }}
+        </h1>
+        <div class="flex items-center justify-center gap-2">
+          <span class="text-[{{ accent }}] text-xl">✿</span>
+          <div class="text-center">
+            <div class="text-[{{ text }}] text-lg font-light italic">{{ current_nickname.word }}</div>
+            <div class="text-[{{ accent }}] text-xs mt-1 opacity-80">({{ current_nickname.pronounce }})</div>
+          </div>
+          <span class="text-[{{ accent }}] text-xl">✿</span>
+        </div>
+      </div>
+
+      {# Info section - organic badges #}
+      <div class="relative mb-6">
+        <div class="mb-4">
+          <div class="flex flex-wrap gap-2 justify-center">
+            {% for spec in specifications %}
+            <span class="px-4 py-2 bg-[{{ accent }}]/10 rounded-full text-[{{ text }}] text-sm 
+                       border border-[{{ accent }}]/20 hover:bg-[{{ accent }}]/20 transition-all duration-300">
+              {{ spec }}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        <p class="text-[{{ border }}] text-sm leading-relaxed text-center max-w-md mx-auto" style="font-family: 'Georgia', serif;">
+          {{ about }}
+        </p>
+      </div>
+
+      {# Repositories section - organic cards #}
+      <div class="relative mb-6">
+        <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-3 text-center opacity-70">
+          🌱 Projects
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          {% for repo in repos %}
+          <a href="{{ repo.link.link }}" 
+             class="group p-4 bg-[{{ border }}]/5 rounded-2xl border border-[{{ border }}]/10 
+                    hover:bg-[{{ accent }}]/10 hover:border-[{{ accent }}]/30 hover:shadow-lg 
+                    transition-all duration-300">
+            <div class="flex flex-col items-center gap-2">
+              <div class="text-[{{ accent }}] group-hover:scale-110 transition-transform duration-300">
+                {{ get_svg(icon=repo.link.icon) | safe }}
+              </div>
+              <div class="text-[{{ text }}] font-medium text-center text-sm group-hover:text-[{{ accent }}] transition-colors">
+                {{ repo.name }}
+              </div>
+              <div class="text-[{{ border }}] text-xs text-center opacity-70">
+                {{ get_icon_name(icon=repo.link.icon) }}
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Social links - organic buttons #}
+      <div class="relative mb-6">
+        <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-3 text-center opacity-70">
+          🌸 Connections
+        </div>
+        <div class="flex flex-wrap gap-3 justify-center">
+          {% for social in socials %}
+          <a href="{{ social.link }}" 
+             class="group flex items-center gap-2 px-4 py-2 bg-[{{ border }}]/5 rounded-full border border-[{{ border }}]/10 
+                    hover:bg-[{{ accent }}]/10 hover:border-[{{ accent }}]/30 hover:shadow-md 
+                    transition-all duration-300">
+            <div class="text-[{{ accent }}] group-hover:scale-110 transition-transform duration-300">
+              {{ get_svg(icon=social.icon) | safe }}
+            </div>
+            <span class="text-[{{ text }}] text-sm group-hover:text-[{{ accent }}] transition-colors">
+              {{ get_icon_name(icon=social.icon) }}
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Skills section - organic garden #}
+      <div class="relative">
+        <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-3 text-center opacity-70">
+          🌻 Skills & Expertise
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          {% for skill in skills %}
+          <a href="{{ skill.repo_link.link }}" 
+             class="group p-3 bg-[{{ border }}]/5 rounded-2xl border border-[{{ border }}]/10 
+                    hover:bg-[{{ accent }}]/10 hover:border-[{{ accent }}]/30 hover:shadow-md 
+                    transition-all duration-300 {% if skill.main %}bg-[{{ accent }}]/15 border-[{{ accent }}]/30{% endif %}">
+            <div class="text-[{{ text }}] font-medium text-center text-sm mb-2 group-hover:text-[{{ accent }}] transition-colors">
+              {{ skill.skill }}
+            </div>
+            <div class="text-[{{ accent }}] text-xs text-center mb-1 opacity-80">
+              {{ skill.since.start }}{% if skill.since.end != 0 %}–{{ skill.since.end }}{% else %}–now{% endif %}
+            </div>
+            <div class="text-[{{ border }}] text-xs text-center opacity-70 group-hover:opacity-100 transition-opacity">
+              {{ get_icon_name(icon=skill.repo_link.icon) }}
+            </div>
+            {% if skill.main %}
+            <div class="mt-2 text-center">
+              <span class="text-[{{ accent }}] text-xs">✿</span>
+            </div>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Organic footer #}
+      <div class="relative mt-6 pt-4 border-t border-[{{ border }}]/20 text-center">
+        <div class="text-[{{ border }}] text-xs opacity-60" style="font-family: 'Georgia', serif;">
+          🌿 Growing together 🌿
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

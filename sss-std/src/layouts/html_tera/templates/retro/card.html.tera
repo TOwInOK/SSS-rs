@@ -1,0 +1,145 @@
+<div class="h-full w-full bg-[{{ background }}] flex justify-center items-center p-8 overflow-clip">
+  <div class="max-w-xl w-full relative">
+    
+    {# Vintage paper texture effect #}
+    <div class="absolute inset-0 border-4 border-double border-[{{ border }}] rounded-lg"></div>
+    <div class="absolute inset-1 border border-[{{ border }}]/50 rounded"></div>
+    
+    {# Main card container #}
+    <div class="relative bg-[{{ background }}] rounded-lg p-6 shadow-2xl">
+      
+      {# Decorative corner ornaments #}
+      <div class="absolute top-2 left-2 text-[{{ accent }}] text-2xl opacity-60">❧</div>
+      <div class="absolute top-2 right-2 text-[{{ accent }}] text-2xl opacity-60 rotate-90">❧</div>
+      <div class="absolute bottom-2 left-2 text-[{{ accent }}] text-2xl opacity-60 -rotate-90">❧</div>
+      <div class="absolute bottom-2 right-2 text-[{{ accent }}] text-2xl opacity-60 rotate-180">❧</div>
+      
+      {# Header section - vintage typography #}
+      <div class="mb-6 pb-4 border-b-2 border-dashed border-[{{ border }}] text-center">
+        <div class="text-[{{ accent }}] text-sm mb-2 tracking-widest uppercase">~ Personal Card ~</div>
+        <h1 class="text-4xl font-serif font-bold text-[{{ text }}] mb-2" style="font-family: 'Times New Roman', serif;">
+          {{ name }}
+        </h1>
+        <div class="flex items-center justify-center gap-3">
+          <span class="text-[{{ border }}] text-xl">✦</span>
+          <div class="text-center">
+            <div class="text-[{{ text }}] text-lg font-serif italic">{{ current_nickname.word }}</div>
+            <div class="text-[{{ accent }}] text-xs mt-1">({{ current_nickname.pronounce }})</div>
+          </div>
+          <span class="text-[{{ border }}] text-xl">✦</span>
+        </div>
+      </div>
+
+      {# Info section - vintage labels #}
+      <div class="mb-6">
+        <div class="mb-3">
+          <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-2 border-b border-[{{ border }}] pb-1">
+            Specializations
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {% for spec in specifications %}
+            <span class="px-3 py-1 bg-[{{ border }}]/10 border border-[{{ border }}]/30 rounded text-[{{ text }}] text-sm font-serif">
+              • {{ spec }}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+          <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-2 border-b border-[{{ border }}] pb-1">
+            About
+          </div>
+          <p class="text-[{{ border }}] text-sm leading-relaxed font-serif text-justify">
+            {{ about }}
+          </p>
+        </div>
+      </div>
+
+      {# Repositories section - vintage cards #}
+      <div class="mb-6">
+        <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-3 border-b border-[{{ border }}] pb-1">
+          Archives
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          {% for repo in repos %}
+          <a href="{{ repo.link.link }}" 
+             class="group p-3 bg-[{{ border }}]/5 border border-[{{ border }}]/20 rounded 
+                    hover:bg-[{{ border }}]/10 hover:border-[{{ border }}]/40 transition-all duration-300">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="text-[{{ accent }}]">
+                {{ get_svg(icon=repo.link.icon) | safe }}
+              </div>
+              <div class="text-[{{ text }}] font-medium font-serif text-sm group-hover:text-[{{ accent }}] transition-colors">
+                {{ repo.name }}
+              </div>
+            </div>
+            <div class="text-[{{ border }}] text-xs font-serif text-center italic">
+              {{ get_icon_name(icon=repo.link.icon) }}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Social links - vintage buttons #}
+      <div class="mb-6">
+        <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-3 border-b border-[{{ border }}] pb-1">
+          Correspondence
+        </div>
+        <div class="flex flex-wrap gap-2 justify-center">
+          {% for social in socials %}
+          <a href="{{ social.link }}" 
+             class="group flex items-center gap-2 px-4 py-2 bg-[{{ border }}]/5 border border-[{{ border }}]/20 rounded 
+                    hover:bg-[{{ border }}]/10 hover:border-[{{ border }}]/40 transition-all duration-300">
+            <div class="text-[{{ accent }}]">
+              {{ get_svg(icon=social.icon) | safe }}
+            </div>
+            <span class="text-[{{ text }}] text-sm font-serif group-hover:text-[{{ accent }}] transition-colors">
+              {{ get_icon_name(icon=social.icon) }}
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Skills section - vintage list #}
+      <div>
+        <div class="text-[{{ accent }}] text-xs uppercase tracking-wider mb-3 border-b border-[{{ border }}] pb-1">
+          Expertise
+        </div>
+        <div class="space-y-2">
+          {% for skill in skills %}
+          <a href="{{ skill.repo_link.link }}" 
+             class="group block p-3 bg-[{{ border }}]/5 border border-[{{ border }}]/20 rounded 
+                    hover:bg-[{{ border }}]/10 hover:border-[{{ border }}]/40 transition-all duration-300
+                    {% if skill.main %}border-l-4 border-l-[{{ accent }}]{% endif %}">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-[{{ text }}] font-medium font-serif text-sm group-hover:text-[{{ accent }}] transition-colors">
+                {{ skill.skill }}
+              </div>
+              {% if skill.main %}
+              <span class="text-[{{ accent }}] text-xs">★</span>
+              {% endif %}
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-[{{ accent }}] font-serif italic">
+                {{ skill.since.start }}{% if skill.since.end != 0 %}–{{ skill.since.end }}{% else %}–present{% endif %}
+              </span>
+              <span class="text-[{{ border }}] font-serif">
+                {{ get_icon_name(icon=skill.repo_link.icon) }}
+              </span>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# Vintage footer decoration #}
+      <div class="mt-6 pt-4 border-t-2 border-dashed border-[{{ border }}] text-center">
+        <div class="text-[{{ border }}] text-xs font-serif italic">
+          ✧ Handcrafted with care ✧
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
