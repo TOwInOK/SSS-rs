@@ -57,7 +57,7 @@ where
 }
 
 impl<L: Layout + Clone> Layout for HtmlTeraRender<'_, '_, '_, L> {
-    fn template(&self) -> Cow<String> {
+    fn template(&'_ self) -> Cow<'_, String> {
         self.layout.template()
     }
 }
@@ -67,7 +67,7 @@ where
     L: Layout<String> + Clone,
     Self: TeraData,
 {
-    fn render(&self) -> Result<Cow<String>> {
+    fn render(&'_ self) -> Result<Cow<'_, String>> {
         // Init data
         let theme = self.get_theme();
         let data = &self.filter();
@@ -185,13 +185,13 @@ impl<L> Limitations for HtmlTeraRender<'_, '_, '_, L>
 where
     L: Layout<String> + Clone,
 {
-    fn limitations(&self) -> Option<Cow<sss_core::LayoutLimitations>> {
+    fn limitations(&'_ self) -> Option<Cow<'_, sss_core::LayoutLimitations>> {
         self.layout.limitations()
     }
 }
 
 impl<L: Layout<String> + Clone> FilterLimitations for HtmlTeraRender<'_, '_, '_, L> {
-    fn filter(&self) -> Cow<Data> {
+    fn filter(&'_ self) -> Cow<'_, Data> {
         if let Some(limitations) = &self.limitations() {
             let mut data = (*self.settings).clone();
 
@@ -249,10 +249,10 @@ impl<L: Layout<String> + Clone> FilterLimitations for HtmlTeraRender<'_, '_, '_,
             }
 
             // Filter socials
-            if let Some(socials_count) = limitations.socials {
-                if data.layout.socials.len() > socials_count {
-                    data.layout.socials.truncate(socials_count);
-                }
+            if let Some(socials_count) = limitations.socials
+                && data.layout.socials.len() > socials_count
+            {
+                data.layout.socials.truncate(socials_count);
             }
 
             // Filter skills

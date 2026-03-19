@@ -8,17 +8,16 @@ license.workspace = true
 
 [dependencies]
 # Local deps
-sss_core = { path = "../sss-lib/sss-core", features = ["full"] }
+sss_core = { path = "../sss-lib/sss-core", features = ["utoipa"] }
 sss_std = { path = "../sss-std", features = ["full"] }
 render = { path = "../sss-lib/render" }
 theme = { path = "../sss-lib/theme" }
 parser = { path = "../sss-lib/parser" }
 # Workspace deps
 ## errors
-thiserror.workspace = true
 anyhow.workspace = true
 ## async rt
-tokio = { workspace = true, features = ["full"] }
+tokio.workspace = true
 ## tracing
 tracing.workspace = true
 tracing-subscriber.workspace = true
@@ -27,18 +26,18 @@ serde.workspace = true
 serde_json.workspace = true
 toml.workspace = true
 ## cli deps
-clap = { workspace = true, features = ["derive"] }
+clap.workspace = true
 # Local deps
 ## file checker
-notify = "8.0.0"
+notify = "8"
 ## web server
-axum = "0.8.1"
+axum = "0.8"
 utoipa = { workspace = true }
-utoipa-scalar = { version = "0.3.0", features = ["axum"] }
+utoipa-scalar = { version = "0.3", features = ["axum"] }
 ## base64
 base64_light.workspace = true
-sha2 = "0.10.8"
+sha2 = "0.10"
 
 [dependencies.xxhash-rust]
-version = "0.8.12"
+version = "0.8"
 features = ["xxh3"]

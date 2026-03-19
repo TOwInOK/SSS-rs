@@ -8,13 +8,13 @@ where
     T: Clone + Display,
     Self: Limitations,
 {
-    /// Return the layout as a Cow<str>
-    fn template(&self) -> Cow<T>;
+    /// Return the layout as a `Cow<str>`
+    fn template(&'_ self) -> Cow<'_, T>;
 }
 
 pub trait Limitations {
     /// Return the layout limitations
-    fn limitations(&self) -> Option<Cow<LayoutLimitations>>;
+    fn limitations(&'_ self) -> Option<Cow<'_, LayoutLimitations>>;
 
     fn is_user_section_allowed(&self) -> bool {
         self.limitations().is_some_and(|x| x.user.is_some())

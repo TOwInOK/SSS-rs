@@ -11,12 +11,12 @@ where
     Self: Layout + Limitations + FilterLimitations,
 {
     /// Render the object into a `Cow<T>`.
-    fn render(&self) -> super::Result<Cow<T>>;
+    fn render(&'_ self) -> super::Result<Cow<'_, T>>;
 }
 
 pub trait FilterLimitations
 where
     Self: Limitations,
 {
-    fn filter(&self) -> Cow<Data>;
+    fn filter(&'_ self) -> Cow<'_, Data>;
 }

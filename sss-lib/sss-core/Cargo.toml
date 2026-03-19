@@ -3,17 +3,15 @@ name = "sss_core"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
+repository.workspace = true
 license.workspace = true
 
 [dependencies]
-serde = { workspace = true, features = ["derive"] }
+serde.workspace = true
 utoipa = { workspace = true, optional = true }
 leptos = { workspace = true, optional = true }
 tabler-icon-definer = { path = "../../icon-derive" }
 parser = { path = "../parser" }
-
-[dev-dependencies]
-# sss_core = { path = ".", features = ["full"] }
 
 [features]
 default = []

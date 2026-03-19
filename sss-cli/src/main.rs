@@ -1,3 +1,16 @@
+//! # SSS-cli
+//!
+//! CLI tool for generating HTML/PNG/PDF using SSS-rs themes and layouts.
+//! Supports hot reload, web server, and file watching.
+//!
+//! ## Modules
+//!
+//! - `cli`: Command-line argument parsing with clap
+//! - `commands`: Command implementations (new, run, gen)
+//! - `settings`: Configuration management and services
+//! - `tools`: Rendering and refresh utilities
+//! - `web`: Web server and file watcher
+
 /// Cli structures for clap
 mod cli;
 /// functions to run function

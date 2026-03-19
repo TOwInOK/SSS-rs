@@ -52,7 +52,7 @@ pub async fn command_run(
         .await
         .map_err(|e| anyhow::anyhow!("Load failed: {}", e))?;
 
-    let settings_services = &SETTINGS.read().await.services;
+    let settings_services = SETTINGS.read().await.services.clone();
     let (shutdown_tx, _) = tokio::sync::broadcast::channel(1);
     trace!("{:#?}", &settings_services);
     if is_watch {
@@ -97,16 +97,18 @@ pub async fn command_run(
         }
     }
 
-    if is_web {
+    let _server_handle = if is_web {
         let shutdown_rx = shutdown_tx.subscribe();
         let address = address.to_string();
 
-        tokio::spawn(async move {
+        Some(tokio::spawn(async move {
             if let Err(e) = serve(address, shutdown_rx).await {
                 error!("Web server error: {}", e);
             }
-        });
-    }
+        }))
+    } else {
+        None
+    };
 
     #[cfg(not(windows))]
     tokio::select! {

@@ -13,9 +13,9 @@ pub trait TeraData {
     /// Get theme to theming
     fn get_theme(&self) -> &Theme;
     /// Return layout
-    fn get_layout(&self) -> Cow<String>;
+    fn get_layout(&self) -> Cow<'_, String>;
     /// Return component
-    fn get_limitations(&self) -> Option<Cow<LayoutLimitations>>;
+    fn get_limitations(&self) -> Option<Cow<'_, LayoutLimitations>>;
 }
 
 impl<L: Layout<String> + Clone> TeraData for HtmlTeraRender<'_, '_, '_, L> {
@@ -33,13 +33,13 @@ impl<L: Layout<String> + Clone> TeraData for HtmlTeraRender<'_, '_, '_, L> {
 
     #[inline]
     /// Return template of component
-    fn get_layout(&self) -> Cow<String> {
+    fn get_layout(&self) -> Cow<'_, String> {
         self.layout.template()
     }
 
     #[inline]
     /// Return limitations of component layout
-    fn get_limitations(&self) -> Option<Cow<LayoutLimitations>> {
+    fn get_limitations(&self) -> Option<Cow<'_, LayoutLimitations>> {
         self.layout.limitations()
     }
 }
@@ -61,13 +61,13 @@ impl<C: Component<String> + TeraData + Clone, L: Layout<String> + Clone> TeraDat
 
     #[inline]
     /// Return template of final layout
-    fn get_layout(&self) -> Cow<String> {
+    fn get_layout(&self) -> Cow<'_, String> {
         self.layout.template()
     }
 
     #[inline]
     /// Return limitations of final layout
-    fn get_limitations(&self) -> Option<Cow<LayoutLimitations>> {
+    fn get_limitations(&self) -> Option<Cow<'_, LayoutLimitations>> {
         self.layout.limitations()
     }
 }

@@ -13,7 +13,7 @@ use crate::tools::gen_css;
 
 use super::{html_meta::Meta, tools::TeraData};
 
-/// Wrapper for Tera component [HtmlTeraRender]
+/// Wrapper for Tera component `HtmlTeraRender`
 /// It's wrap component into Html document
 #[derive(Debug, Clone)]
 pub struct HtmlTeraFinalize<'l, 'c, C, L>
@@ -34,7 +34,7 @@ where
     L: Layout<String> + Clone,
     Self: TeraData + Layout,
 {
-    fn render(&self) -> render::Result<Cow<String>> {
+    fn render(&'_ self) -> render::Result<Cow<'_, String>> {
         // render card
         let card = self.component.render()?;
         // render css
@@ -72,7 +72,7 @@ where
     C: Component<String> + TeraData + Clone,
     L: Layout<String> + Clone,
 {
-    fn template(&self) -> Cow<String> {
+    fn template(&'_ self) -> Cow<'_, String> {
         self.layout.template()
     }
 }
@@ -89,7 +89,7 @@ where
     C: Component<String> + TeraData + Clone,
     L: Layout<String> + Clone,
 {
-    fn limitations(&self) -> Option<Cow<sss_core::LayoutLimitations>> {
+    fn limitations(&self) -> Option<Cow<'_, sss_core::LayoutLimitations>> {
         self.layout.limitations()
     }
 }
@@ -99,7 +99,7 @@ where
     C: Component<String> + TeraData + Clone,
     L: Layout<String> + Clone,
 {
-    fn filter(&self) -> Cow<Data> {
+    fn filter(&self) -> Cow<'_, Data> {
         Cow::Borrowed(self.get_data())
     }
 }

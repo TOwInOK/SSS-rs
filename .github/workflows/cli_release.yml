@@ -1,19 +1,32 @@
 name: Release CLI
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
       - "v*.*.*"
 
 env:
+  RUST_BACKTRACE: 1
   CARGO_TERM_COLOR: always
+  CLICOLOR: 1
+  COLUMNS: 130
   BINARY_NAME: sss_cli
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   build-and-release:
     name: Build and Release
+    permissions:
+      contents: write
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -47,19 +60,24 @@ jobs:
             asset_name: sss_cli-macos-arm
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Install Rust
-        run: rustup toolchain install stable --profile minimal
-
-      - name: Add target
-        run: rustup target add ${{ matrix.target }}
+      - name: Install Linux linker dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y clang mold
 
       - name: Install Linux ARM dependencies
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          targets: ${{ matrix.target }}
 
       - name: Set linker for Linux ARM
         if: matrix.target == 'aarch64-unknown-linux-gnu'
@@ -68,20 +86,9 @@ jobs:
           echo 'linker = "aarch64-linux-gnu-gcc"' >> ~/.cargo/config.toml
 
       - uses: Swatinem/rust-cache@v2
-        with:
-          prefix-key: "v0-rust"
-          shared-key: "${{ matrix.target }}"
-          cache-on-failure: "true"
-          cache-all-crates: "true"
-          workspaces: |
-            . -> target
-          cache-targets: "true"
 
       - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --target ${{ matrix.target }}
+        run: cargo build --release --target ${{ matrix.target }} --locked
 
       - name: Prepare artifact
         shell: bash
@@ -101,6 +108,8 @@ jobs:
 
   create-release:
     needs: build-and-release
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
@@ -120,7 +129,7 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
-          append_bode: true
+          append_body: true
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

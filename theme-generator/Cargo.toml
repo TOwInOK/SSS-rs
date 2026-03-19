@@ -8,17 +8,19 @@ license.workspace = true
 readme = "Readme.md"
 
 [dependencies]
-proc-macro2 = "1.0.93"
-quote = "1.0.38"
-syn = { version = "2.0.96", features = ["full"] }
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full"] }
+utoipa = { version = "5", optional = true }
 
 [dev-dependencies]
 theme = { path = "../sss-lib/theme" }
-serde = { workspace = true, features = ["derive"] }
-clap = { workspace = true, features = ["derive"] }
+serde.workspace = true
+clap.workspace = true
 
 [lib]
 proc-macro = true
 
 [features]
-utoipa = []
+default = []
+utoipa = ["dep:utoipa"]

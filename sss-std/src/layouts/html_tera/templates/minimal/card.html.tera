@@ -1,0 +1,75 @@
+<div class="h-full w-full bg-[{{ background }}] flex justify-center items-center p-8 overflow-clip">
+  <div class="max-w-lg w-full bg-transparent p-6">
+    
+    {# Header section - clean and minimal #}
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-light text-[{{ text }}] mb-2">{{ name }}</h1>
+      <div class="text-[{{ accent }}] text-lg">
+        {{ current_nickname.word }}
+        <span class="text-[{{ border }}] text-sm ml-2">({{ current_nickname.pronounce }})</span>
+      </div>
+    </div>
+
+    {# Info section - simple grid #}
+    <div class="mb-8">
+      <div class="flex flex-wrap gap-2 mb-4 justify-center">
+        {% for spec in specifications %}
+        <span class="text-[{{ text }}] text-sm px-3 py-1 border border-[{{ border }}] rounded-full">
+          {{ spec }}
+        </span>
+        {% endfor %}
+      </div>
+      <p class="text-[{{ border }}] text-sm text-center leading-relaxed max-w-md mx-auto">
+        {{ about }}
+      </p>
+    </div>
+
+    {# Repositories section - clean links #}
+    <div class="mb-8">
+      <div class="flex flex-wrap gap-4 justify-center">
+        {% for repo in repos %}
+        <a href="{{ repo.link.link }}" 
+           class="group flex items-center gap-2 text-[{{ text }}] hover:text-[{{ accent }}] transition-colors duration-200">
+          <span class="text-[{{ accent }}] group-hover:scale-110 transition-transform duration-200">
+            {{ get_svg(icon=repo.link.icon) | safe }}
+          </span>
+          <span class="text-sm font-medium">{{ repo.name }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# Social links - minimal icons #}
+    <div class="mb-8">
+      <div class="flex gap-4 justify-center">
+        {% for social in socials %}
+        <a href="{{ social.link }}" 
+           class="text-[{{ border }}] hover:text-[{{ accent }}] transition-colors duration-200"
+           title="{{ get_icon_name(icon=social.icon) }}">
+          <span class="block w-6 h-6">
+            {{ get_svg(icon=social.icon) | safe }}
+          </span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# Skills section - simple list #}
+    <div>
+      <div class="flex flex-wrap gap-3 justify-center">
+        {% for skill in skills %}
+        <a href="{{ skill.repo_link.link }}" 
+           class="group text-center {% if skill.main %}text-[{{ text }}]{% else %}text-[{{ border }}]{% endif %} hover:text-[{{ accent }}] transition-colors duration-200">
+          <div class="text-sm font-medium {% if skill.main %}font-semibold{% endif %}">
+            {{ skill.skill }}
+          </div>
+          <div class="text-xs text-[{{ accent }}] mt-1 opacity-70 group-hover:opacity-100 transition-opacity duration-200">
+            {{ skill.since.start }}{% if skill.since.end != 0 %}–{{ skill.since.end }}{% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
