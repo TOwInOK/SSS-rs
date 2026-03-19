@@ -24,19 +24,13 @@ pub async fn command_new(
         ConfigType::Json => {
             info!("Convert to JSON");
             serde_json::to_string_pretty(&settings).map_err(|x| {
-                anyhow::anyhow!(
-                    "Got error with generating settings to json type {}",
-                    x
-                )
+                anyhow::anyhow!("Got error with generating settings to json type {}", x)
             })?
         }
         ConfigType::Toml => {
             info!("Convert to TOML");
             toml::to_string_pretty(&settings).map_err(|x| {
-                anyhow::anyhow!(
-                    "Got error with generating settings to toml type {}",
-                    x
-                )
+                anyhow::anyhow!("Got error with generating settings to toml type {}", x)
             })?
         }
     };

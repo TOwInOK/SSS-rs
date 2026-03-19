@@ -51,9 +51,10 @@ fn is_cache_fresh(
 ) -> bool {
     if let Ok(metadata) = fs::metadata(cache_path)
         && let Ok(modified) = metadata.modified()
-            && let Ok(duration) = SystemTime::now().duration_since(modified) {
-                return duration < max_age;
-            }
+        && let Ok(duration) = SystemTime::now().duration_since(modified)
+    {
+        return duration < max_age;
+    }
 
     false
 }
